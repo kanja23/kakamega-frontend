@@ -1,13 +1,20 @@
-// src/App.js - CORRECTED VERSION
+// src/App.js - Now with a Router
 import React from 'react';
-import LoginPage from './LoginPage'; // Import the LoginPage component
-import './App.css'; // A general CSS file for the whole app
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './LoginPage';
+import LoggedInPage from './LoggedInPage'; // Import the new page
+import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <LoginPage />
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/dashboard" element={<LoggedInPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

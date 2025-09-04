@@ -1,12 +1,14 @@
-// src/LoginPage.js - FINAL WORKING VERSION
+// src/LoginPage.js - Now with redirect
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // <-- IMPORT THIS
 import axios from 'axios';
-import './LoginPage.css'; // This will now work correctly
-import logo from './kplc-logo.png'; // Correct path since it's in the src folder
+import './LoginPage.css';
+import logo from './kplc-logo.png';
 
 function LoginPage() {
   const [staffNumber, setStaffNumber] = useState('');
   const [pin, setPin] = useState('');
+  const navigate = useNavigate(); // <-- INITIALIZE THE NAVIGATOR
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -19,7 +21,7 @@ function LoginPage() {
     const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
     if (!apiBaseUrl) {
-      alert('CRITICAL ERROR: API URL is not configured. Deployment is faulty.');
+      alert('CRITICAL ERROR: API URL is not configured.');
       return;
     }
 
@@ -38,8 +40,14 @@ function LoginPage() {
       );
 
       if (response.data && response.data.access_token) {
-        alert('Login Successful!');
+        // Login is successful!
         console.log('Access Token:', response.data.access_token);
+        
+        // Save the token for future use (e.g., in localStorage)
+        localStorage.setItem('accessToken', response.data.access_token);
+
+        // *** THE NEW PART: REDIRECT TO THE DASHBOARD ***
+        navigate('/dashboard'); 
       } else {
         alert('Login failed: Invalid response from server.');
       }
@@ -48,10 +56,10 @@ function LoginPage() {
         if (error.response.status === 401) {
           alert('Login Failed: Invalid Staff Number or PIN.');
         } else {
-          alert(`Login Failed: Server returned an error (Status: ${error.response.status})`);
+          alert(`Login Failed: Server error (Status: ${error.response.status})`);
         }
       } else if (error.request) {
-        alert('Login Failed: Could not connect to the server. Please check your internet connection or contact support.');
+        alert('Login Failed: Could not connect to the server.');
       } else {
         alert(`An unexpected error occurred: ${error.message}`);
       }
@@ -60,6 +68,7 @@ function LoginPage() {
 
   return (
     <div className="login-page">
+      {/* The rest of your JSX is the same as before */}
       <div className="login-header">
         <img src={logo} alt="Kenya Power Logo" className="login-logo" />
         <h1 className="login-title-main">Kakamega Field Ops 2.0</h1>
