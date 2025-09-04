@@ -1,8 +1,9 @@
-// src/App.js - Now with the real Dashboard
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './LoginPage';
-import DashboardPage from './DashboardPage'; // <-- Import the REAL dashboard
+import DashboardPage from './DashboardPage';
+import MeterInspectionPage from './MeterInspectionPage';
 import './App.css';
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} /> {/* <-- Use it here */}
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/meter-inspection" element={<MeterInspectionPage />} />
         </Routes>
       </div>
     </Router>
@@ -19,5 +21,6 @@ function App() {
 }
 
 export default App;
+
 
 

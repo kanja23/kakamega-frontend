@@ -1,101 +1,89 @@
-/* LoginPage.css - New and Improved Design */
-.login-page {
+/* src/LoginPage.css */
+.login-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(170deg, #f0f4f8, #ffffff);
-  padding: 20px;
-  box-sizing: border-box;
+  background-color: #f4f7f9;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-.login-header {
+.login-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
   text-align: center;
-  margin-bottom: 30px;
 }
 
 .login-logo {
-  width: 70px;
-  height: auto;
-  margin-bottom: 10px;
+  width: 60px;
+  margin-bottom: 15px;
 }
 
-.login-title-main {
-  color: #00337f;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
-.login-container {
-  width: 100%;
-  max-width: 400px;
-  background-color: #ffffff;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.login-title-form {
+.login-title {
   font-size: 1.8rem;
-  font-weight: bold;
+  font-weight: 700;
   color: #333;
-  margin-bottom: 25px;
-  text-align: left;
+  margin: 0 0 5px 0;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 30px;
 }
 
 .input-group {
+  text-align: left;
   margin-bottom: 20px;
 }
 
-.input-field {
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.input-group input {
   width: 100%;
-  padding: 15px;
+  padding: 12px 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1rem;
   box-sizing: border-box;
-  transition: border-color 0.3s;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: #00337f;
 }
 
 .login-button {
   width: 100%;
   padding: 15px;
+  border: none;
   background-color: #00337f;
   color: white;
-  border: none;
   border-radius: 8px;
   font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
-.login-button:hover {
-  background-color: #002255;
+.login-footer {
+  margin-top: 25px;
+  font-size: 0.9rem;
 }
 
-.footer-signature {
-  margin-top: 40px; /* Pushes it down */
-  font-size: 0.8rem; /* Smaller font */
-  color: #888;
-}
-
-.footer-signature a {
-  color: #555;
+.login-footer a {
+  color: #00337f;
   text-decoration: none;
-  font-weight: 500;
 }
 
-.footer-signature a:hover {
-  text-decoration: underline;
+.error-message {
+  color: #d93025;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 15px;
 }

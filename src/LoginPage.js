@@ -1,6 +1,6 @@
-// src/LoginPage.js - Now with redirect
+// src/LoginPage.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // <-- IMPORT THIS
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginPage.css';
 import logo from './kplc-logo.png';
@@ -8,30 +8,21 @@ import logo from './kplc-logo.png';
 function LoginPage() {
   const [staffNumber, setStaffNumber] = useState('');
   const [pin, setPin] = useState('');
-  const navigate = useNavigate(); // <-- INITIALIZE THE NAVIGATOR
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    setError('');
 
-    if (!staffNumber || !pin) {
-      alert('Please enter both Staff Number and PIN.');
-      return;
-    }
-
-    const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-
-    if (!apiBaseUrl) {
-      alert('CRITICAL ERROR: API URL is not configured.');
-      return;
-    }
+    const params = new URLSearchParams();
+    params.append('username', staffNumber);
+    params.append('password', pin);
 
     try {
       const response = await axios.post(
-        `${apiBaseUrl}/token`,
-        new URLSearchParams({
-          username: staffNumber,
-          password: pin,
-        }),
+        `${process.env.REACT_APP_API_BASE_URL}/token`,
+        params,
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -39,72 +30,58 @@ function LoginPage() {
         }
       );
 
-      if (response.data && response.data.access_token) {
-        // Login is successful!
-        console.log('Access Token:', response.data.access_token);
-        
-        // Save the token for future use (e.g., in localStorage)
+      if (response.data.access_token && response.data.user_data) {
         localStorage.setItem('accessToken', response.data.access_token);
-
-        // *** THE NEW PART: REDIRECT TO THE DASHBOARD ***
-        navigate('/dashboard'); 
+        localStorage.setItem('userData', JSON.stringify(response.data.user_data));
+        navigate('/dashboard');
       } else {
-        alert('Login failed: Invalid response from server.');
+        setError('Login Failed: Invalid response from server.');
       }
-    } catch (error) {
-      if (error.response) {
-        if (error.response.status === 401) {
-          alert('Login Failed: Invalid Staff Number or PIN.');
-        } else {
-          alert(`Login Failed: Server error (Status: ${error.response.status})`);
-        }
-      } else if (error.request) {
-        alert('Login Failed: Could not connect to the server.');
-      } else {
-        alert(`An unexpected error occurred: ${error.message}`);
-      }
+    } catch (err) {
+      setError('Login Failed: Invalid credentials.');
     }
   };
 
   return (
-    <div className="login-page">
-      {/* The rest of your JSX is the same as before */}
-      <div className="login-header">
+    <div className="login-container">
+      <div className="login-box">
         <img src={logo} alt="Kenya Power Logo" className="login-logo" />
-        <h1 className="login-title-main">Kakamega Field Ops 2.0</h1>
-      </div>
+        <h1 className="login-title">Kakamega Field Ops 2.0</h1>
+        <p className="login-subtitle">Field Staff Reporting System</p>
 
-      <div className="login-container">
-        <h2 className="login-title-form">Login</h2>
         <form onSubmit={handleLogin}>
           <div className="input-group">
+            <label htmlFor="staffNumber">Staff Number</label>
             <input
+              id="staffNumber"
               type="text"
-              className="input-field"
-              placeholder="Staff Number"
               value={staffNumber}
               onChange={(e) => setStaffNumber(e.target.value)}
+              placeholder="Enter your staff number"
+              required
             />
           </div>
           <div className="input-group">
+            <label htmlFor="pin">PIN</label>
             <input
+              id="pin"
               type="password"
-              className="input-field"
-              placeholder="PIN"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
+              placeholder="Enter your PIN"
+              required
             />
           </div>
-          <button type="submit" className="login-button">
-            Login
-          </button>
+
+          {error && <p className="error-message">{error}</p>}
+
+          <button type="submit" className="login-button">Login</button>
         </form>
-      </div>
-      
-      <div className="footer-signature">
-        <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
-          www.martindev.co.ke
-        </a>
+        <p className="login-footer">
+          <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
+            www.martindev.co.ke
+          </a>
+        </p>
       </div>
     </div>
    );
