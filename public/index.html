@@ -1,67 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kakamega Field Ops 2.0</title>
-    
-    <!-- Debug script to identify React loading issues -->
-    <script>
-      window.addEventListener('load', function() {
-        console.log('Page loaded, checking React setup...');
-        
-        // Set a timeout to check if React loaded properly
-        setTimeout(function() {
-          // Check if React is loaded
-          if (typeof React === 'undefined') {
-            console.error('React not loaded - check dependencies');
-            showError('React library failed to load. Please check your browser console for details.');
-            return;
-          }
-          
-          // Check if root element exists
-          const rootElement = document.getElementById('root');
-          if (!rootElement) {
-            console.error('Root element not found');
-            showError('Root element not found in HTML. Check your public/index.html file.');
-            return;
-          }
-          
-          // Check if React rendered anything
-          if (rootElement.children.length === 0) {
-            console.error('React did not render any content');
-            showError('React did not render any content. This might be a runtime error in your components.');
-          } else {
-            console.log('React rendered successfully');
-          }
-        }, 2000);
-        
-        function showError(message) {
-          document.body.innerHTML = `
-            <div style="padding: 40px; text-align: center; font-family: Arial, sans-serif; background: #f8f9fa; min-height: 100vh;">
-              <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <h2 style="color: #dc3545; margin-bottom: 20px;">Application Error</h2>
-                <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.5;">${message}</p>
-                <p style="color: #6c757d; margin-bottom: 25px;">Check the browser console (F12) for detailed error information.</p>
-                <button onclick="window.location.reload()" style="background: #00337f; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px;">
-                  Reload Page
-                </button>
-              </div>
-            </div>
-          `;
-        }
-        
-        // Catch any unhandled errors
-        window.addEventListener('error', function(e) {
-          console.error('Global error caught:', e.error);
-          showError('Unexpected error: ' + (e.error?.message || 'Unknown error'));
-        });
-      });
-    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kakamega Frontend</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
