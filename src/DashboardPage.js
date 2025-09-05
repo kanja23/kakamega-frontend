@@ -51,7 +51,7 @@ function DashboardPage() {
       <section className="greeting-section">
         <div className="greeting-text">
           <h2>{getGreeting()},</h2>
-          <h1>{userName} 👋</h1>
+          <h1>{userName} <span className="waving-hand">👋</span></h1>
         </div>
       </section>
 
