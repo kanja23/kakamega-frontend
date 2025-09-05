@@ -154,4 +154,131 @@
 
 .stat-icon.cases::before { background-color: #ff6633; }
 .stat-icon.cases::after { 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff6633'%3E%3Cpath d='M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff6633'%3E%3Cpath d='M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z'/%3E%3C/svg%3E");
+}
+
+.stat-icon.sync::before { background-color: #33cc33; }
+.stat-icon.sync::after { 
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2333cc33'%3E%3Cpath d='M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z'/%3E%3C/svg%3E");
+}
+
+.stat-card h4 {
+  margin: 0 0 10px;
+  color: #444;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #00337f;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+}
+
+.grid-icon {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eaeaea;
+}
+
+.grid-icon:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.icon-container {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--icon-color-rgb), 0.1);
+  color: var(--icon-color);
+}
+
+.grid-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.grid-icon span {
+  display: block;
+  font-weight: 600;
+  color: #00337f;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Set RGB values for the icon colors */
+.grid-icon[style*="0066cc"] .icon-container {
+  --icon-color-rgb: 0, 102, 204;
+}
+
+.grid-icon[style*="ff6633"] .icon-container {
+  --icon-color-rgb: 255, 102, 51;
+}
+
+.grid-icon[style*="ffcc00"] .icon-container {
+  --icon-color-rgb: 255, 204, 0;
+}
+
+.grid-icon[style*="33cc33"] .icon-container {
+  --icon-color-rgb: 51, 204, 51;
+}
+
+.grid-icon[style*="9966cc"] .icon-container {
+  --icon-color-rgb: 153, 102, 204;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 15px;
+  }
+  
+  .greeting-section {
+    padding: 20px 15px 15px;
+  }
+  
+  .dashboard-main {
+    padding: 0 15px;
+  }
+  
+  .stats-cards-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title-container h2 {
+    font-size: 1.2rem;
+  }
+  
+  .greeting-text h1 {
+    font-size: 1.8rem;
+  }
+  
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}
