@@ -46,7 +46,7 @@ function LoginPage() {
     <div className="login-container">
       <div className="login-box">
         <img src={logo} alt="Kenya Power Logo" className="login-logo" />
-        <h1 className="login-title">Kakamega Field Ops 2.0</h1>
+        <h1 className="login-title">Kakamega Field Ops</h1>
         <p className="login-subtitle">Field Staff Reporting System</p>
 
         <form onSubmit={handleLogin}>
