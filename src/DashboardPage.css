@@ -137,31 +137,20 @@
   font-weight: 500;
   text-align: center;
 }
-/* Waving hand animation */
+/* More pronounced wave */
 .waving-hand {
   display: inline-block;
-  animation: wave 2.5s infinite;
+  animation: wave 2s infinite;
   transform-origin: 70% 70%;
 }
 
 @keyframes wave {
   0% { transform: rotate(0deg); }
-  10% { transform: rotate(14deg); }
-  20% { transform: rotate(-8deg); }
-  30% { transform: rotate(14deg); }
-  40% { transform: rotate(-4deg); }
-  50% { transform: rotate(10deg); }
+  10% { transform: rotate(25deg); }
+  20% { transform: rotate(-15deg); }
+  30% { transform: rotate(25deg); }
+  40% { transform: rotate(-10deg); }
+  50% { transform: rotate(15deg); }
   60% { transform: rotate(0deg); }
   100% { transform: rotate(0deg); }
-}
-
-/* Optional: Add a slight bounce to the greeting text */
-.greeting-text h1 {
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-  40% {transform: translateY(-5px);}
-  60% {transform: translateY(-3px);}
 }
