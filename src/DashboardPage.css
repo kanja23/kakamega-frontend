@@ -124,6 +124,9 @@
   margin: 0 auto 15px;
   border-radius: 50%;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .stat-icon::before {
@@ -133,18 +136,18 @@
   height: 100%;
   border-radius: 50%;
   opacity: 0.15;
+  z-index: 1;
 }
 
 .stat-icon::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 24px;
   height: 24px;
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
+  z-index: 2;
 }
 
 .stat-icon.inspections::before { background-color: #0066cc; }
@@ -208,11 +211,14 @@
   justify-content: center;
   background-color: rgba(var(--icon-color-rgb), 0.1);
   color: var(--icon-color);
+  position: relative;
 }
 
-.grid-icon svg {
+.icon-container svg {
   width: 24px;
   height: 24px;
+  position: relative;
+  z-index: 2;
 }
 
 .grid-icon span {
@@ -281,4 +287,17 @@
   .actions-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Additional alignment fixes */
+.stat-icon,
+.icon-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.icon-container svg {
+  display: block;
+  margin: 0 auto;
 }
