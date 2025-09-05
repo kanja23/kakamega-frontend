@@ -51,6 +51,25 @@ const ReportsIcon = () => (
   </svg>
 );
 
+// In your DashboardPage.js, add this useEffect
+useEffect(() => {
+  const userDataString = localStorage.getItem('userData');
+  if (userDataString) {
+    const userData = JSON.parse(userDataString);
+    setUserName(userData.full_name || 'User');
+  } else {
+    navigate('/');
+  }
+  
+  // Get inspection count from localStorage
+  const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
+  setStats({
+    inspections: inspections.length,
+    activeCases: inspections.filter(i => i.status !== 'normal').length,
+    pendingSync: inspections.filter(i => !i.synced).length
+  });
+}, [navigate]);
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
