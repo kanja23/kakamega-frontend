@@ -42,7 +42,7 @@
 }
 
 .greeting-section {
-  padding: 15px;
+  padding: 10px;
   background: linear-gradient(135deg, #00337f, #005cbf);
   color: white;
 }
@@ -50,14 +50,14 @@
 .greeting-text h2 {
   margin: 0;
   font-weight: 400;
-  font-size: 1.3rem;
-  opacity: 0.5;
+  font-size: 1.1rem;
+  opacity: 0.3;
 }
 
 .greeting-text h1 {
-  margin: 2px 0 0 0;
+  margin: 1px 0 0 0;
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .dashboard-main {
