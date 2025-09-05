@@ -43,7 +43,6 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="Logo" className="header-logo" />
-          <h2>Kakamega Field Ops 2.0</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
