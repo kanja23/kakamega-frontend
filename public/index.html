@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0055a5;
+            --primary: #00337f;
             --secondary: #f9a01b;
             --accent: #007c59;
-            --light: #f8f9fa;
+            --light: #f4f7f9;
             --dark: #212529;
             --success: #28a745;
             --danger: #dc3545;
@@ -22,11 +22,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
         
         body {
-            background-color: #f5f7f9;
+            background-color: var(--light);
             color: #333;
             min-height: 100vh;
             padding: 0;
@@ -44,318 +44,399 @@
         
         /* Header Styles */
         .app-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 25px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
         }
         
-        .logo-container {
+        .app-title-container {
             display: flex;
             align-items: center;
-            gap: 10px;
         }
         
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
+        .header-logo {
+            height: 30px;
+            margin-right: 15px;
         }
         
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        /* Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-        
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #777;
-            font-size: 12px;
-        }
-        
-        .nav-item.active {
-            color: var(--primary);
-        }
-        
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-        
-        /* Main Content */
-        .main-content {
-            padding: 20px;
-            padding-bottom: 70px; /* Space for bottom nav */
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--secondary);
-        }
-        
-        /* Cards */
-        .card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .card-title {
+        .app-title-container h2 {
+            margin: 0;
             font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 15px;
+            color: #333;
+            font-weight: 600;
         }
         
-        /* Stats */
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+        .logout-button {
+            background-color: #f1f3f5;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
         }
         
-        .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* Login Styles */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--light);
+        }
+        
+        .login-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
             text-align: center;
         }
         
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-            margin: 10px 0;
+        .login-logo {
+            width: 80px;
+            margin-bottom: 15px;
         }
         
-        .stat-label {
-            font-size: 14px;
-            color: #777;
+        .login-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 3px 0;
         }
         
-        /* Forms */
-        .form-group {
+        .login-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            text-align: left;
             margin-bottom: 20px;
         }
         
-        .form-label {
+        .input-group label {
             display: block;
+            font-weight: 600;
+            color: #555;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
         }
         
-        .form-input {
+        .input-group input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 1rem;
+            box-sizing: border-box;
         }
         
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
         }
         
-        /* Buttons */
-        .btn {
+        .login-footer {
+            margin-top: 25px;
+            font-size: 0.9rem;
+        }
+        
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .error-message {
+            color: #d93025;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        
+        /* Dashboard Styles */
+        .greeting-section {
+            padding: 10px;
+            background: linear-gradient(135deg, var(--primary), #005cbf);
+            color: white;
+        }
+        
+        .greeting-text h2 {
+            margin: 0;
+            font-weight: 400;
+            font-size: 1.1rem;
+            opacity: 0.3;
+        }
+        
+        .greeting-text h1 {
+            margin: 1px 0 0 0;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+        
+        .dashboard-main {
+            padding: 25px;
+        }
+        
+        .stats-section, .actions-section {
+            margin-bottom: 30px;
+        }
+        
+        .stats-section h3, .actions-section h3 {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .stats-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .stat-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .stat-card p {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+        }
+        
+        .grid-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        
+        .grid-icon:hover {
+            background-color: #e9ecef;
+        }
+        
+        .icon-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #dee2e6;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        .grid-icon span {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        /* Meter Inspection Styles */
+        .inspection-page {
+            background-color: var(--light);
+            min-height: 100vh;
+        }
+        
+        .inspection-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .inspection-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .back-button {
+            margin-right: 20px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .inspection-form-container {
+            padding: 30px;
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        
+        .upload-button, .submit-button {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .upload-button {
+            background-color: #e0e7ff;
+            color: var(--primary);
+        }
+        
+        .submit-button {
+            background-color: var(--primary);
+            color: white;
+            margin-top: 10px;
+        }
+        
+        /* Waving hand animation */
+        .waving-hand {
             display: inline-block;
-            padding: 12px 20px;
+            animation: wave 2s infinite;
+            transform-origin: 70% 70%;
+        }
+        
+        @keyframes wave {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(25deg); }
+            20% { transform: rotate(-15deg); }
+            30% { transform: rotate(25deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(15deg); }
+            60% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        /* Camera and Location Styles */
+        .camera-container {
+            width: 100%;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .camera-preview {
+            width: 100%;
+            height: 250px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .camera-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .location-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .location-badge i {
+            margin-right: 5px;
+        }
+        
+        .camera-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 10px;
+        }
+        
+        .camera-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
             background: var(--primary);
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            cursor: pointer;
             font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
         }
         
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-        
-        .btn-secondary {
-            background: var(--secondary);
-        }
-        
-        .btn-success {
-            background: var(--success);
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-        }
-        
-        .btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            color: #777;
-            border-bottom: 3px solid transparent;
-        }
-        
-        .tab.active {
-            color: var(--primary);
-            border-bottom: 3px solid var(--primary);
-        }
-        
-        /* Module Sections */
-        .module-section {
-            display: none;
-        }
-        
-        .module-section.active {
-            display: block;
-        }
-        
-        /* Login Screen */
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .login-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .login-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        /* Footer */
-        .app-footer {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-            font-size: 14px;
-            border-top: 1px solid #eee;
-        }
-        
-        /* Responsive */
-        @media (min-width: 768px) {
-            .app-container {
-                max-width: 800px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-                min-height: 100vh;
-            }
-            
-            .stats-container {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-        
-        /* Utility Classes */
-        .text-center {
-            text-align: center;
-        }
-        
-        .mt-20 {
-            margin-top: 20px;
-        }
-        
-        .mb-20 {
-            margin-bottom: 20px;
+        .camera-btn.secondary {
+            background: #6c757d;
         }
         
         .hidden {
             display: none;
-        }
-        
-        /* Icons */
-        .icon-large {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-        
-        /* Dashboard Map */
-        .map-placeholder {
-            height: 200px;
-            background: #eee;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #777;
-            margin-bottom: 20px;
-        }
-        
-        /* Fraud Level Indicators */
-        .fraud-level {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .fraud-low {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        
-        .fraud-medium {
-            background: #fff3e0;
-            color: #ef6c00;
-        }
-        
-        .fraud-high {
-            background: #ffebee;
-            color: #c62828;
-        }
-        
-        .fraud-critical {
-            background: #fce4ec;
-            color: #ad1457;
         }
     </style>
 </head>
@@ -364,32 +445,40 @@
         <!-- Login Screen (initially visible) -->
         <div id="loginScreen">
             <div class="login-container">
-                <div class="login-logo">
-                    <h1 class="logo">Kakamega <span>Power</span></h1>
-                    <p>Field Operations 2.0</p>
-                </div>
-                <h2 class="login-title">Staff Login</h2>
-                
-                <div class="form-group">
-                    <label class="form-label">Employee ID</label>
-                    <input type="text" class="form-input" placeholder="Enter your ID">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">PIN</label>
-                    <input type="password" class="form-input" placeholder="Enter your PIN">
-                </div>
-                
-                <div class="form-group">
-                    <button class="btn btn-block" onclick="login()">Login</button>
-                </div>
-                
-                <div class="text-center">
-                    <p>Use biometrics <i class="fas fa-fingerprint"></i></p>
-                </div>
-                
-                <div class="app-footer">
-                    <p>Offline mode available after first login</p>
+                <div class="login-box">
+                    <img src="https://via.placeholder.com/80x80/00337f/ffffff?text=KPLC" alt="Kenya Power Logo" class="login-logo" />
+                    <h1 class="login-title">Kakamega Field Ops 2.0</h1>
+                    <p class="login-subtitle">Field Staff Reporting System</p>
+                    
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label for="staffNumber">Staff Number</label>
+                            <input
+                                id="staffNumber"
+                                type="text"
+                                placeholder="Enter your staff number"
+                                required
+                            />
+                        </div>
+                        <div class="input-group">
+                            <label for="pin">PIN</label>
+                            <input
+                                id="pin"
+                                type="password"
+                                placeholder="Enter your PIN"
+                                required
+                            />
+                        </div>
+                        
+                        <div id="errorMessage" class="error-message" style="display: none;"></div>
+                        
+                        <button type="submit" class="login-button">Login</button>
+                    </form>
+                    <p class="login-footer">
+                        <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
+                            www.martindev.co.ke
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -398,294 +487,337 @@
         <div id="mainApp" class="hidden">
             <!-- Header -->
             <div class="app-header">
-                <div class="logo-container">
-                    <h1 class="logo">Kakamega <span>Power</span></h1>
+                <div class="app-title-container">
+                    <img src="https://via.placeholder.com/30x30/00337f/ffffff?text=K" alt="Logo" class="header-logo" />
+                    <h2>Field Reports</h2>
                 </div>
-                <div>
-                    <i class="fas fa-user-circle icon-large"></i>
-                    <i class="fas fa-bell"></i>
-                </div>
+                <button onclick="logout()" class="logout-button">Logout</button>
             </div>
             
-            <!-- Main Content -->
-            <div class="main-content">
-                <!-- Dashboard Section -->
-                <div id="dashboardSection" class="module-section active">
-                    <h2 class="section-title">Dashboard</h2>
-                    
-                    <div class="map-placeholder">
-                        <i class="fas fa-map-marked-alt"></i> Regional Outage Map
+            <!-- Dashboard Section -->
+            <div id="dashboardSection">
+                <section class="greeting-section">
+                    <div class="greeting-text">
+                        <h2 id="greetingTime">Good morning,</h2>
+                        <h1 id="userName">Field Officer <span class="waving-hand">👋</span></h1>
                     </div>
-                    
-                    <div class="stats-container">
-                        <div class="stat-card">
-                            <div class="stat-value">24</div>
-                            <div class="stat-label">Inspections Today</div>
+                </section>
+
+                <main class="dashboard-main">
+                    <section class="stats-section">
+                        <h3>Quick Stats</h3>
+                        <div class="stats-cards-container">
+                            <div class="stat-card">
+                                <h4>Inspections Today</h4>
+                                <p>0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Active Cases</h4>
+                                <p>0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Pending Sync</h4>
+                                <p>0</p>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">8</div>
-                            <div class="stat-label">Active Fraud Cases</div>
+                    </section>
+
+                    <section class="actions-section">
+                        <h3>What would you like to do?</h3>
+                        <div class="actions-grid">
+                            <div class="grid-icon" onclick="showSection('inspectionSection')">
+                                <div class="icon-placeholder"><i class="fas fa-tachometer-alt"></i></div>
+                                <span>Meter Inspection</span>
+                            </div>
+                            <div class="grid-icon" onclick="alert('Outage reporting coming soon')">
+                                <div class="icon-placeholder"><i class="fas fa-bolt"></i></div>
+                                <span>Report Outage</span>
+                            </div>
+                            <div class="grid-icon" onclick="alert('Anomalies reporting coming soon')">
+                                <div class="icon-placeholder"><i class="fas fa-exclamation-triangle"></i></div>
+                                <span>Anomalies Found</span>
+                            </div>
+                            <div class="grid-icon" onclick="alert('Zero bill coming soon')">
+                                <div class="icon-placeholder"><i class="fas fa-file-invoice-dollar"></i></div>
+                                <span>Zero Bill</span>
+                            </div>
+                            <div class="grid-icon" onclick="alert('Reports coming soon')">
+                                <div class="icon-placeholder"><i class="fas fa-chart-bar"></i></div>
+                                <span>View Reports</span>
+                            </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-value">5</div>
-                            <div class="stat-label">Pending Disconnections</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">3</div>
-                            <div class="stat-label">Outages Reported</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Recent Activities</h3>
-                        <ul>
-                            <li>Meter inspection at Estate A - 09:30 AM</li>
-                            <li>Fraud case reported at SME Plaza - 11:15 AM</li>
-                            <li>Outage reported at Feeder 4 - 01:40 PM</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Quick Actions</h3>
-                        <button class="btn btn-block mb-20" onclick="showSection('inspectionSection')">
-                            <i class="fas fa-tachometer-alt"></i> Meter Inspection
-                        </button>
-                        <button class="btn btn-block mb-20" onclick="showSection('outageSection')">
-                            <i class="fas fa-bolt"></i> Report Outage
-                        </button>
-                        <button class="btn btn-block" onclick="showSection('fraudSection')">
-                            <i class="fas fa-exclamation-triangle"></i> Report Fraud
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Meter Inspection Section -->
-                <div id="inspectionSection" class="module-section">
-                    <h2 class="section-title">Meter Inspection</h2>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Scan Meter QR Code</h3>
-                        <div class="form-group">
-                            <button class="btn btn-block mb-20">
-                                <i class="fas fa-qrcode"></i> Scan QR Code
-                            </button>
-                            <p class="text-center">OR</p>
-                            <input type="text" class="form-input mt-20" placeholder="Enter meter number manually">
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Meter Details</h3>
-                        <div class="form-group">
-                            <label class="form-label">Current Reading</label>
-                            <input type="number" class="form-input" placeholder="Enter reading">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">GPS Coordinates</label>
-                            <input type="text" class="form-input" value="0.2827° N, 34.7519° E" readonly>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Upload Photo Evidence</label>
-                            <button class="btn btn-block">
-                                <i class="fas fa-camera"></i> Take Photo
-                            </button>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Status</label>
-                            <select class="form-input">
-                                <option>Select status</option>
-                                <option>Normal</option>
-                                <option>Faulty meter</option>
-                                <option>Tampered meter</option>
-                                <option>Not on site</option>
-                                <option>Duplicate account</option>
-                            </select>
-                        </div>
-                        
-                        <button class="btn btn-success btn-block">
-                            <i class="fas fa-check"></i> Submit Inspection
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Outage Reporting Section -->
-                <div id="outageSection" class="module-section">
-                    <h2 class="section-title">Report Outage</h2>
-                    
-                    <div class="card">
-                        <div class="form-group">
-                            <label class="form-label">Affected Area</label>
-                            <select class="form-input">
-                                <option>Select area</option>
-                                <option>Feeder 1 - Town East</option>
-                                <option>Feeder 2 - Town West</option>
-                                <option>Feeder 3 - Industrial Area</option>
-                                <option>Feeder 4 - Residential</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Suspected Cause</label>
-                            <select class="form-input">
-                                <option>Select cause</option>
-                                <option>Transformer fault</option>
-                                <option>Line fault</option>
-                                <option>Unknown</option>
-                                <option>Maintenance work</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Outage Start Time</label>
-                            <input type="datetime-local" class="form-input">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Estimated Customers Affected</label>
-                            <input type="number" class="form-input" placeholder="Enter number">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Upload Photos</label>
-                            <button class="btn btn-block">
-                                <i class="fas fa-camera"></i> Take Photo
-                            </button>
-                        </div>
-                        
-                        <button class="btn btn-block">
-                            <i class="fas fa-bolt"></i> Report Outage
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Fraud Reporting Section -->
-                <div id="fraudSection" class="module-section">
-                    <h2 class="section-title">Report Fraud Case</h2>
-                    
-                    <div class="card">
-                        <div class="form-group">
-                            <label class="form-label">Account/Meter Number</label>
-                            <input type="text" class="form-input" placeholder="Enter account/meter number">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Fraud Type</label>
-                            <select class="form-input">
-                                <option>Select type</option>
-                                <option>Meter bypass</option>
-                                <option>Illegal connection</option>
-                                <option>Meter tampering</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Severity</label>
-                            <select class="form-input">
-                                <option>Select severity</option>
-                                <option class="fraud-low">Low</option>
-                                <option class="fraud-medium">Medium</option>
-                                <option class="fraud-high">High</option>
-                                <option class="fraud-critical">Critical</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Location Details</label>
-                            <textarea class="form-input" placeholder="Enter location details" rows="3"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Upload Evidence</label>
-                            <button class="btn btn-block mb-10">
-                                <i class="fas fa-camera"></i> Take Photo
-                            </button>
-                            <button class="btn btn-block">
-                                <i class="fas fa-file-upload"></i> Upload File
-                            </button>
-                        </div>
-                        
-                        <button class="btn btn-danger btn-block">
-                            <i class="fas fa-exclamation-triangle"></i> Report Fraud Case
-                        </button>
-                    </div>
-                </div>
+                    </section>
+                </main>
             </div>
             
-            <!-- Bottom Navigation -->
-            <div class="bottom-nav">
-                <div class="nav-item active" onclick="showSection('dashboardSection')">
-                    <i class="fas fa-home nav-icon"></i>
-                    <span>Dashboard</span>
-                </div>
-                <div class="nav-item" onclick="showSection('inspectionSection')">
-                    <i class="fas fa-tachometer-alt nav-icon"></i>
-                    <span>Meters</span>
-                </div>
-                <div class="nav-item" onclick="showSection('outageSection')">
-                    <i class="fas fa-bolt nav-icon"></i>
-                    <span>Outages</span>
-                </div>
-                <div class="nav-item" onclick="showSection('fraudSection')">
-                    <i class="fas fa-exclamation-triangle nav-icon"></i>
-                    <span>Fraud</span>
-                </div>
-                <div class="nav-item" onclick="showSection('reportsSection')">
-                    <i class="fas fa-chart-bar nav-icon"></i>
-                    <span>Reports</span>
-                </div>
+            <!-- Meter Inspection Section -->
+            <div id="inspectionSection" class="hidden">
+                <header class="inspection-header">
+                    <button onclick="showSection('dashboardSection')" class="back-button">
+                        &larr; Back to Dashboard
+                    </button>
+                    <h1>Meter Inspection</h1>
+                </header>
+                <main class="inspection-form-container">
+                    <form id="inspectionForm">
+                        <div class="form-group">
+                            <label for="meterNumber">Meter Number</label>
+                            <input
+                                id="meterNumber"
+                                type="text"
+                                placeholder="Enter or scan meter number"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="reading">Meter Reading</label>
+                            <input
+                                id="reading"
+                                type="number"
+                                placeholder="Enter current reading"
+                                required
+                            />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Capture Photo with Location</label>
+                            <div class="camera-container">
+                                <div class="camera-preview" id="cameraPreview">
+                                    <div id="cameraPlaceholder">Camera preview will appear here</div>
+                                    <img id="capturedImage" class="hidden" alt="Captured photo">
+                                </div>
+                                <div class="location-badge hidden" id="locationBadge">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="locationText">Location captured</span>
+                                </div>
+                                <div class="camera-controls">
+                                    <button type="button" class="camera-btn" onclick="capturePhoto()">
+                                        <i class="fas fa-camera"></i> Capture Photo
+                                    </button>
+                                    <button type="button" class="camera-btn secondary" onclick="resetCamera()">
+                                        <i class="fas fa-redo"></i> Retake
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Notes / Flags</label>
+                            <textarea
+                                id="notes"
+                                placeholder="e.g., Tampered meter, faulty, etc."
+                                rows="4"
+                            ></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Submit Inspection</button>
+                    </form>
+                </main>
             </div>
         </div>
     </div>
 
     <script>
-        // Simple app functionality
-        function login() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
+        // App state
+        let currentUser = null;
+        let currentLocation = null;
+        let capturedPhoto = null;
+        
+        // DOM elements
+        const loginScreen = document.getElementById('loginScreen');
+        const mainApp = document.getElementById('mainApp');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const greetingTime = document.getElementById('greetingTime');
+        const userName = document.getElementById('userName');
+        const inspectionForm = document.getElementById('inspectionForm');
+        const cameraPreview = document.getElementById('cameraPreview');
+        const cameraPlaceholder = document.getElementById('cameraPlaceholder');
+        const capturedImage = document.getElementById('capturedImage');
+        const locationBadge = document.getElementById('locationBadge');
+        const locationText = document.getElementById('locationText');
+        
+        // Initialize the app
+        function initApp() {
+            // Check if user is already logged in (from localStorage)
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showApp();
+            }
+            
+            // Set up event listeners
+            loginForm.addEventListener('submit', handleLogin);
+            inspectionForm.addEventListener('submit', handleInspectionSubmit);
+            
+            // Set up greeting based on time of day
+            updateGreeting();
         }
         
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            const staffNumber = document.getElementById('staffNumber').value;
+            const pin = document.getElementById('pin').value;
+            
+            // Simple validation
+            if (!staffNumber || !pin) {
+                showError('Please enter both staff number and PIN');
+                return;
+            }
+            
+            // In a real app, you would verify credentials with an API
+            // For this demo, we'll simulate a successful login
+            currentUser = {
+                staffNumber: staffNumber,
+                name: "Field Officer",
+                role: "Inspector"
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Hide login, show app
+            showApp();
+        }
+        
+        // Show the main app interface
+        function showApp() {
+            loginScreen.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            
+            // Update user interface
+            userName.textContent = currentUser.name;
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            // Hide error after 3 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Update greeting based on time of day
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Good morning";
+            
+            if (hour >= 12 && hour < 18) {
+                greeting = "Good afternoon";
+            } else if (hour >= 18) {
+                greeting = "Good evening";
+            }
+            
+            greetingTime.textContent = greeting + ",";
+        }
+        
+        // Log out the user
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            mainApp.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            
+            // Reset login form
+            loginForm.reset();
+        }
+        
+        // Show a specific section
         function showSection(sectionId) {
             // Hide all sections
-            document.querySelectorAll('.module-section').forEach(section => {
-                section.classList.remove('active');
+            document.querySelectorAll('#mainApp > div').forEach(section => {
+                section.classList.add('hidden');
             });
             
-            // Show the selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Find and activate the corresponding nav item
-            const navItems = document.querySelectorAll('.nav-item');
-            for (let item of navItems) {
-                if (item.getAttribute('onclick').includes(sectionId)) {
-                    item.classList.add('active');
-                }
+            // Show the requested section
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+        
+        // Capture photo with location
+        function capturePhoto() {
+            // Get current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        // Successfully got location
+                        currentLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy
+                        };
+                        
+                        // Update location badge
+                        locationText.textContent = `Lat: ${currentLocation.latitude.toFixed(4)}, Long: ${currentLocation.longitude.toFixed(4)}`;
+                        locationBadge.classList.remove('hidden');
+                        
+                        // Simulate photo capture (in a real app, you would use the device camera)
+                        cameraPlaceholder.classList.add('hidden');
+                        capturedImage.classList.remove('hidden');
+                        capturedImage.src = "https://via.placeholder.com/400x300/00337f/ffffff?text=Meter+Photo";
+                        capturedPhoto = true;
+                        
+                        // Show success message
+                        alert("Photo captured with location data!");
+                    },
+                    error => {
+                        // Error getting location
+                        console.error("Error getting location:", error);
+                        alert("Could not get your location. Please ensure location services are enabled.");
+                    },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
             }
         }
         
-        // Simulate offline functionality
-        window.addEventListener('online', function() {
-            console.log('App is online');
-            // Here you would trigger sync operations
-        });
-        
-        window.addEventListener('offline', function() {
-            console.log('App is offline');
-            // Here you would show offline indicator
-        });
-        
-        // Check if the app is offline initially
-        if (!navigator.onLine) {
-            console.log('App started in offline mode');
+        // Reset camera
+        function resetCamera() {
+            cameraPlaceholder.classList.remove('hidden');
+            capturedImage.classList.add('hidden');
+            locationBadge.classList.add('hidden');
+            capturedPhoto = null;
+            currentLocation = null;
         }
+        
+        // Handle inspection form submission
+        function handleInspectionSubmit(e) {
+            e.preventDefault();
+            
+            const meterNumber = document.getElementById('meterNumber').value;
+            const reading = document.getElementById('reading').value;
+            const notes = document.getElementById('notes').value;
+            
+            // Validate form
+            if (!meterNumber || !reading) {
+                alert("Please fill in all required fields");
+                return;
+            }
+            
+            if (!capturedPhoto) {
+                alert("Please capture a photo with location data");
+                return;
+            }
+            
+            // In a real app, you would submit this data to an API
+            // For this demo, we'll just show a success message
+            alert(`Inspection submitted successfully!\nMeter: ${meterNumber}\nReading: ${reading}\nLocation: ${currentLocation.latitude}, ${currentLocation.longitude}`);
+            
+            // Reset form and return to dashboard
+            inspectionForm.reset();
+            resetCamera();
+            showSection('dashboardSection');
+            
+            // Update stats (in a real app, this would come from the server)
+            const inspectionsElement = document.querySelector('.stat-card:first-child p');
+            inspectionsElement.textContent = parseInt(inspectionsElement.textContent) + 1;
+        }
+        
+        // Initialize the app when the page loads
+        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
