@@ -1,23 +1,13 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './LoginPage';
-import DashboardPage from './DashboardPage';
-import MeterInspectionPage from './MeterInspectionPage';
-import './App.css';
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/meter-inspection" element={<MeterInspectionPage />} />
-          <Route path="*" element={<LoginPage />} /> {/* Catch all routes */}
-        </Routes>
-      </div>
-    </Router>
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h1>Kakamega Field Ops 2.0</h1>
+      <p>If you can see this, React is working correctly.</p>
+      <p>Now we'll gradually add back your components.</p>
+    </div>
   );
 }
 
