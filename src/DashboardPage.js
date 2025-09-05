@@ -43,7 +43,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="Logo" className="header-logo" />
-          <h2>Field Ops</h2>
+           <h2>Field Ops Dashboard</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
