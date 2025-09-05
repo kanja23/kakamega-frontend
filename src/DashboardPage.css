@@ -42,7 +42,7 @@
 }
 
 .greeting-section {
-  padding: 25px;
+  padding: 15px;
   background: linear-gradient(135deg, #00337f, #005cbf);
   color: white;
 }
@@ -51,11 +51,11 @@
   margin: 0;
   font-weight: 400;
   font-size: 1.3rem;
-  opacity: 0.9;
+  opacity: 0.5;
 }
 
 .greeting-text h1 {
-  margin: 5px 0 0 0;
+  margin: 2px 0 0 0;
   font-size: 2rem;
   font-weight: 700;
 }
