@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Kakamega mypower 2.0 application" />
-    <title>Kakamega mypower 2.0</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kakamega Field Ops 2.0</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #0055a5;
+            --secondary: #f9a01b;
+            --accent: #007c59;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -16,215 +26,666 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background-color: #f5f7f9;
             color: #333;
             min-height: 100vh;
-            padding: 20px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .app-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            color: #777;
+            font-size: 12px;
         }
         
-        .container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 70px; /* Space for bottom nav */
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
         
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-        
-        p {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            color: #555;
-        }
-        
-        .error-section {
-            background-color: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 20px;
-            margin: 30px 0;
-            text-align: left;
-            border-radius: 4px;
-        }
-        
-        .error-title {
-            color: #721c24;
+        .stat-value {
+            font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px;
+            color: var(--primary);
+            margin: 10px 0;
         }
         
-        .code-block {
-            background-color: #f4f4f4;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            text-align: left;
-            font-family: monospace;
-            white-space: pre-wrap;
-            border-left: 4px solid #2575fc;
+        .stat-label {
+            font-size: 14px;
+            color: #777;
         }
         
-        .steps {
-            text-align: left;
-            margin: 30px 0;
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
         }
         
-        .steps li {
-            margin-bottom: 15px;
-            line-height: 1.6;
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
         }
         
-        .button {
-            background-color: #2575fc;
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: var(--primary);
             color: white;
-            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
-            font-size: 1rem;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-success {
+            background: var(--success);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #777;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        /* Module Sections */
+        .module-section {
+            display: none;
+        }
+        
+        .module-section.active {
+            display: block;
+        }
+        
+        /* Login Screen */
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Footer */
+        .app-footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 800px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+                min-height: 100vh;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Utility Classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-20 {
             margin-top: 20px;
         }
         
-        .button:hover {
-            background-color: #1a60c0;
+        .mb-20 {
+            margin-bottom: 20px;
         }
         
-        footer {
-            margin-top: 40px;
-            color: white;
-            text-align: center;
-            font-size: 0.9rem;
+        .hidden {
+            display: none;
         }
         
-        #root {
-            width: 100%;
+        /* Icons */
+        .icon-large {
+            font-size: 24px;
+            margin-right: 10px;
         }
         
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 1.5rem;
-            color: #2575fc;
+        /* Dashboard Map */
+        .map-placeholder {
+            height: 200px;
+            background: #eee;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #777;
+            margin-bottom: 20px;
         }
         
-        .status-check {
-            background-color: #e9f7ef;
-            border-left: 4px solid #28a745;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: left;
-            border-radius: 4px;
+        /* Fraud Level Indicators */
+        .fraud-level {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .fraud-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .fraud-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        
+        .fraud-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .fraud-critical {
+            background: #fce4ec;
+            color: #ad1457;
         }
     </style>
 </head>
 <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root">
-        <div class="container">
-            <h1>Kakamega mypower 2.0</h1>
-            <div class="loading">Loading application...</div>
-            
-            <div class="status-check">
-                <div class="error-title">Application Status Check:</div>
-                <div id="status-message">Checking if React loaded correctly...</div>
+    <div class="app-container">
+        <!-- Login Screen (initially visible) -->
+        <div id="loginScreen">
+            <div class="login-container">
+                <div class="login-logo">
+                    <h1 class="logo">Kakamega <span>Power</span></h1>
+                    <p>Field Operations 2.0</p>
+                </div>
+                <h2 class="login-title">Staff Login</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">Employee ID</label>
+                    <input type="text" class="form-input" placeholder="Enter your ID">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">PIN</label>
+                    <input type="password" class="form-input" placeholder="Enter your PIN">
+                </div>
+                
+                <div class="form-group">
+                    <button class="btn btn-block" onclick="login()">Login</button>
+                </div>
+                
+                <div class="text-center">
+                    <p>Use biometrics <i class="fas fa-fingerprint"></i></p>
+                </div>
+                
+                <div class="app-footer">
+                    <p>Offline mode available after first login</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main App (initially hidden) -->
+        <div id="mainApp" class="hidden">
+            <!-- Header -->
+            <div class="app-header">
+                <div class="logo-container">
+                    <h1 class="logo">Kakamega <span>Power</span></h1>
+                </div>
+                <div>
+                    <i class="fas fa-user-circle icon-large"></i>
+                    <i class="fas fa-bell"></i>
+                </div>
             </div>
             
-            <div class="error-section">
-                <div class="error-title">If you're seeing this message for more than a few seconds:</div>
-                <div>Your React application may not have loaded properly. This could be due to:</div>
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboardSection" class="module-section active">
+                    <h2 class="section-title">Dashboard</h2>
+                    
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i> Regional Outage Map
+                    </div>
+                    
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Inspections Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Active Fraud Cases</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Pending Disconnections</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Outages Reported</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">Recent Activities</h3>
+                        <ul>
+                            <li>Meter inspection at Estate A - 09:30 AM</li>
+                            <li>Fraud case reported at SME Plaza - 11:15 AM</li>
+                            <li>Outage reported at Feeder 4 - 01:40 PM</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">Quick Actions</h3>
+                        <button class="btn btn-block mb-20" onclick="showSection('inspectionSection')">
+                            <i class="fas fa-tachometer-alt"></i> Meter Inspection
+                        </button>
+                        <button class="btn btn-block mb-20" onclick="showSection('outageSection')">
+                            <i class="fas fa-bolt"></i> Report Outage
+                        </button>
+                        <button class="btn btn-block" onclick="showSection('fraudSection')">
+                            <i class="fas fa-exclamation-triangle"></i> Report Fraud
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Meter Inspection Section -->
+                <div id="inspectionSection" class="module-section">
+                    <h2 class="section-title">Meter Inspection</h2>
+                    
+                    <div class="card">
+                        <h3 class="card-title">Scan Meter QR Code</h3>
+                        <div class="form-group">
+                            <button class="btn btn-block mb-20">
+                                <i class="fas fa-qrcode"></i> Scan QR Code
+                            </button>
+                            <p class="text-center">OR</p>
+                            <input type="text" class="form-input mt-20" placeholder="Enter meter number manually">
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="card-title">Meter Details</h3>
+                        <div class="form-group">
+                            <label class="form-label">Current Reading</label>
+                            <input type="number" class="form-input" placeholder="Enter reading">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">GPS Coordinates</label>
+                            <input type="text" class="form-input" value="0.2827° N, 34.7519° E" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Photo Evidence</label>
+                            <button class="btn btn-block">
+                                <i class="fas fa-camera"></i> Take Photo
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-input">
+                                <option>Select status</option>
+                                <option>Normal</option>
+                                <option>Faulty meter</option>
+                                <option>Tampered meter</option>
+                                <option>Not on site</option>
+                                <option>Duplicate account</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-success btn-block">
+                            <i class="fas fa-check"></i> Submit Inspection
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Outage Reporting Section -->
+                <div id="outageSection" class="module-section">
+                    <h2 class="section-title">Report Outage</h2>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">Affected Area</label>
+                            <select class="form-input">
+                                <option>Select area</option>
+                                <option>Feeder 1 - Town East</option>
+                                <option>Feeder 2 - Town West</option>
+                                <option>Feeder 3 - Industrial Area</option>
+                                <option>Feeder 4 - Residential</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Suspected Cause</label>
+                            <select class="form-input">
+                                <option>Select cause</option>
+                                <option>Transformer fault</option>
+                                <option>Line fault</option>
+                                <option>Unknown</option>
+                                <option>Maintenance work</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Outage Start Time</label>
+                            <input type="datetime-local" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Estimated Customers Affected</label>
+                            <input type="number" class="form-input" placeholder="Enter number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Photos</label>
+                            <button class="btn btn-block">
+                                <i class="fas fa-camera"></i> Take Photo
+                            </button>
+                        </div>
+                        
+                        <button class="btn btn-block">
+                            <i class="fas fa-bolt"></i> Report Outage
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Fraud Reporting Section -->
+                <div id="fraudSection" class="module-section">
+                    <h2 class="section-title">Report Fraud Case</h2>
+                    
+                    <div class="card">
+                        <div class="form-group">
+                            <label class="form-label">Account/Meter Number</label>
+                            <input type="text" class="form-input" placeholder="Enter account/meter number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Fraud Type</label>
+                            <select class="form-input">
+                                <option>Select type</option>
+                                <option>Meter bypass</option>
+                                <option>Illegal connection</option>
+                                <option>Meter tampering</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Severity</label>
+                            <select class="form-input">
+                                <option>Select severity</option>
+                                <option class="fraud-low">Low</option>
+                                <option class="fraud-medium">Medium</option>
+                                <option class="fraud-high">High</option>
+                                <option class="fraud-critical">Critical</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Location Details</label>
+                            <textarea class="form-input" placeholder="Enter location details" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Upload Evidence</label>
+                            <button class="btn btn-block mb-10">
+                                <i class="fas fa-camera"></i> Take Photo
+                            </button>
+                            <button class="btn btn-block">
+                                <i class="fas fa-file-upload"></i> Upload File
+                            </button>
+                        </div>
+                        
+                        <button class="btn btn-danger btn-block">
+                            <i class="fas fa-exclamation-triangle"></i> Report Fraud Case
+                        </button>
+                    </div>
+                </div>
             </div>
             
-            <div class="steps">
-                <ol>
-                    <li><strong>Build issues on Netlify</strong> - Check your build logs in the Netlify dashboard</li>
-                    <li><strong>Missing dependencies</strong> - Ensure all dependencies are in package.json</li>
-                    <li><strong>Incorrect build directory</strong> - Netlify needs to know where your build files are located</li>
-                    <li><strong>Routing issues</strong> - If using React Router, you may need a _redirects file</li>
-                </ol>
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="showSection('dashboardSection')">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" onclick="showSection('inspectionSection')">
+                    <i class="fas fa-tachometer-alt nav-icon"></i>
+                    <span>Meters</span>
+                </div>
+                <div class="nav-item" onclick="showSection('outageSection')">
+                    <i class="fas fa-bolt nav-icon"></i>
+                    <span>Outages</span>
+                </div>
+                <div class="nav-item" onclick="showSection('fraudSection')">
+                    <i class="fas fa-exclamation-triangle nav-icon"></i>
+                    <span>Fraud</span>
+                </div>
+                <div class="nav-item" onclick="showSection('reportsSection')">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <span>Reports</span>
+                </div>
             </div>
-            
-            <h2>Netlify Deployment Checklist</h2>
-            
-            <div class="code-block">
-# In your Netlify deployment settings:
-Build command: npm run build
-Publish directory: build
-            </div>
-            
-            <button class="button" onclick="window.location.href='https://app.netlify.com/'">Check Netlify Dashboard</button>
         </div>
     </div>
-    
-    <footer>
-        <p>Kakamega mypower 2.0 &copy; 2023</p>
-    </footer>
 
     <script>
-        // Enhanced debug script
-        window.addEventListener('load', function() {
-            console.log('Page loaded, checking React...');
+        // Simple app functionality
+        function login() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+        }
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.module-section').forEach(section => {
+                section.classList.remove('active');
+            });
             
-            // Update status message
-            const statusMessage = document.getElementById('status-message');
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('active');
             
-            // Check if React loaded successfully
-            setTimeout(function() {
-                if (typeof React === 'undefined') {
-                    console.error('React not loaded - check your dependencies');
-                    statusMessage.innerHTML = '❌ React not loaded - check your dependencies and build process';
-                    statusMessage.style.color = '#dc3545';
-                } else {
-                    console.log('React loaded successfully');
-                    statusMessage.innerHTML = '✅ React loaded successfully';
-                    statusMessage.style.color = '#28a745';
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Find and activate the corresponding nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            for (let item of navItems) {
+                if (item.getAttribute('onclick').includes(sectionId)) {
+                    item.classList.add('active');
                 }
-                
-                // Check if root element exists
-                const rootElement = document.getElementById('root');
-                if (!rootElement) {
-                    console.error('Root element not found');
-                    document.body.innerHTML = '<h1>Root element not found. Check your HTML.</h1>';
-                } else {
-                    console.log('Root element found');
-                }
-                
-                // Check for build files
-                fetch('%PUBLIC_URL%/static/js/main.js')
-                    .then(response => {
-                        if (response.status === 200) {
-                            console.log('Main JS file found');
-                            statusMessage.innerHTML += '<br>✅ Build files are present';
-                        } else {
-                            console.error('Main JS file not found');
-                            statusMessage.innerHTML += '<br>❌ Build files are missing - check your build process';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching main.js:', error);
-                        statusMessage.innerHTML += '<br>❌ Error checking build files';
-                    });
-            }, 1000);
+            }
+        }
+        
+        // Simulate offline functionality
+        window.addEventListener('online', function() {
+            console.log('App is online');
+            // Here you would trigger sync operations
         });
         
-        // Catch any unhandled errors
-        window.addEventListener('error', function(e) {
-            console.error('Global error caught:', e.error);
-            const statusMessage = document.getElementById('status-message');
-            statusMessage.innerHTML += '<br>❌ Error detected: ' + e.message;
-            statusMessage.style.color = '#dc3545';
+        window.addEventListener('offline', function() {
+            console.log('App is offline');
+            // Here you would show offline indicator
         });
+        
+        // Check if the app is offline initially
+        if (!navigator.onLine) {
+            console.log('App started in offline mode');
+        }
     </script>
 </body>
 </html>
