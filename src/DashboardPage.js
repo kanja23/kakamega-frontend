@@ -81,7 +81,8 @@ function DashboardPage() {
               <GridIcon label="Meter Inspection" />
             </div>
             <GridIcon label="Report Outage" />
-            <GridIcon label="Fraud Detector" />
+            <GridIcon label="Anomalies Found" />
+            <GridIcon label="Zero bill" />
             <GridIcon label="View Reports" />
           </div>
         </section>
