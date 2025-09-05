@@ -51,10 +51,15 @@ function LoginPage() {
 
   return (
     <div className="login-container">
+      <div className="login-header">
+        <div className="brand-container">
+          <span className="tusichome-brand">Tusichome Brand</span>
+        </div>
+      </div>
+      
       <div className="login-box">
         <div className="logo-container">
           <img src={logo} alt="Kenya Power Logo" className="login-logo" />
-          <div className="electric-pulse"></div>
         </div>
         
         <h1 className="login-title">Kakamega Field Ops 2.0</h1>
