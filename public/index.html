@@ -1,42 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script>
-  // Debug script to check if React is loading properly
-  window.addEventListener('load', function() {
-    console.log('Page loaded, checking React...');
-    
-    // Check if React loaded successfully
-    setTimeout(function() {
-      if (typeof React === 'undefined') {
-        console.error('React not loaded - check your dependencies');
-        document.body.innerHTML = '<h1>React failed to load. Please check console for errors.</h1>';
-      } else {
-        console.log('React loaded successfully');
-      }
-      
-      // Check if root element exists
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        console.error('Root element not found');
-        document.body.innerHTML = '<h1>Root element not found. Check your HTML.</h1>';
-      } else {
-        console.log('Root element found');
-      }
-    }, 1000);
-  });
-  
-  // Catch any unhandled errors
-  window.addEventListener('error', function(e) {
-    console.error('Global error caught:', e.error);
-  });
-</script>
+<head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Kakamega mypower 2.0 application" />
     <title>Kakamega mypower 2.0</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #555;
+        }
+        
+        .error-section {
+            background-color: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+            border-radius: 4px;
+        }
+        
+        .error-title {
+            color: #721c24;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            white-space: pre-wrap;
+            border-left: 4px solid #2575fc;
+        }
+        
+        .steps {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .steps li {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .button {
+            background-color: #2575fc;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            background-color: #1a60c0;
+        }
+        
+        footer {
+            margin-top: 40px;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        #root {
+            width: 100%;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1.5rem;
+            color: #2575fc;
+        }
+        
+        .status-check {
+            background-color: #e9f7ef;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+        <div class="container">
+            <h1>Kakamega mypower 2.0</h1>
+            <div class="loading">Loading application...</div>
+            
+            <div class="status-check">
+                <div class="error-title">Application Status Check:</div>
+                <div id="status-message">Checking if React loaded correctly...</div>
+            </div>
+            
+            <div class="error-section">
+                <div class="error-title">If you're seeing this message for more than a few seconds:</div>
+                <div>Your React application may not have loaded properly. This could be due to:</div>
+            </div>
+            
+            <div class="steps">
+                <ol>
+                    <li><strong>Build issues on Netlify</strong> - Check your build logs in the Netlify dashboard</li>
+                    <li><strong>Missing dependencies</strong> - Ensure all dependencies are in package.json</li>
+                    <li><strong>Incorrect build directory</strong> - Netlify needs to know where your build files are located</li>
+                    <li><strong>Routing issues</strong> - If using React Router, you may need a _redirects file</li>
+                </ol>
+            </div>
+            
+            <h2>Netlify Deployment Checklist</h2>
+            
+            <div class="code-block">
+# In your Netlify deployment settings:
+Build command: npm run build
+Publish directory: build
+            </div>
+            
+            <button class="button" onclick="window.location.href='https://app.netlify.com/'">Check Netlify Dashboard</button>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Kakamega mypower 2.0 &copy; 2023</p>
+    </footer>
+
+    <script>
+        // Enhanced debug script
+        window.addEventListener('load', function() {
+            console.log('Page loaded, checking React...');
+            
+            // Update status message
+            const statusMessage = document.getElementById('status-message');
+            
+            // Check if React loaded successfully
+            setTimeout(function() {
+                if (typeof React === 'undefined') {
+                    console.error('React not loaded - check your dependencies');
+                    statusMessage.innerHTML = '❌ React not loaded - check your dependencies and build process';
+                    statusMessage.style.color = '#dc3545';
+                } else {
+                    console.log('React loaded successfully');
+                    statusMessage.innerHTML = '✅ React loaded successfully';
+                    statusMessage.style.color = '#28a745';
+                }
+                
+                // Check if root element exists
+                const rootElement = document.getElementById('root');
+                if (!rootElement) {
+                    console.error('Root element not found');
+                    document.body.innerHTML = '<h1>Root element not found. Check your HTML.</h1>';
+                } else {
+                    console.log('Root element found');
+                }
+                
+                // Check for build files
+                fetch('%PUBLIC_URL%/static/js/main.js')
+                    .then(response => {
+                        if (response.status === 200) {
+                            console.log('Main JS file found');
+                            statusMessage.innerHTML += '<br>✅ Build files are present';
+                        } else {
+                            console.error('Main JS file not found');
+                            statusMessage.innerHTML += '<br>❌ Build files are missing - check your build process';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching main.js:', error);
+                        statusMessage.innerHTML += '<br>❌ Error checking build files';
+                    });
+            }, 1000);
+        });
+        
+        // Catch any unhandled errors
+        window.addEventListener('error', function(e) {
+            console.error('Global error caught:', e.error);
+            const statusMessage = document.getElementById('status-message');
+            statusMessage.innerHTML += '<br>❌ Error detected: ' + e.message;
+            statusMessage.style.color = '#dc3545';
+        });
+    </script>
+</body>
 </html>
