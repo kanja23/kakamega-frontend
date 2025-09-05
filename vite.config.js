@@ -6,6 +6,9 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
+    rollupOptions: {
+      external: [] // Ensure no external modules unless explicitly needed
+    }
   }
 })
