@@ -1,5 +1,5 @@
 // src/LoginPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginPage.css';
@@ -10,6 +10,19 @@ function LoginPage() {
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    // Start the animation
+    setIsAnimating(true);
+    
+    // Set interval to keep animating
+    const interval = setInterval(() => {
+      setIsAnimating(prev => !prev);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -44,8 +57,23 @@ function LoginPage() {
 
   return (
     <div className="login-container">
+      <div className="electric-effects">
+        <div className={`lightning ${isAnimating ? 'active' : ''}`}></div>
+        <div className={`lightning ${isAnimating ? 'active' : ''}`}></div>
+        <div className={`lightning ${isAnimating ? 'active' : ''}`}></div>
+      </div>
+      
       <div className="login-box">
-        <img src={logo} alt="Kenya Power Logo" className="login-logo" />
+        <div className="logo-container">
+          <img src={logo} alt="Kenya Power Logo" className="login-logo" />
+          <div className="electric-pulse"></div>
+          <div className="electric-spikes">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className={`spike spike-${i}`}></div>
+            ))}
+          </div>
+        </div>
+        
         <h1 className="login-title">Kakamega Field Ops 2.0</h1>
         <p className="login-subtitle">Field Staff Reporting System</p>
 
