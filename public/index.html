@@ -1,6 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script>
+  // Debug script to check if React is loading properly
+  window.addEventListener('load', function() {
+    console.log('Page loaded, checking React...');
+    
+    // Check if React loaded successfully
+    setTimeout(function() {
+      if (typeof React === 'undefined') {
+        console.error('React not loaded - check your dependencies');
+        document.body.innerHTML = '<h1>React failed to load. Please check console for errors.</h1>';
+      } else {
+        console.log('React loaded successfully');
+      }
+      
+      // Check if root element exists
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        console.error('Root element not found');
+        document.body.innerHTML = '<h1>Root element not found. Check your HTML.</h1>';
+      } else {
+        console.log('Root element found');
+      }
+    }, 1000);
+  });
+  
+  // Catch any unhandled errors
+  window.addEventListener('error', function(e) {
+    console.error('Global error caught:', e.error);
+  });
+</script>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
