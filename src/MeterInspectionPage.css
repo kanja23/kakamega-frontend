@@ -11,22 +11,33 @@
   padding: 15px 30px;
   background-color: #ffffff;
   border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .inspection-header h1 {
   margin: 0;
   font-size: 1.5rem;
   color: #333;
+  flex-grow: 1;
+  text-align: center;
 }
 
 .back-button {
-  margin-right: 20px;
   background: none;
   border: none;
   font-size: 1rem;
   font-weight: 500;
   color: #00337f;
   cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #f0f5ff;
 }
 
 .inspection-form-container {
@@ -34,7 +45,7 @@
   max-width: 700px;
   margin: 20px auto;
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
@@ -50,16 +61,32 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
+  transition: border-color 0.2s;
 }
 
-.upload-button, .submit-button {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #00337f;
+  box-shadow: 0 0 0 2px rgba(0, 51, 127, 0.1);
+}
+
+.status-select {
+  background-color: #fff;
+}
+
+.upload-button, 
+.location-button,
+.submit-button {
   width: 100%;
   padding: 15px;
   border-radius: 8px;
@@ -67,6 +94,7 @@
   font-weight: bold;
   cursor: pointer;
   border: none;
+  transition: all 0.2s;
 }
 
 .upload-button {
@@ -74,7 +102,72 @@
   color: #00337f;
 }
 
+.upload-button:hover {
+  background-color: #d0d9ff;
+}
+
+.location-button {
+  background-color: #e0f2ff;
+  color: #0066cc;
+  margin-bottom: 10px;
+}
+
+.location-button:hover {
+  background-color: #cce8ff;
+}
+
 .submit-button {
   background-color: #00337f;
   color: white;
+  margin-top: 20px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #002a66;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.photo-preview {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.photo-preview img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.location-info {
+  background-color: #f0f9ff;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.location-info small {
+  color: #0066cc;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .inspection-header {
+    padding: 15px;
+  }
+  
+  .inspection-form-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .inspection-header h1 {
+    font-size: 1.3rem;
+  }
 }
