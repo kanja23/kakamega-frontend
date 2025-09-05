@@ -1,19 +1,43 @@
-/* src/index.css */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Arial, sans-serif; /* As per brand guidelines */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f4f7f9;
+  background-color: #ffffff; /* White background */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  text-align: center;
 }
 
-* {
-  box-sizing: border-box;
+.App-logo {
+  height: 15vmin;
+  pointer-events: none;
+  margin-top: 2rem;
+}
+
+.App-header {
+  background-color: #00337F; /* KPLC Blue */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-header h1 {
+    color: #FFCF01; /* KPLC Yellow */
+}
+
+.App-link {
+  color: #61dafb;
+}
+    
+.powered-by a {
+    color: #FFCF01;
+    text-decoration: none;
+    font-size: 0.8rem;
+    margin-top: 2rem;
 }
