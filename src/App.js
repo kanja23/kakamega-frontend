@@ -14,6 +14,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/meter-inspection" element={<MeterInspectionPage />} />
+          <Route path="*" element={<LoginPage />} /> {/* Catch all routes */}
         </Routes>
       </div>
     </Router>
@@ -21,6 +22,3 @@ function App() {
 }
 
 export default App;
-
-
-
