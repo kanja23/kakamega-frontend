@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
 import logo from './kplc-logo.png';
 
+// Import icons from react-icons
+import { FaSearch, FaPhone, FaExclamationTriangle, FaFileInvoiceDollar, FaChartBar } from 'react-icons/fa';
+
 const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return 'Good morning';
@@ -11,9 +14,11 @@ const getGreeting = () => {
   return 'Good evening';
 };
 
-const GridIcon = ({ label }) => (
-  <div className="grid-icon">
-    <div className="icon-placeholder"></div>
+const GridIcon = ({ icon: Icon, label, color }) => (
+  <div className="grid-icon" style={{ '--icon-color': color }}>
+    <div className="icon-container">
+      <Icon className="grid-icon-svg" />
+    </div>
     <span>{label}</span>
   </div>
 );
@@ -43,7 +48,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="Logo" className="header-logo" />
-           <h2> field reports.io</h2>
+          <h2> field reports.io</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -57,19 +62,22 @@ function DashboardPage() {
 
       <main className="dashboard-main">
         <section className="stats-section">
-          <h3>Quick Stats</h3>
+          <h3>Today's Overview</h3>
           <div className="stats-cards-container">
             <div className="stat-card">
-              <h4>Inspections Today</h4>
-              <p>0</p>
+              <div className="stat-icon inspections"></div>
+              <h4>Inspections</h4>
+              <p className="stat-value">0</p>
             </div>
             <div className="stat-card">
+              <div className="stat-icon cases"></div>
               <h4>Active Cases</h4>
-              <p>0</p>
+              <p className="stat-value">0</p>
             </div>
             <div className="stat-card">
+              <div className="stat-icon sync"></div>
               <h4>Pending Sync</h4>
-              <p>0</p>
+              <p className="stat-value">0</p>
             </div>
           </div>
         </section>
@@ -78,12 +86,40 @@ function DashboardPage() {
           <h3>What would you like to do?</h3>
           <div className="actions-grid">
             <div onClick={() => navigate('/meter-inspection')}>
-              <GridIcon label="Meter Inspection" />
+              <GridIcon 
+                icon={FaSearch} 
+                label="Meter Inspection" 
+                color="#0066cc" 
+              />
             </div>
-            <GridIcon label="Report Outage" />
-            <GridIcon label="Anomalies Found" />
-            <GridIcon label="Zero bill" />
-            <GridIcon label="View Reports" />
+            <div>
+              <GridIcon 
+                icon={FaPhone} 
+                label="Report Outage" 
+                color="#ff6633" 
+              />
+            </div>
+            <div>
+              <GridIcon 
+                icon={FaExclamationTriangle} 
+                label="Anomalies Found" 
+                color="#ffcc00" 
+              />
+            </div>
+            <div>
+              <GridIcon 
+                icon={FaFileInvoiceDollar} 
+                label="Zero Bill" 
+                color="#33cc33" 
+              />
+            </div>
+            <div>
+              <GridIcon 
+                icon={FaChartBar} 
+                label="View Reports" 
+                color="#9966cc" 
+              />
+            </div>
           </div>
         </section>
       </main>
