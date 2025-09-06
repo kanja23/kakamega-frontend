@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
-      external: ['@emailjs/browser'] // Exclude @emailjs/browser from bundling
+      external: ['@emailjs/browser'] // External due to CDN
     }
   }
 });
