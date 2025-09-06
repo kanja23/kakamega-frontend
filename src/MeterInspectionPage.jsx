@@ -64,7 +64,7 @@ function MeterInspectionPage() {
       ...inspectionData,
       id: Date.now(),
       synced: false,
-      photoBase64: inspectionData.photo ? inspectionData.photoPreview : null // Store base64 for local use
+      photoBase64: inspectionData.photo ? inspectionData.photoPreview : null
     };
     inspections.push(newInspection);
     localStorage.setItem('inspections', JSON.stringify(inspections));
@@ -76,7 +76,7 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 7:03 PM EAT
+    }); // e.g., September 06, 2025, 7:41 PM EAT
 
     emailjs.send(
       'service_gypr87t',
@@ -92,7 +92,7 @@ function MeterInspectionPage() {
         supervisorEmail: 'martin.kanja23@gmail.com',
         userEmail: userEmail
       },
-      'YOUR_USER_ID' // Replace with your EmailJS User ID
+      'YOUR_USER_ID' // Replace with your actual EmailJS User ID once available
     ).then(
       () => console.log('Email sent successfully'),
       (error) => console.error('Email failed:', error.text)
