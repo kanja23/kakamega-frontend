@@ -82,11 +82,11 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 3:50 PM EAT
+    }); // e.g., September 06, 2025, 4:00 PM EAT
 
     emailjs.send(
-      'YOUR_SERVICE_ID', // Replace with your EmailJS Service ID
-      'template_tpm59pq', // Updated with your Template ID
+      'service_gypr87t', // Updated with your Service ID
+      'template_tpm59pq',
       {
         meterNumber: inspectionData.meterNumber,
         reading: inspectionData.reading,
