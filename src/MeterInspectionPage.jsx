@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MeterInspectionPage.css';
+import emailjs from '@emailjs/browser';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -8,17 +9,16 @@ function MeterInspectionPage() {
   const [formData, setFormData] = useState({
     meterNumber: '',
     reading: '',
-    status: 'normal', // normal, faulty, tampered, not_found
+    status: 'normal',
     notes: '',
     photo: null,
     photoPreview: null,
     location: null,
     timestamp: new Date().toISOString()
   });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -27,7 +27,6 @@ function MeterInspectionPage() {
     }));
   };
 
-  // Handle photo selection
   const handlePhotoSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -43,7 +42,6 @@ function MeterInspectionPage() {
     }
   };
 
-  // Get current location
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -67,7 +65,6 @@ function MeterInspectionPage() {
     }
   };
 
-  // Save inspection to localStorage
   const saveInspection = (inspectionData) => {
     const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
     const newInspection = {
@@ -80,26 +77,55 @@ function MeterInspectionPage() {
     return newInspection;
   };
 
-  // Handle form submission
+  const sendEmail = (inspectionData) => {
+    const timestamp = new Date().toLocaleString('en-US', {
+      timeZone: 'Africa/Nairobi',
+      dateStyle: 'full',
+      timeStyle: 'medium'
+    }); // e.g., September 06, 2025, 3:50 PM EAT
+
+    emailjs.send(
+      'YOUR_SERVICE_ID', // Replace with your EmailJS Service ID
+      'template_tpm59pq', // Updated with your Template ID
+      {
+        meterNumber: inspectionData.meterNumber,
+        reading: inspectionData.reading,
+        status: inspectionData.status,
+        notes: inspectionData.notes,
+        locationLat: inspectionData.location?.lat || 'N/A',
+        locationLng: inspectionData.location?.lng || 'N/A',
+        photoFilename: inspectionData.photo?.name || 'No photo',
+        timestamp: timestamp,
+        supervisorEmail: 'supervisor@example.com', // Replace with supervisor's Gmail
+        userEmail: userEmail
+      },
+      'YOUR_USER_ID' // Replace with your EmailJS User ID
+    ).then(
+      () => console.log('Email sent successfully'),
+      (error) => console.error('Email failed:', error.text)
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Validate required fields
       if (!formData.meterNumber || !formData.reading) {
         alert('Please fill in all required fields');
         setIsSubmitting(false);
         return;
       }
+      if (!userEmail) {
+        alert('Please enter your email address');
+        setIsSubmitting(false);
+        return;
+      }
 
-      // Save inspection
       const savedInspection = saveInspection(formData);
-      
-      // Show success message
+      sendEmail(savedInspection);
+
       alert(`Inspection submitted successfully!\nMeter: ${savedInspection.meterNumber}\nID: ${savedInspection.id}`);
-      
-      // Navigate back to dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Error submitting inspection:', error);
@@ -185,6 +211,19 @@ function MeterInspectionPage() {
                 <img src={formData.photoPreview} alt="Meter preview" />
               </div>
             )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="userEmail">Your Email *</label>
+            <input
+              id="userEmail"
+              name="userEmail"
+              type="email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
           </div>
 
           <div className="form-group">
