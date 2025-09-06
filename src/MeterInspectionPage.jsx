@@ -17,7 +17,7 @@ function MeterInspectionPage() {
     timestamp: new Date().toISOString()
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com'); // Set your email as default
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,10 +82,10 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 4:00 PM EAT
+    }); // e.g., September 06, 2025, 4:35 PM EAT
 
     emailjs.send(
-      'service_gypr87t', // Updated with your Service ID
+      'service_gypr87t',
       'template_tpm59pq',
       {
         meterNumber: inspectionData.meterNumber,
@@ -96,7 +96,7 @@ function MeterInspectionPage() {
         locationLng: inspectionData.location?.lng || 'N/A',
         photoFilename: inspectionData.photo?.name || 'No photo',
         timestamp: timestamp,
-        supervisorEmail: 'supervisor@example.com', // Replace with supervisor's Gmail
+        supervisorEmail: 'martin.kanja23@gmail.com', // Supervisor's email
         userEmail: userEmail
       },
       'YOUR_USER_ID' // Replace with your EmailJS User ID
