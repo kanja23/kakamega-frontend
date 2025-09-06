@@ -28,7 +28,11 @@ function MeterInspectionPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({ ...prev, photo: file, photoPreview: reader.result }));
+        setFormData(prev => ({
+          ...prev,
+          photo: file,
+          photoPreview: reader.result
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -56,7 +60,12 @@ function MeterInspectionPage() {
 
   const saveInspection = (inspectionData) => {
     const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
-    const newInspection = { ...inspectionData, id: Date.now(), synced: false };
+    const newInspection = {
+      ...inspectionData,
+      id: Date.now(),
+      synced: false,
+      photoBase64: inspectionData.photo ? inspectionData.photoPreview : null // Store base64 for local use
+    };
     inspections.push(newInspection);
     localStorage.setItem('inspections', JSON.stringify(inspections));
     return newInspection;
@@ -67,7 +76,7 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 6:29 PM EAT
+    }); // e.g., September 06, 2025, 7:03 PM EAT
 
     emailjs.send(
       'service_gypr87t',
@@ -79,7 +88,6 @@ function MeterInspectionPage() {
         notes: inspectionData.notes,
         locationLat: inspectionData.location?.lat || 'N/A',
         locationLng: inspectionData.location?.lng || 'N/A',
-        photoFilename: inspectionData.photo?.name || 'No photo',
         timestamp: timestamp,
         supervisorEmail: 'martin.kanja23@gmail.com',
         userEmail: userEmail
