@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MeterInspectionPage.css';
-import emailjs from '@emailjs/browser';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -17,14 +16,11 @@ function MeterInspectionPage() {
     timestamp: new Date().toISOString()
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com'); // Set your email as default
+  const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handlePhotoSelect = (e) => {
@@ -32,11 +28,7 @@ function MeterInspectionPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
-          ...prev,
-          photo: file,
-          photoPreview: reader.result
-        }));
+        setFormData(prev => ({ ...prev, photo: file, photoPreview: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -48,10 +40,7 @@ function MeterInspectionPage() {
         (position) => {
           setFormData(prev => ({
             ...prev,
-            location: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            }
+            location: { lat: position.coords.latitude, lng: position.coords.longitude }
           }));
           alert('Location captured successfully!');
         },
@@ -67,11 +56,7 @@ function MeterInspectionPage() {
 
   const saveInspection = (inspectionData) => {
     const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
-    const newInspection = {
-      ...inspectionData,
-      id: Date.now(),
-      synced: false
-    };
+    const newInspection = { ...inspectionData, id: Date.now(), synced: false };
     inspections.push(newInspection);
     localStorage.setItem('inspections', JSON.stringify(inspections));
     return newInspection;
@@ -82,7 +67,7 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 4:35 PM EAT
+    }); // e.g., September 06, 2025, 6:29 PM EAT
 
     emailjs.send(
       'service_gypr87t',
@@ -96,7 +81,7 @@ function MeterInspectionPage() {
         locationLng: inspectionData.location?.lng || 'N/A',
         photoFilename: inspectionData.photo?.name || 'No photo',
         timestamp: timestamp,
-        supervisorEmail: 'martin.kanja23@gmail.com', // Supervisor's email
+        supervisorEmail: 'martin.kanja23@gmail.com',
         userEmail: userEmail
       },
       'YOUR_USER_ID' // Replace with your EmailJS User ID
@@ -143,7 +128,6 @@ function MeterInspectionPage() {
         </button>
         <h1>Meter Inspection</h1>
       </header>
-
       <main className="inspection-form-container">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -158,7 +142,6 @@ function MeterInspectionPage() {
               required
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="reading">Meter Reading *</label>
             <input
@@ -171,7 +154,6 @@ function MeterInspectionPage() {
               required
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="status">Meter Status</label>
             <select
@@ -187,7 +169,6 @@ function MeterInspectionPage() {
               <option value="not_found">Not Found</option>
             </select>
           </div>
-
           <div className="form-group">
             <label htmlFor="photo">Upload Photo</label>
             <input
@@ -199,8 +180,8 @@ function MeterInspectionPage() {
               capture="environment"
               style={{ display: 'none' }}
             />
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="upload-button"
               onClick={() => fileInputRef.current.click()}
             >
@@ -212,7 +193,6 @@ function MeterInspectionPage() {
               </div>
             )}
           </div>
-
           <div className="form-group">
             <label htmlFor="userEmail">Your Email *</label>
             <input
@@ -225,11 +205,10 @@ function MeterInspectionPage() {
               required
             />
           </div>
-
           <div className="form-group">
             <label>Location</label>
-            <button 
-              type="button" 
+            <button
+              type="button"
               className="location-button"
               onClick={getCurrentLocation}
             >
@@ -238,13 +217,11 @@ function MeterInspectionPage() {
             {formData.location && (
               <div className="location-info">
                 <small>
-                  Lat: {formData.location.lat.toFixed(6)}, 
-                  Lng: {formData.location.lng.toFixed(6)}
+                  Lat: {formData.location.lat.toFixed(6)}, Lng: {formData.location.lng.toFixed(6)}
                 </small>
               </div>
             )}
           </div>
-
           <div className="form-group">
             <label htmlFor="notes">Notes / Flags</label>
             <textarea
@@ -256,9 +233,8 @@ function MeterInspectionPage() {
               rows="4"
             ></textarea>
           </div>
-
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
