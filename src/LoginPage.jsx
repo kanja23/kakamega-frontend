@@ -9,11 +9,13 @@ function LoginPage() {
   const [staffNumber, setStaffNumber] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // Only added this line
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
+    setIsLoading(true); // Added this line
 
     const params = new URLSearchParams();
     params.append('username', staffNumber);
@@ -46,6 +48,8 @@ function LoginPage() {
       } else {
         setError('Login Failed: An unexpected error occurred.');
       }
+    } finally {
+      setIsLoading(false); // Added this line
     }
   };
 
@@ -75,6 +79,7 @@ function LoginPage() {
               onChange={(e) => setStaffNumber(e.target.value)}
               placeholder="Enter your staff number"
               required
+              disabled={isLoading} // Added this attribute
             />
           </div>
           <div className="input-group">
@@ -86,12 +91,26 @@ function LoginPage() {
               onChange={(e) => setPin(e.target.value)}
               placeholder="Enter your PIN"
               required
+              disabled={isLoading} // Added this attribute
             />
           </div>
 
           {error && <p className="error-message">{error}</p>}
 
-          <button type="submit" className="login-button">Login</button>
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={isLoading} // Added this attribute
+          >
+            {isLoading ? ( // Only changed this part
+              <span className="button-loading">
+                <span className="button-spinner"></span>
+                Logging in...
+              </span>
+            ) : (
+              'Login'
+            )}
+          </button>
         </form>
         <p className="login-footer">
           <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
