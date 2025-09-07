@@ -10,8 +10,8 @@ const getGreeting = () => {
   return 'Good evening';
 };
 
-const GridIcon = ({ label, iconSvg, color }) => (
-  <div className="grid-icon" style={{ '--icon-color': color }}>
+const GridIcon = ({ label, iconSvg, color, onClick }) => (
+  <div className="grid-icon" style={{ '--icon-color': color }} onClick={onClick}>
     <div className="icon-container">
       {iconSvg}
     </div>
@@ -83,6 +83,11 @@ function DashboardPage() {
     navigate('/');
   };
 
+  // Function to show coming soon alert for unimplemented features
+  const showComingSoon = (featureName) => {
+    alert(`${featureName} feature is coming soon!`);
+  };
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -125,41 +130,36 @@ function DashboardPage() {
         <section className="actions-section">
           <h3>What would you like to do?</h3>
           <div className="actions-grid">
-            <div onClick={() => navigate('/meter-inspection')}>
-              <GridIcon 
-                iconSvg={<MeterInspectionIcon />}
-                label="Meter Inspection" 
-                color="#0066cc" 
-              />
-            </div>
-            <div>
-              <GridIcon 
-                iconSvg={<ReportOutageIcon />}
-                label="Report Outage" 
-                color="#ff6633" 
-              />
-            </div>
-            <div>
-              <GridIcon 
-                iconSvg={<AnomaliesIcon />}
-                label="Anomalies Found" 
-                color="#ffcc00" 
-              />
-            </div>
-            <div>
-              <GridIcon 
-                iconSvg={<ZeroBillIcon />}
-                label="Zero Bill" 
-                color="#33cc33" 
-              />
-            </div>
-            <div>
-              <GridIcon 
-                iconSvg={<ReportsIcon />}
-                label="View Reports" 
-                color="#9966cc" 
-              />
-            </div>
+            <GridIcon 
+              iconSvg={<MeterInspectionIcon />}
+              label="Meter Inspection" 
+              color="#0066cc"
+              onClick={() => navigate('/meter-inspection')}
+            />
+            <GridIcon 
+              iconSvg={<ReportOutageIcon />}
+              label="Report Outage" 
+              color="#ff6633"
+              onClick={() => showComingSoon("Outage Reporting")}
+            />
+            <GridIcon 
+              iconSvg={<AnomaliesIcon />}
+              label="Anomalies Found" 
+              color="#ffcc00"
+              onClick={() => showComingSoon("Anomalies Reporting")}
+            />
+            <GridIcon 
+              iconSvg={<ZeroBillIcon />}
+              label="Zero Bill" 
+              color="#33cc33"
+              onClick={() => showComingSoon("Zero Bill Reporting")}
+            />
+            <GridIcon 
+              iconSvg={<ReportsIcon />}
+              label="View Reports" 
+              color="#9966cc"
+              onClick={() => navigate('/reports')}
+            />
           </div>
         </section>
       </main>
