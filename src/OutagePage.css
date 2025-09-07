@@ -1,3 +1,4 @@
+/* OutagePage.css - White header with blue text */
 .outage-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
@@ -8,9 +9,10 @@
   display: flex;
   align-items: center;
   padding: 15px 25px;
-  background: linear-gradient(90deg, #00337f 0%, #0044aa 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white; /* Changed to white */
+  color: #00337f; /* Blue text */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #eaeaea;
 }
 
 .outage-header h1 {
@@ -19,23 +21,29 @@
   font-size: 1.6rem;
   text-align: center;
   flex: 1;
+  color: #00337f; /* Blue text */
 }
 
 .back-button {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #00337f; /* Blue border */
+  padding: 10px 15px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00337f; /* Blue text */
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: #00337f;
+  color: white; /* White text on hover */
 }
 
+/* Rest of your OutagePage.css styles remain the same */
 .outage-form-container {
   max-width: 600px;
   margin: 20px auto;
@@ -64,6 +72,7 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
   background: white;
+  color: #333;
 }
 
 .form-group input:focus,
@@ -135,6 +144,7 @@
   background-color: #f8f9fa;
   border-radius: 6px;
   border-left: 3px solid #00337f;
+  color: #333;
 }
 
 .submit-button {
@@ -180,4 +190,4 @@
     width: 80px;
     height: 80px;
   }
-  }
+}
