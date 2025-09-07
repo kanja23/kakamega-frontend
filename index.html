@@ -11,7 +11,12 @@
     <link rel="icon" href="/icon-192x192.png" type="image/png">
 
     <!-- EmailJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function() {
+        emailjs.init('V63TcL3HlkUPnJO1H'); // Your Public Key for EmailJS initialization
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
