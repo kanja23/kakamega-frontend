@@ -131,14 +131,14 @@ function OutagePage() {
   const feederOptions = [
     'Kakamega Town',
     'Matende',
-    'Shirere',
+    'Eregi',
     'Malaha',
     'Malava',
     'Mumias',
-    'Shinyalu,
-    'Milimani',
+    'Shinyalu',
+    'Ex-Chavakali',
     'Bukhungu',
-    'Market',
+    'Lubao',
     'Others'
   ];
 
