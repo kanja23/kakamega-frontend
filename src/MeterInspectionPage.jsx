@@ -20,7 +20,8 @@ function MeterInspectionPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const sanitizedValue = value.replace(/<script.*?>.*?</script>/gi, '');
+    // Fixed the regex by escaping the forward slash
+    const sanitizedValue = value.replace(/<script.*?>.*?<\/script>/gi, '');
     setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
   };
 
