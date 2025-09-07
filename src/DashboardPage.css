@@ -209,9 +209,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--icon-color-rgb), 0.1);
-  color: var(--icon-color);
   position: relative;
+}
+
+/* Fix for icon colors - using direct color assignment instead of CSS variables */
+.grid-icon:nth-child(1) .icon-container {
+  background-color: rgba(0, 102, 204, 0.1);
+  color: #0066cc;
+}
+
+.grid-icon:nth-child(2) .icon-container {
+  background-color: rgba(255, 102, 51, 0.1);
+  color: #ff6633;
+}
+
+.grid-icon:nth-child(3) .icon-container {
+  background-color: rgba(255, 204, 0, 0.1);
+  color: #ffcc00;
+}
+
+.grid-icon:nth-child(4) .icon-container {
+  background-color: rgba(51, 204, 51, 0.1);
+  color: #33cc33;
+}
+
+.grid-icon:nth-child(5) .icon-container {
+  background-color: rgba(153, 102, 204, 0.1);
+  color: #9966cc;
 }
 
 .icon-container svg {
@@ -227,27 +251,6 @@
   color: #00337f;
   font-size: 0.9rem;
   margin-top: 5px;
-}
-
-/* Set RGB values for the icon colors */
-.grid-icon[style*="0066cc"] .icon-container {
-  --icon-color-rgb: 0, 102, 204;
-}
-
-.grid-icon[style*="ff6633"] .icon-container {
-  --icon-color-rgb: 255, 102, 51;
-}
-
-.grid-icon[style*="ffcc00"] .icon-container {
-  --icon-color-rgb: 255, 204, 0;
-}
-
-.grid-icon[style*="33cc33"] .icon-container {
-  --icon-color-rgb: 51, 204, 51;
-}
-
-.grid-icon[style*="9966cc"] .icon-container {
-  --icon-color-rgb: 153, 102, 204;
 }
 
 /* Responsive adjustments */
