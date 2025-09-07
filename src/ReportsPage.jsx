@@ -14,6 +14,7 @@ function ReportsPage() {
     status: 'all'
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState('');
 
   // Report types based on your modules
   const reportTypes = {
@@ -25,6 +26,13 @@ function ReportsPage() {
   };
 
   useEffect(() => {
+    // Get user data from localStorage
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      setUserName(userData.full_name || 'Unknown Officer');
+    }
+    
     loadReports();
   }, []);
 
@@ -100,7 +108,7 @@ function ReportsPage() {
           'Date': new Date(report.timestamp).toLocaleDateString(),
           'Time': new Date(report.timestamp).toLocaleTimeString(),
           'Status': report.status || 'Submitted',
-          'Officer': report.officerName || 'Unknown'
+          'Officer': userName // Use the logged-in user's name
         };
 
         // Add type-specific fields
