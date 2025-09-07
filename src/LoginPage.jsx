@@ -9,13 +9,11 @@ function LoginPage() {
   const [staffNumber, setStaffNumber] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // New state for loading
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
-    setIsLoading(true); // Start loading
 
     const params = new URLSearchParams();
     params.append('username', staffNumber);
@@ -48,8 +46,6 @@ function LoginPage() {
       } else {
         setError('Login Failed: An unexpected error occurred.');
       }
-    } finally {
-      setIsLoading(false); // Stop loading regardless of outcome
     }
   };
 
@@ -79,7 +75,6 @@ function LoginPage() {
               onChange={(e) => setStaffNumber(e.target.value)}
               placeholder="Enter your staff number"
               required
-              disabled={isLoading} // Disable inputs during loading
             />
           </div>
           <div className="input-group">
@@ -91,26 +86,12 @@ function LoginPage() {
               onChange={(e) => setPin(e.target.value)}
               placeholder="Enter your PIN"
               required
-              disabled={isLoading} // Disable inputs during loading
             />
           </div>
 
           {error && <p className="error-message">{error}</p>}
 
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={isLoading} // Disable button during loading
-          >
-            {isLoading ? (
-              <div className="spinner-container">
-                <div className="spinner"></div>
-                <span>Authenticating...</span>
-              </div>
-            ) : (
-              'Login'
-            )}
-          </button>
+          <button type="submit" className="login-button">Login</button>
         </form>
         <p className="login-footer">
           <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
@@ -118,16 +99,6 @@ function LoginPage() {
           </a>
         </p>
       </div>
-
-      {/* Loading overlay */}
-      {isLoading && (
-        <div className="loading-overlay">
-          <div className="tech-spinner">
-            <div className="spinner-ring"></div>
-            <div className="spinner-text">Connecting to server...</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
