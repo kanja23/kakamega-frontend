@@ -140,7 +140,7 @@ function DashboardPage() {
               iconSvg={<ReportOutageIcon />}
               label="Report Outage" 
               color="#ff6633"
-              onClick={() => showComingSoon("Outage Reporting")}
+              onClick={() => navigate('/outage-reporting')}
             />
             <GridIcon 
               iconSvg={<AnomaliesIcon />}
