@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './MeterInspectionPage.css';
+import Toast from './Toast'; // Import the Toast component
+import logo from './kplc-logo.png';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -17,10 +20,14 @@ function MeterInspectionPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Fixed the regex by escaping the forward slash
     const sanitizedValue = value.replace(/<script.*?>.*?<\/script>/gi, '');
     setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
   };
@@ -48,76 +55,20 @@ function MeterInspectionPage() {
             ...prev,
             location: { lat: position.coords.latitude, lng: position.coords.longitude }
           }));
-          alert('Location captured successfully!');
+          // Use toast instead of alert
+          showToast('Location captured successfully!');
         },
         (error) => {
           console.error('Error getting location:', error);
-          alert('Could not get location. Please ensure location services are enabled.');
+          showToast('Could not get location. Please ensure location services are enabled.', 'error');
         }
       );
     } else {
-      alert('Geolocation is not supported by this browser.');
+      showToast('Geolocation is not supported by this browser.', 'error');
     }
   };
 
-  const saveInspection = (inspectionData) => {
-    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
-    const newInspection = {
-      ...inspectionData,
-      id: Date.now(),
-      synced: false,
-      photoBase64: inspectionData.photo ? inspectionData.photoPreview : null
-    };
-    inspections.push(newInspection);
-    localStorage.setItem('inspections', JSON.stringify(inspections));
-    console.log('Inspection saved:', newInspection);
-    return newInspection;
-  };
-
-  const sendEmail = (inspectionData) => {
-    const timestamp = new Date().toLocaleString('en-US', {
-      timeZone: 'Africa/Nairobi',
-      dateStyle: 'full',
-      timeStyle: 'medium'
-    });
-
-    console.log('Attempting to send email with:', {
-      serviceID: 'service_gypr87t',
-      templateID: 'template_tpm59pq',
-      data: {
-        meterNumber: inspectionData.meterNumber,
-        reading: inspectionData.reading,
-        status: inspectionData.status,
-        notes: inspectionData.notes,
-        locationLat: inspectionData.location?.lat || 'N/A',
-        locationLng: inspectionData.location?.lng || 'N/A',
-        timestamp: timestamp,
-        supervisorEmail: 'martin.kanja23@gmail.com',
-        userEmail: userEmail
-      }
-    });
-    return emailjs.send(
-      'service_gypr87t',
-      'template_tpm59pq',
-      {
-        meterNumber: inspectionData.meterNumber,
-        reading: inspectionData.reading,
-        status: inspectionData.status,
-        notes: inspectionData.notes,
-        locationLat: inspectionData.location?.lat || 'N/A',
-        locationLng: inspectionData.location?.lng || 'N/A',
-        timestamp: timestamp,
-        supervisorEmail: 'martin.kanja23@gmail.com',
-        userEmail: userEmail
-      }
-    ).then(
-      () => console.log('Email sent successfully'),
-      (error) => {
-        console.error('Email failed with details:', error);
-        throw error;
-      }
-    );
-  };
+  // ... rest of your MeterInspectionPage code ...
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,12 +76,12 @@ function MeterInspectionPage() {
 
     try {
       if (!formData.meterNumber || !formData.reading) {
-        alert('Please fill in all required fields');
+        showToast('Please fill in all required fields', 'error');
         setIsSubmitting(false);
         return;
       }
       if (!userEmail) {
-        alert('Please enter your email address');
+        showToast('Please enter your email address', 'error');
         setIsSubmitting(false);
         return;
       }
@@ -138,11 +89,16 @@ function MeterInspectionPage() {
       const savedInspection = saveInspection(formData);
       await sendEmail(savedInspection);
 
-      alert(`Inspection submitted successfully!\nMeter: ${savedInspection.meterNumber}\nID: ${savedInspection.id}`);
-      navigate('/dashboard');
+      // Use toast instead of alert
+      showToast('Meter inspection submitted successfully!');
+      
+      // Navigate after a short delay so user can see the message
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Failed to submit inspection. Please try again. Check console for details.');
+      showToast('Failed to submit inspection. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -150,126 +106,16 @@ function MeterInspectionPage() {
 
   return (
     <div className="inspection-page">
-      <header className="inspection-header">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
-          &larr; Back to Dashboard
-        </button>
-        <h1>Meter Inspection</h1>
-      </header>
-      <main className="inspection-form-container">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="meterNumber">Meter Number *</label>
-            <input
-              id="meterNumber"
-              name="meterNumber"
-              type="text"
-              value={formData.meterNumber}
-              onChange={handleInputChange}
-              placeholder="Enter or scan meter number"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="reading">Meter Reading *</label>
-            <input
-              id="reading"
-              name="reading"
-              type="number"
-              value={formData.reading}
-              onChange={handleInputChange}
-              placeholder="Enter current reading"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="status">Meter Status</label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              className="status-select"
-            >
-              <option value="normal">Normal</option>
-              <option value="faulty">Faulty</option>
-              <option value="tampered">Tampered</option>
-              <option value="not_found">Not Found</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="photo">Upload Photo</label>
-            <input
-              type="file"
-              id="photo"
-              ref={fileInputRef}
-              onChange={handlePhotoSelect}
-              accept="image/*"
-              capture="environment"
-              style={{ display: 'none' }}
-            />
-            <button
-              type="button"
-              className="upload-button"
-              onClick={() => fileInputRef.current.click()}
-            >
-              {formData.photoPreview ? 'Change Photo' : 'Select Photo'}
-            </button>
-            {formData.photoPreview && (
-              <div className="photo-preview">
-                <img src={formData.photoPreview} alt="Meter preview" />
-              </div>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="userEmail">Your Email *</label>
-            <input
-              id="userEmail"
-              name="userEmail"
-              type="email"
-              value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Location</label>
-            <button
-              type="button"
-              className="upload-button"
-              onClick={getCurrentLocation}
-            >
-              {formData.location ? 'Update Location' : 'Capture Location'}
-            </button>
-            {formData.location && (
-              <div className="location-info">
-                <small>
-                  Lat: {formData.location.lat.toFixed(6)}, Lng: {formData.location.lng.toFixed(6)}
-                </small>
-              </div>
-            )}
-          </div>
-          <div className="form-group">
-            <label htmlFor="notes">Notes / Flags</label>
-            <textarea
-              id="notes"
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
-              placeholder="e.g., Tampered meter, faulty, customer comments, etc."
-              rows="4"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Submitting...' : 'Submit Inspection'}
-          </button>
-        </form>
-      </main>
+      {/* Your existing JSX */}
+      
+      {/* Toast notification */}
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ show: false, message: '', type: 'success' })} 
+        />
+      )}
     </div>
   );
 }
