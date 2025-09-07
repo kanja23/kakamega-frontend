@@ -20,7 +20,8 @@ function MeterInspectionPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const sanitizedValue = value.replace(/<script.*?>.*?</script>/gi, '');
+    setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
   };
 
   const handlePhotoSelect = (e) => {
@@ -68,6 +69,7 @@ function MeterInspectionPage() {
     };
     inspections.push(newInspection);
     localStorage.setItem('inspections', JSON.stringify(inspections));
+    console.log('Inspection saved:', newInspection);
     return newInspection;
   };
 
@@ -76,9 +78,24 @@ function MeterInspectionPage() {
       timeZone: 'Africa/Nairobi',
       dateStyle: 'full',
       timeStyle: 'medium'
-    }); // e.g., September 06, 2025, 7:41 PM EAT
+    });
 
-    emailjs.send(
+    console.log('Attempting to send email with:', {
+      serviceID: 'service_gypr87t',
+      templateID: 'template_tpm59pq',
+      data: {
+        meterNumber: inspectionData.meterNumber,
+        reading: inspectionData.reading,
+        status: inspectionData.status,
+        notes: inspectionData.notes,
+        locationLat: inspectionData.location?.lat || 'N/A',
+        locationLng: inspectionData.location?.lng || 'N/A',
+        timestamp: timestamp,
+        supervisorEmail: 'martin.kanja23@gmail.com',
+        userEmail: userEmail
+      }
+    });
+    return emailjs.send(
       'service_gypr87t',
       'template_tpm59pq',
       {
@@ -91,11 +108,13 @@ function MeterInspectionPage() {
         timestamp: timestamp,
         supervisorEmail: 'martin.kanja23@gmail.com',
         userEmail: userEmail
-      },
-      'YOUR_USER_ID' // Replace with your actual EmailJS User ID once available
+      }
     ).then(
       () => console.log('Email sent successfully'),
-      (error) => console.error('Email failed:', error.text)
+      (error) => {
+        console.error('Email failed with details:', error);
+        throw error;
+      }
     );
   };
 
@@ -116,13 +135,13 @@ function MeterInspectionPage() {
       }
 
       const savedInspection = saveInspection(formData);
-      sendEmail(savedInspection);
+      await sendEmail(savedInspection);
 
       alert(`Inspection submitted successfully!\nMeter: ${savedInspection.meterNumber}\nID: ${savedInspection.id}`);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Error submitting inspection:', error);
-      alert('Failed to submit inspection. Please try again.');
+      console.error('Submission error:', error);
+      alert('Failed to submit inspection. Please try again. Check console for details.');
     } finally {
       setIsSubmitting(false);
     }
@@ -217,7 +236,7 @@ function MeterInspectionPage() {
             <label>Location</label>
             <button
               type="button"
-              className="location-button"
+              className="upload-button"
               onClick={getCurrentLocation}
             >
               {formData.location ? 'Update Location' : 'Capture Location'}
