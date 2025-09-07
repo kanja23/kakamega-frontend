@@ -136,7 +136,6 @@ function OutagePage() {
     'Malava',
     'Mumias',
     'Shinyalu,
-    'CB_58',
     'Milimani',
     'Bukhungu',
     'Market',
