@@ -1,4 +1,3 @@
-/* src/DashboardPage.css */
 .dashboard-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
@@ -67,23 +66,6 @@
   font-weight: 700;
 }
 
-.waving-hand {
-  display: inline-block;
-  animation: wave 2.5s infinite;
-  transform-origin: 70% 70%;
-}
-
-@keyframes wave {
-  0% { transform: rotate(0deg); }
-  10% { transform: rotate(14deg); }
-  20% { transform: rotate(-8deg); }
-  30% { transform: rotate(14deg); }
-  40% { transform: rotate(-4deg); }
-  50% { transform: rotate(10deg); }
-  60% { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
-}
-
 .dashboard-main {
   padding: 0 25px;
 }
@@ -123,47 +105,23 @@
   height: 50px;
   margin: 0 auto 15px;
   border-radius: 50%;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
-.stat-icon::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  opacity: 0.15;
-  z-index: 1;
-}
-
-.stat-icon::after {
-  content: '';
-  position: absolute;
+.stat-icon svg {
   width: 24px;
   height: 24px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   z-index: 2;
+  fill: #fff; /* White icon on colored background */
 }
 
-.stat-icon.inspections::before { background-color: #0066cc; }
-.stat-icon.inspections::after { 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230066cc'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
-}
-
-.stat-icon.cases::before { background-color: #ff6633; }
-.stat-icon.cases::after { 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff6633'%3E%3Cpath d='M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z'/%3E%3C/svg%3E");
-}
-
-.stat-icon.sync::before { background-color: #33cc33; }
-.stat-icon.sync::after { 
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2333cc33'%3E%3Cpath d='M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z'/%3E%3C/svg%3E");
-}
+.stat-icon.inspections { background-color: #0066cc; }
+.stat-icon.cases { background-color: #ff6633; }
+.stat-icon.sync { background-color: #33cc33; }
+.stat-icon.outages { background-color: #ff6633; }
 
 .stat-card h4 {
   margin: 0 0 10px;
@@ -210,40 +168,22 @@
   align-items: center;
   justify-content: center;
   position: relative;
-}
-
-/* Fix for icon colors - using direct color assignment instead of CSS variables */
-.grid-icon:nth-child(1) .icon-container {
-  background-color: rgba(0, 102, 204, 0.1);
-  color: #0066cc;
-}
-
-.grid-icon:nth-child(2) .icon-container {
-  background-color: rgba(255, 102, 51, 0.1);
-  color: #ff6633;
-}
-
-.grid-icon:nth-child(3) .icon-container {
-  background-color: rgba(255, 204, 0, 0.1);
-  color: #ffcc00;
-}
-
-.grid-icon:nth-child(4) .icon-container {
-  background-color: rgba(51, 204, 51, 0.1);
-  color: #33cc33;
-}
-
-.grid-icon:nth-child(5) .icon-container {
-  background-color: rgba(153, 102, 204, 0.1);
-  color: #9966cc;
+  background-color: rgba(0, 102, 204, 0.1); /* Default, override per icon */
 }
 
 .icon-container svg {
   width: 24px;
   height: 24px;
-  position: relative;
   z-index: 2;
+  fill: currentColor;
 }
+
+/* Per-icon colors */
+.grid-icon:nth-child(1) .icon-container { background-color: rgba(0, 102, 204, 0.1); color: #0066cc; }
+.grid-icon:nth-child(2) .icon-container { background-color: rgba(255, 102, 51, 0.1); color: #ff6633; }
+.grid-icon:nth-child(3) .icon-container { background-color: rgba(255, 204, 0, 0.1); color: #ffcc00; }
+.grid-icon:nth-child(4) .icon-container { background-color: rgba(51, 204, 51, 0.1); color: #33cc33; }
+.grid-icon:nth-child(5) .icon-container { background-color: rgba(153, 102, 204, 0.1); color: #9966cc; }
 
 .grid-icon span {
   display: block;
@@ -253,54 +193,16 @@
   margin-top: 5px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .dashboard-header {
-    padding: 15px;
-  }
-  
-  .greeting-section {
-    padding: 20px 15px 15px;
-  }
-  
-  .dashboard-main {
-    padding: 0 15px;
-  }
-  
-  .stats-cards-container {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .actions-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
+  .dashboard-header { padding: 15px; }
+  .greeting-section { padding: 20px 15px 15px; }
+  .dashboard-main { padding: 0 15px; }
+  .stats-cards-container { grid-template-columns: 1fr; gap: 15px; }
+  .actions-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
 }
 
 @media (max-width: 480px) {
-  .app-title-container h2 {
-    font-size: 1.2rem;
-  }
-  
-  .greeting-text h1 {
-    font-size: 1.8rem;
-  }
-  
-  .actions-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Additional alignment fixes */
-.stat-icon,
-.icon-container {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.icon-container svg {
-  display: block;
-  margin: 0 auto;
+  .app-title-container h2 { font-size: 1.2rem; }
+  .greeting-text h1 { font-size: 1.8rem; }
+  .actions-grid { grid-template-columns: 1fr; }
 }
