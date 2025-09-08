@@ -19,17 +19,10 @@ const GridIcon = ({ label, iconSvg, color, onClick }) => (
   </div>
 );
 
-// SVG Icons as React components
+// SVG Icons
 const MeterInspectionIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-  </svg>
-);
-
-// Add this icon component with the other icons
-const DisconnectionsIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79 2.73 2.71 7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29-3.51 3.48-9.21 3.48-12.72 0-3.5-3.47-3.53-9.11-.02-12.58 3.51-3.47 9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08-.72 1.21L11 13V8h1.5z"/>
   </svg>
 );
 
@@ -39,21 +32,21 @@ const ReportOutageIcon = () => (
   </svg>
 );
 
+const DisconnectionIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1 .9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7V9h3v8zm4-8H7V7h7v2z"/>
+  </svg>
+);
+
 const AnomaliesIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
   </svg>
 );
 
-const ZeroBillIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M20 4H4c-1.11 0-2 .9-2 2v14c0 1.11.9 2 2 2h16c1.11 0 2-.9 2-2V6c0-1.11-.9-2-2-2zm-8 6h-2v2h2v2h-2v2H8v-2H6v-2h2v-2h2V8h2v2h2v2zm4 6h-8v-2h8v2zm0-4h-8v-2h8v2z"/>
-  </svg>
-);
-
 const ReportsIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1 .9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
   </svg>
 );
 
@@ -64,6 +57,7 @@ function DashboardPage() {
     inspections: 0,
     activeCases: 0,
     pendingSync: 0,
+    outages: 0
   });
 
   useEffect(() => {
@@ -74,14 +68,8 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-
-    // Simulate getting inspection data (replace with API call if needed)
-    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
-    setStats({
-      inspections: inspections.length,
-      activeCases: inspections.filter(i => i.status !== 'normal').length,
-      pendingSync: inspections.filter(i => !i.synced).length,
-    });
+    // Placeholder stats - can load from localStorage later
+    setStats({ inspections: 5, activeCases: 3, pendingSync: 2, outages: 1 });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -90,9 +78,12 @@ function DashboardPage() {
     navigate('/');
   };
 
-  // Function to show coming soon alert for unimplemented features
   const showComingSoon = (featureName) => {
     alert(`${featureName} feature is coming soon!`);
+  };
+
+  const navigateTo = (path) => {
+    navigate(path);
   };
 
   return (
@@ -100,82 +91,91 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="Logo" className="header-logo" />
-          <h2> Daily field reports</h2>
+          <h2>Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
 
-      <section className="greeting-section">
+      <div className="greeting-section">
         <div className="greeting-text">
-          <h2>{getGreeting()},</h2>
-          <h1>{userName} <span className="waving-hand">👋</span></h1>
+          <h2>{getGreeting()}, {userName} 👋</h2>
+          <h1>Welcome back to Field Ops 2.0</h1>
         </div>
-      </section>
+      </div>
 
-      <main className="dashboard-main">
+      <div className="dashboard-main">
         <section className="stats-section">
-          <h3>Today's Overview</h3>
+          <h3>Quick Stats</h3>
           <div className="stats-cards-container">
-            <div className="stat-card">
-              <div className="stat-icon inspections"></div>
-              <h4>Inspections</h4>
+            <div className="stat-card inspections">
+              <div className="stat-icon inspections">
+                <MeterInspectionIcon />
+              </div>
+              <h4>Inspections Today</h4>
               <p className="stat-value">{stats.inspections}</p>
             </div>
-            <div className="stat-card">
-              <div className="stat-icon cases"></div>
-              <h4>Active Cases</h4>
+            <div className="stat-card cases">
+              <div className="stat-icon cases">
+                <AnomaliesIcon />
+              </div>
+              <h4>Active Fraud Cases</h4>
               <p className="stat-value">{stats.activeCases}</p>
             </div>
-            <div className="stat-card">
-              <div className="stat-icon sync"></div>
+            <div className="stat-card sync">
+              <div className="stat-icon sync">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+              </div>
               <h4>Pending Sync</h4>
               <p className="stat-value">{stats.pendingSync}</p>
+            </div>
+            <div className="stat-card outages">
+              <div className="stat-icon outages">
+                <ReportOutageIcon />
+              </div>
+              <h4>Outages Reported</h4>
+              <p className="stat-value">{stats.outages}</p>
             </div>
           </div>
         </section>
 
         <section className="actions-section">
-          <h3>What would you like to do?</h3>
+          <h3>Quick Actions</h3>
           <div className="actions-grid">
-            <GridIcon 
+            <GridIcon
+              label="Meter Inspection"
               iconSvg={<MeterInspectionIcon />}
-              label="Meter Inspection" 
               color="#0066cc"
-              onClick={() => navigate('/meter-inspection')}
+              onClick={() => navigateTo('/meter-inspection')}
             />
-            <GridIcon 
+            <GridIcon
+              label="Report Outage"
               iconSvg={<ReportOutageIcon />}
-              label="Report Outage" 
               color="#ff6633"
-              onClick={() => navigate('/outage-reporting')}
+              onClick={() => navigateTo('/outage-reporting')}
             />
-            <GridIcon 
-              iconSvg={<DisconnectionsIcon />}
-              label="Disconnections" 
-              color="#cc3333"
-              onClick={() => navigate('/disconnections')}
-            />
-            <GridIcon 
-              iconSvg={<AnomaliesIcon />}
-              label="Anomalies Found" 
+            <GridIcon
+              label="Disconnections"
+              iconSvg={<DisconnectionIcon />}
               color="#ffcc00"
-              onClick={() => showComingSoon("Anomalies Reporting")}
+              onClick={() => navigateTo('/disconnections')}
             />
-            <GridIcon 
-              iconSvg={<ZeroBillIcon />}
-              label="Zero Bill" 
+            <GridIcon
+              label="Fraud Detection"
+              iconSvg={<AnomaliesIcon />}
               color="#33cc33"
-              onClick={() => showComingSoon("Zero Bill Reporting")}
+              onClick={() => showComingSoon('Fraud Detector')}
             />
-            <GridIcon 
+            <GridIcon
+              label="Reports"
               iconSvg={<ReportsIcon />}
-              label="View Reports" 
               color="#9966cc"
-              onClick={() => navigate('/reports')}
+              onClick={() => navigateTo('/reports')}
             />
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }
