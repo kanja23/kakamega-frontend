@@ -129,7 +129,7 @@ function SafetyRulesPage() {
         <section className="foreword-banner">
           <h2>Foreword</h2>
           <p>{safetyContent.foreword}</p>
-          <p className="foreword-source">
+          <p className="foreword-source">Source: KPLC Safety Manual</p>
         </section>
 
         {/* Contents Overview */}
