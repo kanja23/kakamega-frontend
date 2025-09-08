@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
-import Toast from './Toast';
+import Toast from './Toast'; // Import for toasts
 import logo from './kplc-logo.png';
 
 const getGreeting = () => {
@@ -11,67 +11,67 @@ const getGreeting = () => {
   return 'Good evening';
 };
 
-// SVG for Pie Chart (Round Scale for Inspections by Type)
-const PieChart = ({ data }) => {
-  const total = data.reduce((sum, d) => sum + d.value, 0);
-  let cumulative = 0;
-  return (
-    <svg viewBox="0 0 100 100" className="pie-chart">
-      {data.map((d, i) => {
-        const angle = (d.value / total) * 360;
-        const largeArc = angle > 180 ? 1 : 0;
-        const startAngle = cumulative;
-        cumulative += angle;
-        const endAngle = cumulative;
-        const x1 = 50 + 40 * Math.cos(startAngle * Math.PI / 180);
-        const y1 = 50 + 40 * Math.sin(startAngle * Math.PI / 180);
-        const x2 = 50 + 40 * Math.cos(endAngle * Math.PI / 180);
-        const y2 = 50 + 40 * Math.sin(endAngle * Math.PI / 180);
-        return (
-          <path key={i} d={`M50 50 L${x1} ${y1} A40 40 0 ${largeArc} 1 ${x2} ${y2} Z`} fill={d.color} />
-        );
-      })}
-      <circle cx="50" cy="50" r="30" fill="white" />
-      <text x="50" y="52" textAnchor="middle" className="pie-label">{data.reduce((sum, d) => sum + d.value, 0)} Total</text>
-    </svg>
-  );
-};
+const GridIcon = ({ label, iconSvg, color, onClick }) => (
+  <div className="grid-icon" style={{ '--icon-color': color }} onClick={onClick}>
+    <div className="icon-container">
+      {iconSvg}
+    </div>
+    <span>{label}</span>
+  </div>
+);
 
-// SVG for Bar Graph (Outage Evolution)
-const BarGraph = ({ data }) => (
-  <svg viewBox="0 0 200 100" className="bar-graph">
-    {data.map((d, i) => (
-      <rect key={i} x={i * 40 + 10} y={100 - d.value * 2} width="30" height={d.value * 2} fill={d.color} rx="2" />
-    ))}
-    <text x="10" y="95" className="graph-label">Jun</text>
-    <text x="55" y="95" className="graph-label">Jul</text>
-    <text x="100" y="95" className="graph-label">Aug</text>
+// SVG Icons (including new SafetyIcon)
+const MeterInspectionIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
   </svg>
 );
 
-// SVG for Line Graph (Electrification Progress)
-const LineGraph = ({ data }) => {
-  return (
-    <svg viewBox="0 0 200 100" className="line-graph">
-      <polyline points={data.map((d, i) => `${i * 50}, ${100 - d * 2}`).join(' ')} fill="none" stroke="#00337f" strokeWidth="3" />
-      <text x="10" y="95" className="graph-label">2018</text>
-      <text x="100" y="95" className="graph-label">2022</text>
-      <text x="190" y="95" className="graph-label">2025</text>
-    </svg>
-  );
-};
+const ReportOutageIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+  </svg>
+);
+
+const DisconnectionIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1 .9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7V9h3v8zm4-8H7V7h7v2z"/>
+  </svg>
+);
+
+const FraudIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+  </svg>
+);
+
+const ReportsIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1 .9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+  </svg>
+);
+
+const SmartMeterIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+  </svg>
+);
+
+const SafetyIcon = () => (  // New icon for Safety Rules (shield/helmet)
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V5l-9-4z"/>
+  </svg>
+);
 
 function DashboardPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [stats, setStats] = useState({
-    inspections: 1500, // Simulated monthly from KPLC trends
-    outages: 5, // Major outages 2025
-    disconnections: 300, // Pending/actioned
-    fraudCases: 50, // From awareness campaigns
-    electrificationProgress: [75, 78, 79], // Trend 2018-2025
-    renewablesMix: [{ value: 90, color: '#28a745' }, { value: 10, color: '#6b7280' }], // 90% green
-    outageEvolution: [{ value: 3, color: '#ffcc00' }, { value: 4, color: '#ffcc00' }, { value: 5, color: '#ff6633' }] // Jun-Aug
+    inspections: 0,
+    activeCases: 0,
+    pendingSync: 0,
+    outages: 0,
+    disconnections: 0
   });
   const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
 
@@ -83,12 +83,18 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-    // Dynamic from localStorage (unchanged)
-    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length || stats.inspections;
-    const outages = JSON.parse(localStorage.getItem('outages') || '[]').length || stats.outages;
-    const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]').length || stats.disconnections;
-    const fraudCases = JSON.parse(localStorage.getItem('fraudCases') || '[]').length || stats.fraudCases;
-    setStats({ ...stats, inspections, outages, disconnections, fraudCases });
+    // Load real stats from localStorage
+    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length;
+    const outages = JSON.parse(localStorage.getItem('outages') || '[]').length;
+    const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]');
+    const pendingDisconnections = disconnectionAccounts.filter(a => a.status === 'pending').length;
+    setStats({ 
+      inspections, 
+      activeCases: 3, 
+      pendingSync: 2, 
+      outages, 
+      disconnections: pendingDisconnections 
+    });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -114,7 +120,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="KPLC Logo" className="header-logo" />
-          <h2>Kenya Power Dashboard</h2>
+          <h2> Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -122,76 +128,54 @@ function DashboardPage() {
       <div className="greeting-section">
         <div className="greeting-text">
           <h2>{getGreeting()}, {userName} <span className="waving-hand">👋</span></h2>
-          <h1>Field Ops Analytics</h1>
-          <p>Visual stats for inspections, outages, and safety metrics</p>
+          <h1>Welcome back</h1>
         </div>
       </div>
 
       <div className="dashboard-main">
-        {/* Top Stats Cards (Inspired by Example) */}
         <section className="stats-section">
-          <h3>Key Metrics</h3>
+          <h3>Quick Stats</h3>
           <div className="stats-cards-container">
             <div className="stat-card inspections">
               <div className="stat-icon inspections">
                 <MeterInspectionIcon />
               </div>
-              <h4>Inspections</h4>
+              <h4>Inspections Today</h4>
               <p className="stat-value">{stats.inspections}</p>
+            </div>
+            <div className="stat-card cases">
+              <div className="stat-icon cases">
+                <FraudIcon />
+              </div>
+              <h4>Active Fraud Cases</h4>
+              <p className="stat-value">{stats.activeCases}</p>
+            </div>
+            <div className="stat-card sync">
+              <div className="stat-icon sync">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+              </div>
+              <h4>Pending Sync</h4>
+              <p className="stat-value">{stats.pendingSync}</p>
             </div>
             <div className="stat-card outages">
               <div className="stat-icon outages">
                 <ReportOutageIcon />
               </div>
-              <h4>Outages</h4>
+              <h4>Outages Reported</h4>
               <p className="stat-value">{stats.outages}</p>
             </div>
             <div className="stat-card disconnections">
               <div className="stat-icon disconnections">
                 <DisconnectionIcon />
               </div>
-              <h4>Disconnections</h4>
+              <h4>Pending Disconnections</h4>
               <p className="stat-value">{stats.disconnections}</p>
             </div>
-            <div className="stat-card fraud">
-              <div className="stat-icon fraud">
-                <FraudIcon />
-              </div>
-              <h4>Fraud Cases</h4>
-              <p className="stat-value">{stats.fraudCases}</p>
-            </div>
           </div>
         </section>
 
-        {/* Infographics Section (Pie, Bar, Line) */}
-        <section className="infographics-section">
-          <div className="infographic-row">
-            <div className="infographic-card">
-              <h4>Inspections by Type (Round Scale)</h4>
-              <PieChart data={[
-                { value: 40, color: '#28a745' }, // Meter
-                { value: 30, color: '#ffcc00' }, // Outage
-                { value: 30, color: '#ff6633' } // Fraud
-              ]} />
-            </div>
-            <div className="infographic-card">
-              <h4>Renewables Mix (Donut Scale)</h4>
-              <PieChart data={stats.renewablesMix} />
-            </div>
-          </div>
-          <div className="infographic-row">
-            <div className="infographic-card">
-              <h4>Outage Evolution (Bar Graph)</h4>
-              <BarGraph data={stats.outageEvolution} />
-            </div>
-            <div className="infographic-card">
-              <h4>Electrification Progress (Line Graph)</h4>
-              <LineGraph data={stats.electrificationProgress} />
-            </div>
-          </div>
-        </section>
-
-        {/* Quick Actions */}
         <section className="actions-section">
           <h3>Quick Actions</h3>
           <div className="actions-grid">
@@ -216,14 +200,20 @@ function DashboardPage() {
             <GridIcon
               label="Safety Rules"
               iconSvg={<SafetyIcon />}
-              color="#28a745"
+              color="#28a745" // Green for safety
               onClick={() => navigateTo('/safety-rules')}
             />
             <GridIcon
               label="Fraud Detection"
               iconSvg={<FraudIcon />}
               color="#33cc33"
-              onClick={() => navigateTo('/fraud-detector')}
+              onClick={() => showComingSoon('Fraud Detector & SME Monitoring')}
+            />
+            <GridIcon
+              label="Smart Meters"
+              iconSvg={<SmartMeterIcon />}
+              color="#ff6633"
+              onClick={() => showComingSoon('Smart Meter (AMI-style) Checking')}
             />
             <GridIcon
               label="Reports"
@@ -236,7 +226,11 @@ function DashboardPage() {
       </div>
 
       {toast.show && (
-        <Toast message={toast.message} type={toast.type} onClose={closeToast} />
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={closeToast} 
+        />
       )}
     </div>
   );
