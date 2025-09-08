@@ -5,6 +5,7 @@ import MeterInspectionPage from './MeterInspectionPage.jsx'
 import ReportsPage from './ReportsPage.jsx'
 import OutagePage from './OutagePage.jsx'
 import DisconnectionsPage from './DisconnectionsPage.jsx' // Add this import
+import '@fortawesome/fontawesome-free/css/all.min.css';  // <-- This is the new line for Font Awesome icons!
 
 function App() {
   return (
