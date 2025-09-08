@@ -149,7 +149,6 @@ function DashboardPage() {
               color="#ff6633"
               onClick={() => navigate('/outage-reporting')}
             />
-            // Add this to the actions grid
             <GridIcon 
               iconSvg={<DisconnectionsIcon />}
               label="Disconnections" 
