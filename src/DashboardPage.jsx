@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
-import Toast from './Toast'; // Import your Toast component
-import logo from './kplc-logo.png'; // Assume this logo file exists in src/
+import Toast from './Toast'; // Import for toasts
+import logo from './kplc-logo.png';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -20,7 +20,7 @@ const GridIcon = ({ label, iconSvg, color, onClick }) => (
   </div>
 );
 
-// SVG Icons (simple, high-res, themed)
+// SVG Icons (including new SafetyIcon)
 const MeterInspectionIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -57,6 +57,12 @@ const SmartMeterIcon = () => (
   </svg>
 );
 
+const SafetyIcon = () => (  // New icon for Safety Rules (shield/helmet)
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V5l-9-4z"/>
+  </svg>
+);
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -65,9 +71,9 @@ function DashboardPage() {
     activeCases: 0,
     pendingSync: 0,
     outages: 0,
-    disconnections: 0 // From localStorage
+    disconnections: 0
   });
-  const [toast, setToast] = useState({ show: false, message: '', type: 'info' }); // Toast state
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
 
   useEffect(() => {
     const userDataString = localStorage.getItem('userData');
@@ -77,15 +83,15 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-    // Load real stats from localStorage (offline-first)
+    // Load real stats from localStorage
     const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length;
     const outages = JSON.parse(localStorage.getItem('outages') || '[]').length;
     const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]');
     const pendingDisconnections = disconnectionAccounts.filter(a => a.status === 'pending').length;
     setStats({ 
       inspections, 
-      activeCases: 3, // Placeholder for fraud
-      pendingSync: 2, // Placeholder
+      activeCases: 3, 
+      pendingSync: 2, 
       outages, 
       disconnections: pendingDisconnections 
     });
@@ -99,7 +105,6 @@ function DashboardPage() {
 
   const showComingSoon = (featureName) => {
     setToast({ show: true, message: `${featureName} is coming soon!`, type: 'info' });
-    // Toast auto-closes after 3s via Toast.jsx useEffect
   };
 
   const navigateTo = (path) => {
@@ -115,7 +120,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="KPLC Logo" className="header-logo" />
-          <h2> Daily Field Reports</h2>
+          <h2>Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -123,7 +128,7 @@ function DashboardPage() {
       <div className="greeting-section">
         <div className="greeting-text">
           <h2>{getGreeting()}, {userName} <span className="waving-hand">👋</span></h2>
-          <h1>Welcome back</h1>
+          <h1>Welcome back to Field Ops 2.0</h1>
         </div>
       </div>
 
@@ -193,16 +198,16 @@ function DashboardPage() {
               onClick={() => navigateTo('/disconnections')}
             />
             <GridIcon
+              label="Safety Rules"
+              iconSvg={<SafetyIcon />}
+              color="#28a745" // Green for safety
+              onClick={() => navigateTo('/safety-rules')}
+            />
+            <GridIcon
               label="Fraud Detection"
               iconSvg={<FraudIcon />}
               color="#33cc33"
               onClick={() => showComingSoon('Fraud Detector & SME Monitoring')}
-            />
-            <GridIcon
-              label="Reports"
-              iconSvg={<ReportsIcon />}
-              color="#9966cc"
-              onClick={() => navigateTo('/reports')}
             />
             <GridIcon
               label="Smart Meters"
@@ -210,11 +215,16 @@ function DashboardPage() {
               color="#ff6633"
               onClick={() => showComingSoon('Smart Meter (AMI-style) Checking')}
             />
+            <GridIcon
+              label="Reports"
+              iconSvg={<ReportsIcon />}
+              color="#9966cc"
+              onClick={() => navigateTo('/reports')}
+            />
           </div>
         </section>
       </div>
 
-      {/* Render Toast if showing */}
       {toast.show && (
         <Toast 
           message={toast.message} 
