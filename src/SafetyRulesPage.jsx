@@ -115,7 +115,6 @@ function SafetyRulesPage() {
           <img src={logo} alt="KPLC Logo" className="header-logo" />
           <h1>Electrical Safety Rules (Revised 2022)</h1>
         </div>
-        <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
 
       <nav className="safety-nav">
