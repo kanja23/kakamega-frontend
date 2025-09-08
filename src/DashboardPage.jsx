@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
+import Toast from './Toast'; // Import your Toast component
 import logo from './kplc-logo.png'; // Assume this logo file exists in src/
 
 const getGreeting = () => {
@@ -50,6 +51,12 @@ const ReportsIcon = () => (
   </svg>
 );
 
+const SmartMeterIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+  </svg>
+);
+
 function DashboardPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -60,6 +67,7 @@ function DashboardPage() {
     outages: 0,
     disconnections: 0 // From localStorage
   });
+  const [toast, setToast] = useState({ show: false, message: '', type: 'info' }); // Toast state
 
   useEffect(() => {
     const userDataString = localStorage.getItem('userData');
@@ -90,11 +98,16 @@ function DashboardPage() {
   };
 
   const showComingSoon = (featureName) => {
-    alert(`${featureName} feature is coming soon!`);
+    setToast({ show: true, message: `${featureName} is coming soon!`, type: 'info' });
+    // Toast auto-closes after 3s via Toast.jsx useEffect
   };
 
   const navigateTo = (path) => {
     navigate(path);
+  };
+
+  const closeToast = () => {
+    setToast({ show: false, message: '', type: 'info' });
   };
 
   return (
@@ -102,7 +115,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="KPLC Logo" className="header-logo" />
-          <h2>  Daily Field Reports</h2>
+          <h2> Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -183,7 +196,7 @@ function DashboardPage() {
               label="Fraud Detection"
               iconSvg={<FraudIcon />}
               color="#33cc33"
-              onClick={() => showComingSoon('Fraud Detector')}
+              onClick={() => showComingSoon('Fraud Detector & SME Monitoring')}
             />
             <GridIcon
               label="Reports"
@@ -193,13 +206,22 @@ function DashboardPage() {
             />
             <GridIcon
               label="Smart Meters"
-              iconSvg={<MeterInspectionIcon />} // Reuse for now
+              iconSvg={<SmartMeterIcon />}
               color="#ff6633"
-              onClick={() => showComingSoon('Smart Meter Checking')}
+              onClick={() => showComingSoon('Smart Meter (AMI-style) Checking')}
             />
           </div>
         </section>
       </div>
+
+      {/* Render Toast if showing */}
+      {toast.show && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={closeToast} 
+        />
+      )}
     </div>
   );
 }
