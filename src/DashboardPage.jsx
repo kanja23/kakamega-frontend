@@ -102,7 +102,7 @@ function DashboardPage() {
       <header className="dashboard-header">
         <div className="app-title-container">
           <img src={logo} alt="KPLC Logo" className="header-logo" />
-          <h2>Daily Field Reports</h2>
+          <h2>  Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -110,7 +110,7 @@ function DashboardPage() {
       <div className="greeting-section">
         <div className="greeting-text">
           <h2>{getGreeting()}, {userName} <span className="waving-hand">👋</span></h2>
-          <h1>Welcome back to Field Ops 2.0</h1>
+          <h1>Welcome back</h1>
         </div>
       </div>
 
