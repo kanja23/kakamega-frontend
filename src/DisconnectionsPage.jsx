@@ -179,7 +179,6 @@ function DisconnectionsPage() {
         <button onClick={() => navigate('/dashboard')} className="back-button">
           ← Back to Dashboard
         </button>
-        <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
 
       <main className="disconnections-main">
