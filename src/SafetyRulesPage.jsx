@@ -129,7 +129,7 @@ function SafetyRulesPage() {
         <section className="foreword-banner">
           <h2>Foreword</h2>
           <p>{safetyContent.foreword}</p>
-          <p className="foreword-source">Signed: Manager - Safety, Health & Environment</p>
+          <p className="foreword-source">
         </section>
 
         {/* Contents Overview */}
