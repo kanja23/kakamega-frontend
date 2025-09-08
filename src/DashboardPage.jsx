@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
 import Toast from './Toast';
-import logo from './kplc-logo.png'; // Reuse logo placeholder; replace with FinTech logo if available
+import logo from './kplc-logo.png';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -11,57 +11,67 @@ const getGreeting = () => {
   return 'Good evening';
 };
 
-const GridIcon = ({ label, iconSvg, color, onClick, progress }) => (
-  <div className="grid-icon" style={{ '--icon-color': color }} onClick={onClick}>
-    <div className="icon-container">
-      {iconSvg}
-    </div>
-    <span>{label}</span>
-    {progress && <div className="progress-bar"><div className="progress-fill" style={{ width: `${progress}%` }}></div></div>}
-  </div>
-);
+// SVG for Pie Chart (Round Scale for Inspections by Type)
+const PieChart = ({ data }) => {
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  let cumulative = 0;
+  return (
+    <svg viewBox="0 0 100 100" className="pie-chart">
+      {data.map((d, i) => {
+        const angle = (d.value / total) * 360;
+        const largeArc = angle > 180 ? 1 : 0;
+        const startAngle = cumulative;
+        cumulative += angle;
+        const endAngle = cumulative;
+        const x1 = 50 + 40 * Math.cos(startAngle * Math.PI / 180);
+        const y1 = 50 + 40 * Math.sin(startAngle * Math.PI / 180);
+        const x2 = 50 + 40 * Math.cos(endAngle * Math.PI / 180);
+        const y2 = 50 + 40 * Math.sin(endAngle * Math.PI / 180);
+        return (
+          <path key={i} d={`M50 50 L${x1} ${y1} A40 40 0 ${largeArc} 1 ${x2} ${y2} Z`} fill={d.color} />
+        );
+      })}
+      <circle cx="50" cy="50" r="30" fill="white" />
+      <text x="50" y="52" textAnchor="middle" className="pie-label">{data.reduce((sum, d) => sum + d.value, 0)} Total</text>
+    </svg>
+  );
+};
 
-// SVG Icons (FinTech-themed, high-res)
-const TransactionsIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 4h-2v3H7v2h2v3h2v-3h2v-2h-2V8zm6 6h-2v-2h2v2zm0-4h-2V8h2v2z"/>
+// SVG for Bar Graph (Outage Evolution)
+const BarGraph = ({ data }) => (
+  <svg viewBox="0 0 200 100" className="bar-graph">
+    {data.map((d, i) => (
+      <rect key={i} x={i * 40 + 10} y={100 - d.value * 2} width="30" height={d.value * 2} fill={d.color} rx="2" />
+    ))}
+    <text x="10" y="95" className="graph-label">Jun</text>
+    <text x="55" y="95" className="graph-label">Jul</text>
+    <text x="100" y="95" className="graph-label">Aug</text>
   </svg>
 );
 
-const FraudIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-  </svg>
-);
-
-const AccountsIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-  </svg>
-);
-
-const ReportsIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14H7v-7h3v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-  </svg>
-);
-
-const RetentionIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-    <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-  </svg>
-);
+// SVG for Line Graph (Electrification Progress)
+const LineGraph = ({ data }) => {
+  return (
+    <svg viewBox="0 0 200 100" className="line-graph">
+      <polyline points={data.map((d, i) => `${i * 50}, ${100 - d * 2}`).join(' ')} fill="none" stroke="#00337f" strokeWidth="3" />
+      <text x="10" y="95" className="graph-label">2018</text>
+      <text x="100" y="95" className="graph-label">2022</text>
+      <text x="190" y="95" className="graph-label">2025</text>
+    </svg>
+  );
+};
 
 function DashboardPage() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [stats, setStats] = useState({
-    transactions: 0,
-    activeAccounts: 0,
-    fraudDetectionRate: 85, // Industry average for 2025 FinTech
-    customerRetention: 90, // Simulated high retention
-    pendingSync: 0,
-    fraudCases: 0
+    inspections: 1500, // Simulated monthly from KPLC trends
+    outages: 5, // Major outages 2025
+    disconnections: 300, // Pending/actioned
+    fraudCases: 50, // From awareness campaigns
+    electrificationProgress: [75, 78, 79], // Trend 2018-2025
+    renewablesMix: [{ value: 90, color: '#28a745' }, { value: 10, color: '#6b7280' }], // 90% green
+    outageEvolution: [{ value: 3, color: '#ffcc00' }, { value: 4, color: '#ffcc00' }, { value: 5, color: '#ff6633' }] // Jun-Aug
   });
   const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
 
@@ -73,19 +83,12 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-    // Dynamic stats from localStorage (unchanged logic)
-    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]').length || 1500; // Simulated volume
-    const activeAccounts = JSON.parse(localStorage.getItem('accounts') || '[]').length || 1200; // Simulated growth
-    const fraudCases = JSON.parse(localStorage.getItem('fraudCases') || '[]').length;
-    const pendingSync = 2; // Fixed for demo
-    setStats({ 
-      transactions,
-      activeAccounts,
-      fraudDetectionRate: 85, // Fixed to plausible 2025 benchmark
-      customerRetention: 90, // Fixed to high retention goal
-      pendingSync,
-      fraudCases
-    });
+    // Dynamic from localStorage (unchanged)
+    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length || stats.inspections;
+    const outages = JSON.parse(localStorage.getItem('outages') || '[]').length || stats.outages;
+    const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]').length || stats.disconnections;
+    const fraudCases = JSON.parse(localStorage.getItem('fraudCases') || '[]').length || stats.fraudCases;
+    setStats({ ...stats, inspections, outages, disconnections, fraudCases });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -106,18 +109,12 @@ function DashboardPage() {
     setToast({ show: false, message: '', type: 'info' });
   };
 
-  const getStatusColor = (value, target) => {
-    if (value >= target) return 'green';
-    if (value >= target * 0.8) return 'yellow';
-    return 'red';
-  };
-
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="app-title-container">
-          <img src={logo} alt="FinTech Logo" className="header-logo" />
-          <h2>FinTech Operations Dashboard</h2>
+          <img src={logo} alt="KPLC Logo" className="header-logo" />
+          <h2>Kenya Power Dashboard</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
@@ -125,109 +122,114 @@ function DashboardPage() {
       <div className="greeting-section">
         <div className="greeting-text">
           <h2>{getGreeting()}, {userName} <span className="waving-hand">👋</span></h2>
-          <h1>Real-Time Financial Insights</h1>
-          <p>Monitor transactions, fraud, and customer metrics</p>
+          <h1>Field Ops Analytics</h1>
+          <p>Visual stats for inspections, outages, and safety metrics</p>
         </div>
       </div>
 
       <div className="dashboard-main">
-        {/* Quick Stats with KPIs */}
+        {/* Top Stats Cards (Inspired by Example) */}
         <section className="stats-section">
-          <h3>Operational KPIs (Progressing Well / Lacking)</h3>
+          <h3>Key Metrics</h3>
           <div className="stats-cards-container">
-            <div className="stat-card transactions" onClick={() => navigateTo('/meter-inspection')}>
-              <div className="stat-icon transactions">
-                <TransactionsIcon />
+            <div className="stat-card inspections">
+              <div className="stat-icon inspections">
+                <MeterInspectionIcon />
               </div>
-              <h4>Transaction Volume</h4>
-              <p className="stat-value">{stats.transactions.toLocaleString()}</p>
-              <div className="kpi-progress">
-                <span>Target: 2000/day</span>
-                <div className="progress-bar small">
-                  <div className="progress-fill" style={{ width: `${(stats.transactions / 2000 * 100)}%`, backgroundColor: getStatusColor(stats.transactions / 2000 * 100, 100) }}></div>
-                </div>
-              </div>
-              <span className={`kpi-status ${stats.transactions >= 1600 ? 'good' : 'lacking'}`}>{stats.transactions >= 1600 ? 'On Target' : 'Below Goal'}</span>
+              <h4>Inspections</h4>
+              <p className="stat-value">{stats.inspections}</p>
             </div>
-            <div className="stat-card fraud" onClick={() => navigateTo('/fraud-detector')}>
+            <div className="stat-card outages">
+              <div className="stat-icon outages">
+                <ReportOutageIcon />
+              </div>
+              <h4>Outages</h4>
+              <p className="stat-value">{stats.outages}</p>
+            </div>
+            <div className="stat-card disconnections">
+              <div className="stat-icon disconnections">
+                <DisconnectionIcon />
+              </div>
+              <h4>Disconnections</h4>
+              <p className="stat-value">{stats.disconnections}</p>
+            </div>
+            <div className="stat-card fraud">
               <div className="stat-icon fraud">
                 <FraudIcon />
               </div>
               <h4>Fraud Cases</h4>
               <p className="stat-value">{stats.fraudCases}</p>
-              <div className="kpi-progress">
-                <span>{stats.fraudDetectionRate}% Detected</span>
-                <div className="progress-bar small">
-                  <div className="progress-fill" style={{ width: `${stats.fraudDetectionRate}%`, backgroundColor: getStatusColor(stats.fraudDetectionRate, 90) }}></div>
-                </div>
-              </div>
-              <span className={`kpi-status ${stats.fraudDetectionRate >= 90 ? 'good' : 'lacking'}`}>{stats.fraudDetectionRate >= 90 ? 'Excellent' : 'Review Needed'}</span>
-            </div>
-            <div className="stat-card accounts" onClick={() => showComingSoon('Accounts Management')}>
-              <div className="stat-icon accounts">
-                <AccountsIcon />
-              </div>
-              <h4>Active Accounts</h4>
-              <p className="stat-value">{stats.activeAccounts.toLocaleString()}</p>
-              <div className="kpi-progress">
-                <span>Target: 1500</span>
-                <div className="progress-bar small">
-                  <div className="progress-fill" style={{ width: `${(stats.activeAccounts / 1500 * 100)}%`, backgroundColor: getStatusColor(stats.activeAccounts / 1500 * 100, 100) }}></div>
-                </div>
-              </div>
-              <span className={`kpi-status ${stats.activeAccounts >= 1200 ? 'good' : 'lacking'}`}>{stats.activeAccounts >= 1200 ? 'Growing' : 'Lagging'}</span>
-            </div>
-            <div className="stat-card sync">
-              <div className="stat-icon sync">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                </svg>
-              </div>
-              <h4>Pending Sync</h4>
-              <p className="stat-value">{stats.pendingSync}</p>
-              <span className="kpi-status lacking">Sync Now</span>
             </div>
           </div>
         </section>
 
-        {/* Quick Actions Grid */}
+        {/* Infographics Section (Pie, Bar, Line) */}
+        <section className="infographics-section">
+          <div className="infographic-row">
+            <div className="infographic-card">
+              <h4>Inspections by Type (Round Scale)</h4>
+              <PieChart data={[
+                { value: 40, color: '#28a745' }, // Meter
+                { value: 30, color: '#ffcc00' }, // Outage
+                { value: 30, color: '#ff6633' } // Fraud
+              ]} />
+            </div>
+            <div className="infographic-card">
+              <h4>Renewables Mix (Donut Scale)</h4>
+              <PieChart data={stats.renewablesMix} />
+            </div>
+          </div>
+          <div className="infographic-row">
+            <div className="infographic-card">
+              <h4>Outage Evolution (Bar Graph)</h4>
+              <BarGraph data={stats.outageEvolution} />
+            </div>
+            <div className="infographic-card">
+              <h4>Electrification Progress (Line Graph)</h4>
+              <LineGraph data={stats.electrificationProgress} />
+            </div>
+          </div>
+        </section>
+
+        {/* Quick Actions */}
         <section className="actions-section">
-          <h3>Financial Operations (Click for Details)</h3>
+          <h3>Quick Actions</h3>
           <div className="actions-grid">
             <GridIcon
-              label="Transactions"
-              iconSvg={<TransactionsIcon />}
+              label="Meter Inspection"
+              iconSvg={<MeterInspectionIcon />}
               color="#0066cc"
               onClick={() => navigateTo('/meter-inspection')}
-              progress={75}
+            />
+            <GridIcon
+              label="Report Outage"
+              iconSvg={<ReportOutageIcon />}
+              color="#ff6633"
+              onClick={() => navigateTo('/outage-reporting')}
+            />
+            <GridIcon
+              label="Disconnections"
+              iconSvg={<DisconnectionIcon />}
+              color="#ffcc00"
+              onClick={() => navigateTo('/disconnections')}
+            />
+            <GridIcon
+              label="Safety Rules"
+              iconSvg={<SafetyIcon />}
+              color="#28a745"
+              onClick={() => navigateTo('/safety-rules')}
             />
             <GridIcon
               label="Fraud Detection"
               iconSvg={<FraudIcon />}
-              color="#ff6633"
-              onClick={() => navigateTo('/fraud-detector')}
-              progress={85}
-            />
-            <GridIcon
-              label="Accounts Management"
-              iconSvg={<AccountsIcon />}
               color="#33cc33"
-              onClick={() => showComingSoon('Accounts Management')}
-              progress={80}
-            />
-            <GridIcon
-              label="Customer Retention"
-              iconSvg={<RetentionIcon />}
-              color="#ffcc00"
-              onClick={() => showComingSoon('Retention Analytics')}
-              progress={90}
+              onClick={() => navigateTo('/fraud-detector')}
             />
             <GridIcon
               label="Reports"
               iconSvg={<ReportsIcon />}
               color="#9966cc"
               onClick={() => navigateTo('/reports')}
-              progress={95}
             />
           </div>
         </section>
