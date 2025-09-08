@@ -59,7 +59,7 @@ const safetyContent = {
       title: "Appendices",
       content: [
         { subtitle: "Appendix A: Safety Documents", text: "Forms: Permit-to-Work, Sanction-for-Test, Limitation-of-Access, Live/Mechanical Permits." },
-        { subtitle: "Appendix B: Basic First Aid", text: "Scene management, primary survey. Electric Shock: Turn off power, CPR. Bleeding: Pressure. Concussions: Monitor. Burns: Cool/cover. Contacts: 1199 ambulance, 95551 KPLC." },
+        { subtitle: "Appendix B: Basic First Aid", text: "Scene management, primary survey. Electric Shock: Turn off power, CPR. Bleeding: Pressure. Concussions: Monitor. Burns: Cool/cover. Contacts: 1199 ambulance, *977# KPLC." },
         { subtitle: "Appendix C: Authorization Classes", text: "A1: All voltages; B: LV." },
         { subtitle: "Appendix D: Minimum Requirements", text: "Training/experience; re-authorize 3 years." },
         { subtitle: "Appendix E: Notes", text: "Pole inspection (sound wood), de-authorization, metal-clad vs. enclosed switchgear." }
@@ -200,7 +200,7 @@ function SafetyRulesPage() {
               <li>Bleeding: Direct pressure, elevate limb.</li>
               <li>Concussions: Monitor for headache/nausea; seek medical help.</li>
             </ol>
-            <p className="aid-note">Emergency Contacts: Ambulance 1199, Kenya Power 95551. Full procedures in Appendix B.</p>
+            <p className="aid-note">Emergency Contacts: Ambulance 1199, Kenya Power *977#. Full procedures in Appendix B.</p>
           </div>
         </section>
       </main>
