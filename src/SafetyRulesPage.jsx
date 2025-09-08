@@ -23,7 +23,6 @@ const safetyContent = {
         { subtitle: "1.10 Personal Protective Equipment", text: "Mandatory PPE: Helmets, gloves, etc.; inspect before use." }
       ]
     },
-    // Add placeholders for other sections based on contents (expand as needed)
     {
       id: 2,
       title: "Section 2 – Procedure for Initiation of Work",
@@ -71,7 +70,7 @@ const safetyContent = {
 function SafetyRulesPage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeSection, setActiveSection] = useState(null); // For accordion
+  const [activeSection, setActiveSection] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
 
   const showToast = (message, type = 'info') => {
@@ -82,7 +81,6 @@ function SafetyRulesPage() {
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    // Filter logic (simple keyword match)
     if (term) {
       const filtered = safetyContent.sections.map(s => ({
         ...s,
@@ -91,19 +89,12 @@ function SafetyRulesPage() {
         )
       })).filter(s => s.content.length > 0);
       if (filtered.length === 0) showToast('No matches. Try "PPE", "permit", or "shock". Full rules based on 2022 edition.', 'info');
-      // Use filtered for display (update state if needed)
     }
   };
 
   const toggleSection = (id) => {
     setActiveSection(activeSection === id ? null : id);
     showToast(`Opened ${safetyContent.sections.find(s => s.id === id).title}. Review before work!`, 'info');
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('userData');
-    navigate('/');
   };
 
   const closeToast = () => setToast({ show: false, message: '', type: 'info' });
@@ -152,16 +143,20 @@ function SafetyRulesPage() {
           <h2>Quick Safety Tips (From PDF)</h2>
           <div className="tips-grid">
             <div className="tip-card" onClick={() => showToast('Comply with Energy Act – report accidents in 48 hours! Section 1.6', 'info')}>
-              Report Incidents to EPRA
+              <h3>Report Incidents to EPRA</h3>
+              <p>Comply with Energy Act – report accidents in 48 hours! Section 1.6</p>
             </div>
             <div className="tip-card" onClick={() => showToast('Use PPE always – OSH Act Section 13. Section 1.10', 'info')}>
-              Wear PPE (Gloves, Helmets)
+              <h3>Wear PPE (Gloves, Helmets)</h3>
+              <p>Use PPE always – OSH Act Section 13. Section 1.10</p>
             </div>
             <div className="tip-card" onClick={() => showToast('Object to unsafe work – Foreword & Section 1.2', 'info')}>
-              Right to Refuse Unsafe Tasks
+              <h3>Right to Refuse Unsafe Tasks</h3>
+              <p>Object to unsafe work – Foreword & Section 1.2</p>
             </div>
             <div className="tip-card" onClick={() => showToast('Earth equipment – Section 2.6', 'info')}>
-              Isolate & Earth Before Work
+              <h3>Isolate & Earth Before Work</h3>
+              <p>Earth equipment – Section 2.6</p>
             </div>
           </div>
         </section>
@@ -172,6 +167,7 @@ function SafetyRulesPage() {
             <div key={section.id} className="section-accordion">
               <button className="accordion-header" onClick={() => toggleSection(section.id)}>
                 {section.title}
+                <i className={`fas ${activeSection === section.id ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
               </button>
               {activeSection === section.id && (
                 <div className="accordion-content">
