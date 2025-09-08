@@ -3,7 +3,8 @@ import LoginPage from './LoginPage.jsx'
 import DashboardPage from './DashboardPage.jsx'
 import MeterInspectionPage from './MeterInspectionPage.jsx'
 import ReportsPage from './ReportsPage.jsx'
-import OutagePage from './OutagePage.jsx' // Add this import
+import OutagePage from './OutagePage.jsx'
+import DisconnectionsPage from './DisconnectionsPage.jsx' // Add this import
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/meter-inspection" element={<MeterInspectionPage />} />
         <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/outage-reporting" element={<OutagePage />} /> {/* Add this route */}
+        <Route path="/outage-reporting" element={<OutagePage />} />
+        <Route path="/disconnections" element={<DisconnectionsPage />} /> {/* Add this route */}
       </Routes>
     </BrowserRouter>
   )
