@@ -5,7 +5,8 @@ import MeterInspectionPage from './MeterInspectionPage.jsx';
 import ReportsPage from './ReportsPage.jsx';
 import OutagePage from './OutagePage.jsx';
 import DisconnectionsPage from './DisconnectionsPage.jsx';
-import '@fortawesome/fontawesome-free/css/all.min.css'; // Font Awesome for icons (e.g., upload, search)
+import SafetyRulesPage from './SafetyRulesPage.jsx'; // New import for Safety Rules
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Font Awesome for icons
 
 function App() {
   // Placeholder component for coming soon features
@@ -45,6 +46,7 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/outage-reporting" element={<OutagePage />} />
         <Route path="/disconnections" element={<DisconnectionsPage />} />
+        <Route path="/safety-rules" element={<SafetyRulesPage />} /> {/* New Safety Rules route */}
         
         {/* New placeholder routes for remaining core modules from the prompt */}
         <Route path="/fraud-detector" element={<ComingSoon title="Fraud Detector & SME Monitoring" />} />
