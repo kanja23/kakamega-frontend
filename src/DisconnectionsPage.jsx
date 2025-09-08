@@ -26,12 +26,13 @@ function DisconnectionsPage() {
     if (savedAccounts) setAccounts(JSON.parse(savedAccounts));
     if (savedRemarks) setSupervisorRemarks(JSON.parse(savedRemarks));
     else {
+      // Mock data updated with new columns
       setAccounts([
-        { id: 1, name: "James Otuma", accountNo: "125510073", meterNo: "54401312787", region: "Kakamega, West Kenya", status: "pending", balance: 4250, remarks: "" },
-        { id: 2, name: "Mose Malava", accountNo: "145040648", meterNo: "37195030541", region: "Kakamega, West Kenya", status: "completed", action: "reconnected", balance: 3800, remarks: "" },
-        { id: 3, name: "Alima Burhan", accountNo: "145240891", meterNo: "14284736577", region: "Kakamega, West Kenya", status: "pending", balance: 7800, remarks: "" },
-        { id: 4, name: "Ayub L Masai", accountNo: "30071419", meterNo: "060349422", region: "Kakamega, West Kenya", status: "pending", balance: 45, remarks: "" },
-        { id: 5, name: "Alex Musiomi", accountNo: "110648177", meterNo: "37187116985", region: "Kakamega, West Kenya", status: "completed", action: "disconnected", balance: 30, remarks: "" }
+        { id: 1, meterNo: "54401312787", name: "James Otuma", supplyLocation: "Kakamega Town, Plot 123", lastMonthBalance: 2000, totalBalance: 4250, coordinates: "0.2827,34.7519,90", status: "pending", remarks: "" },
+        { id: 2, meterNo: "37195030541", name: "Mose Malava", supplyLocation: "West Kenya Estate, Block A", lastMonthBalance: 1500, totalBalance: 3800, coordinates: "0.2905,34.7667,180", status: "completed", action: "reconnected", remarks: "" },
+        { id: 3, meterNo: "14284736577", name: "Alima Burhan", supplyLocation: "Kakamega Central, Street 45", lastMonthBalance: 3000, totalBalance: 7800, coordinates: "0.2750,34.7583,270", status: "pending", remarks: "" },
+        { id: 4, meterNo: "060349422", name: "Ayub L Masai", supplyLocation: "Rural Kakamega Village", lastMonthBalance: 20, totalBalance: 45, coordinates: "0.3000,34.7500,0", status: "pending", remarks: "" },
+        { id: 5, meterNo: "37187116985", name: "Alex Musiomi", supplyLocation: "Urban West Kenya, Apt 5", lastMonthBalance: 10, totalBalance: 30, coordinates: "0.2850,34.7600,135", status: "completed", action: "disconnected", remarks: "" }
       ]);
       setSupervisorRemarks([
         { text: "Follow up with James Otuma regarding payment plan", date: "2025-09-08 14:30" },
@@ -60,7 +61,8 @@ function DisconnectionsPage() {
         const worksheet = workbook.Sheets[sheetName];
         let jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-        const expectedColumns = ['Account_Number', 'Customer_Name', 'Meter_Number', 'Region', 'Bill_Balance'];
+        // Updated expected columns
+        const expectedColumns = ['Meter_Number', 'Customer_Name', 'Supply_Location', 'Last_Month_Balance', 'Total_Balance', 'Coordinates'];
         const headers = Object.keys(jsonData[0] || {});
         const colMap = {};
         expectedColumns.forEach(col => {
@@ -68,24 +70,34 @@ function DisconnectionsPage() {
           if (matched) colMap[col] = matched;
         });
 
-        const processedData = jsonData.map((row, index) => ({
-          id: Date.now() + index,
-          accountNo: row[colMap.Account_Number] || row['Account No'] || '',
-          name: row[colMap.Customer_Name] || row['Customer Name'] || 'Unknown',
-          meterNo: row[colMap.Meter_Number] || row['Meter No'] || '',
-          region: row[colMap.Region] || row['Region'] || 'Unknown',
-          balance: parseFloat(row[colMap.Bill_Balance] || row['Balance'] || 0) || 0,
-          status: 'pending',
-          action: '',
-          remarks: ''
-        })).filter(row => row.accountNo && row.meterNo);
+        const processedData = jsonData.map((row, index) => {
+          // Parse coordinates (e.g., "lat,lng" or "lat,lng,bearing")
+          const coordsStr = row[colMap.Coordinates] || row['Coordinates'] || '';
+          const coordsParts = coordsStr.split(',');
+          const lat = parseFloat(coordsParts[0]);
+          const lng = parseFloat(coordsParts[1]);
+          const bearing = coordsParts[2] ? parseFloat(coordsParts[2]) : 0;
 
-        if (processedData.length === 0) throw new Error('No valid data found. Check columns.');
+          return {
+            id: Date.now() + index,
+            meterNo: row[colMap.Meter_Number] || row['Meter No'] || '',
+            name: row[colMap.Customer_Name] || row['Customer Name'] || 'Unknown',
+            supplyLocation: row[colMap.Supply_Location] || row['Supply Location'] || 'Unknown',
+            lastMonthBalance: parseFloat(row[colMap.Last_Month_Balance] || row['Last Month Balance'] || 0) || 0,
+            totalBalance: parseFloat(row[colMap.Total_Balance] || row['Total Balance'] || 0) || 0,
+            coordinates: { lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng, bearing },
+            status: 'pending',
+            action: '',
+            remarks: ''
+          };
+        }).filter(row => row.meterNo && row.name); // Filter valid rows
+
+        if (processedData.length === 0) throw new Error('No valid data found. Check columns: Meter_Number, Customer_Name, Supply_Location, Last_Month_Balance, Total_Balance, Coordinates.');
 
         setAccounts(processedData);
-        showToast(`Uploaded ${processedData.length} accounts successfully!`);
+        showToast(`Uploaded ${processedData.length} accounts successfully! Coordinates ready for mapping.`);
       } catch (error) {
-        showToast(`Error uploading: ${error.message}. Ensure file has columns like Account_Number, Customer_Name, etc.`, 'error');
+        showToast(`Error uploading: ${error.message}. Ensure file has the required columns.`, 'error');
         console.error(error);
       }
       setIsUploading(false);
@@ -132,29 +144,29 @@ function DisconnectionsPage() {
 
   const getStatusText = (account) => {
     if (account.status === 'completed') return 'Completed';
-    if (account.balance > 51) return 'Disconnect Required';
+    if (account.totalBalance > 51) return 'Disconnect Required';
     return 'Compliant';
   };
 
   const getStatusClass = (account) => {
     if (account.status === 'completed') return 'completed';
-    if (account.balance > 51) return 'pending-high';
+    if (account.totalBalance > 51) return 'pending-high';
     return 'pending-low';
   };
 
   const filteredAccounts = accounts.filter(account => {
     const matchesSearch = searchTerm === '' || 
       account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      account.accountNo.includes(searchTerm) ||
-      account.meterNo.includes(searchTerm);
+      account.meterNo.includes(searchTerm) ||
+      account.supplyLocation.toLowerCase().includes(searchTerm.toLowerCase());
     
     let matchesFilter = true;
     if (filter === 'pending') matchesFilter = account.status === 'pending';
     if (filter === 'completed') matchesFilter = account.status === 'completed';
-    if (filter === 'highPriority') matchesFilter = account.balance > 50;
-    if (filter === 'disconnections') matchesFilter = account.balance > 51 && account.status === 'pending';
+    if (filter === 'highPriority') matchesFilter = account.totalBalance > 50;
+    if (filter === 'disconnections') matchesFilter = account.totalBalance > 51 && account.status === 'pending';
     if (filter === 'reconnections') matchesFilter = account.status === 'completed' && account.action === 'disconnected';
-    if (filter === 'compliant') matchesFilter = account.balance <= 51;
+    if (filter === 'compliant') matchesFilter = account.totalBalance <= 51;
     
     return matchesSearch && matchesFilter;
   });
@@ -163,8 +175,8 @@ function DisconnectionsPage() {
     total: accounts.length,
     pending: accounts.filter(a => a.status === 'pending').length,
     completed: accounts.filter(a => a.status === 'completed').length,
-    highPriority: accounts.filter(a => a.balance > 51).length,
-    totalDebt: accounts.reduce((sum, a) => sum + a.balance, 0)
+    highPriority: accounts.filter(a => a.totalBalance > 51).length,
+    totalDebt: accounts.reduce((sum, a) => sum + a.totalBalance, 0)
   };
 
   const handleLogout = () => {
@@ -173,12 +185,22 @@ function DisconnectionsPage() {
     navigate('/');
   };
 
+  // Generate Google Maps link (satellite view, precise navigation with bearing)
+  const getMapLink = (account) => {
+    if (!account.coordinates.lat || !account.coordinates.lng) return '#';
+    const { lat, lng, bearing } = account.coordinates;
+    const baseUrl = `https://www.google.com/maps?q=${lat},${lng}&t=k`; // t=k for satellite
+    const heading = bearing ? `&heading=${bearing}` : ''; // Bearing for direction
+    return `${baseUrl}${heading}`;
+  };
+
   return (
     <div className="disconnections-page">
       <header className="disconnections-header">
         <button onClick={() => navigate('/dashboard')} className="back-button">
           ← Back to Dashboard
         </button>
+        <h1>Disconnections & Reconnections</h1>
         <button onClick={handleLogout} className="logout-button">Logout</button>
       </header>
 
@@ -189,7 +211,7 @@ function DisconnectionsPage() {
             <i className="fas fa-file-excel"></i>
             <h3>{isUploading ? 'Uploading...' : 'Upload Daily Debt List Report'}</h3>
             <p>Drag & drop your Excel file here or click to browse</p>
-            <p className="small">Supported format: .xlsx, .xls, .csv</p>
+            <p className="small">Supported format: .xlsx, .xls, .csv (with Coordinates for mapping)</p>
             <button className="btn btn-primary" disabled={isUploading}>
               <i className="fas fa-upload"></i> Browse Files
             </button>
@@ -229,7 +251,7 @@ function DisconnectionsPage() {
             <div className="stat-card">
               <div className="stat-icon debt"></div>
               <h4>Total Debt</h4>
-              <p className="stat-value">KES {stats.totalDebt.toLocaleString()}</p>
+              <p className="stat-value">Ksh {stats.totalDebt.toLocaleString()}</p>
             </div>
           </div>
         </section>
@@ -239,7 +261,7 @@ function DisconnectionsPage() {
             <input 
               type="text" 
               className="search-input" 
-              placeholder="Filter by Meter Number, Account No, or Customer Name"
+              placeholder="Filter by Meter Number (or Name/Location)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -267,11 +289,12 @@ function DisconnectionsPage() {
             <table className="accounts-table">
               <thead>
                 <tr>
-                  <th>Account No</th>
+                  <th>Meter Number</th>
                   <th>Customer Name</th>
-                  <th>Meter No</th>
-                  <th>Region</th>
-                  <th>Debt Amount (Ksh)</th>
+                  <th>Supply Location</th>
+                  <th>Last Month Bill/Balance (Ksh)</th>
+                  <th>Total Bill/Balance (Ksh)</th>
+                  <th>Location/Coordinates</th>
                   <th>Status</th>
                   <th>Actions</th>
                   <th>Remarks</th>
@@ -280,12 +303,28 @@ function DisconnectionsPage() {
               <tbody>
                 {filteredAccounts.map(account => (
                   <tr key={account.id} data-status={account.status}>
-                    <td>{account.accountNo}</td>
-                    <td>{account.name}</td>
                     <td>{account.meterNo}</td>
-                    <td>{account.region}</td>
-                    <td className={account.balance > 50 ? 'debt-high' : 'debt-low'}>
-                      {account.balance.toLocaleString()}
+                    <td>{account.name}</td>
+                    <td>{account.supplyLocation}</td>
+                    <td>{account.lastMonthBalance.toLocaleString()}</td>
+                    <td className={account.totalBalance > 50 ? 'debt-high' : 'debt-low'}>
+                      {account.totalBalance.toLocaleString()}
+                    </td>
+                    <td>
+                      {account.coordinates.lat && account.coordinates.lng ? (
+                        <a 
+                          href={getMapLink(account)} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="map-link"
+                          title="Open in Google Maps Satellite View (Precise Navigation)"
+                        >
+                          {account.coordinates.lat.toFixed(4)}, {account.coordinates.lng.toFixed(4)}
+                          {account.coordinates.bearing ? ` (Bearing: ${account.coordinates.bearing}°)` : ''}
+                        </a>
+                      ) : (
+                        'No Coordinates'
+                      )}
                     </td>
                     <td>
                       <span className={`status-badge status-${getStatusClass(account)}`}>
@@ -301,7 +340,7 @@ function DisconnectionsPage() {
                           >
                             Reconnect
                           </button>
-                        ) : account.balance > 51 ? (
+                        ) : account.totalBalance > 51 ? (
                           <button 
                             className="btn-sm btn-danger"
                             onClick={() => handleAction(account.id, 'disconnect')}
@@ -328,7 +367,7 @@ function DisconnectionsPage() {
                 ))}
                 {filteredAccounts.length === 0 && (
                   <tr>
-                    <td colSpan="8" style={{ textAlign: 'center', padding: '20px' }}>
+                    <td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>
                       No accounts match the filter. Upload data or adjust search.
                     </td>
                   </tr>
