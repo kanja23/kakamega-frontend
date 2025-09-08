@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
-import logo from './kplc-logo.png';
+import logo from './kplc-logo.png'; // Assume this logo file exists in src/
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -19,7 +19,7 @@ const GridIcon = ({ label, iconSvg, color, onClick }) => (
   </div>
 );
 
-// SVG Icons
+// SVG Icons (simple, high-res, themed)
 const MeterInspectionIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -38,7 +38,7 @@ const DisconnectionIcon = () => (
   </svg>
 );
 
-const AnomaliesIcon = () => (
+const FraudIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
   </svg>
@@ -57,7 +57,8 @@ function DashboardPage() {
     inspections: 0,
     activeCases: 0,
     pendingSync: 0,
-    outages: 0
+    outages: 0,
+    disconnections: 0 // From localStorage
   });
 
   useEffect(() => {
@@ -68,8 +69,18 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-    // Placeholder stats - can load from localStorage later
-    setStats({ inspections: 5, activeCases: 3, pendingSync: 2, outages: 1 });
+    // Load real stats from localStorage (offline-first)
+    const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length;
+    const outages = JSON.parse(localStorage.getItem('outages') || '[]').length;
+    const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]');
+    const pendingDisconnections = disconnectionAccounts.filter(a => a.status === 'pending').length;
+    setStats({ 
+      inspections, 
+      activeCases: 3, // Placeholder for fraud
+      pendingSync: 2, // Placeholder
+      outages, 
+      disconnections: pendingDisconnections 
+    });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -90,7 +101,7 @@ function DashboardPage() {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="app-title-container">
-          <img src={logo} alt="Logo" className="header-logo" />
+          <img src={logo} alt="KPLC Logo" className="header-logo" />
           <h2>Daily Field Reports</h2>
         </div>
         <button onClick={handleLogout} className="logout-button">Logout</button>
@@ -98,7 +109,7 @@ function DashboardPage() {
 
       <div className="greeting-section">
         <div className="greeting-text">
-          <h2>{getGreeting()}, {userName} 👋</h2>
+          <h2>{getGreeting()}, {userName} <span className="waving-hand">👋</span></h2>
           <h1>Welcome back to Field Ops 2.0</h1>
         </div>
       </div>
@@ -116,7 +127,7 @@ function DashboardPage() {
             </div>
             <div className="stat-card cases">
               <div className="stat-icon cases">
-                <AnomaliesIcon />
+                <FraudIcon />
               </div>
               <h4>Active Fraud Cases</h4>
               <p className="stat-value">{stats.activeCases}</p>
@@ -136,6 +147,13 @@ function DashboardPage() {
               </div>
               <h4>Outages Reported</h4>
               <p className="stat-value">{stats.outages}</p>
+            </div>
+            <div className="stat-card disconnections">
+              <div className="stat-icon disconnections">
+                <DisconnectionIcon />
+              </div>
+              <h4>Pending Disconnections</h4>
+              <p className="stat-value">{stats.disconnections}</p>
             </div>
           </div>
         </section>
@@ -163,7 +181,7 @@ function DashboardPage() {
             />
             <GridIcon
               label="Fraud Detection"
-              iconSvg={<AnomaliesIcon />}
+              iconSvg={<FraudIcon />}
               color="#33cc33"
               onClick={() => showComingSoon('Fraud Detector')}
             />
@@ -172,6 +190,12 @@ function DashboardPage() {
               iconSvg={<ReportsIcon />}
               color="#9966cc"
               onClick={() => navigateTo('/reports')}
+            />
+            <GridIcon
+              label="Smart Meters"
+              iconSvg={<MeterInspectionIcon />} // Reuse for now
+              color="#ff6633"
+              onClick={() => showComingSoon('Smart Meter Checking')}
             />
           </div>
         </section>
