@@ -33,25 +33,13 @@
   color: white;
 }
 
-.logout-button {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.logout-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
 .safety-nav {
   padding: 15px 25px;
   background: white;
   border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .back-button {
@@ -82,26 +70,58 @@
   margin: 0 auto;
 }
 
-.search-section {
-  margin-bottom: 20px;
+.foreword-banner {
+  background: linear-gradient(135deg, #e6f7ff 0%, #d1edff 100%);
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-left: 5px solid #0066cc;
+}
+
+.foreword-banner h2 {
+  color: #003366;
+  margin-top: 0;
+  border-bottom: 2px solid #0066cc;
+  padding-bottom: 10px;
+}
+
+.foreword-source {
+  font-style: italic;
+  color: #666;
+  margin-top: 15px;
+}
+
+.contents-section {
   background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.contents-section h2 {
+  color: #003366;
+  border-bottom: 2px solid #F9A01B;
+  padding-bottom: 10px;
+}
+
+.search-section {
+  margin-bottom: 25px;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 14px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 1rem;
+  transition: border-color 0.3s;
 }
 
-.search-results {
-  margin-top: 10px;
-  color: #666;
-  font-style: italic;
+.search-input:focus {
+  border-color: #0066cc;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
 }
 
 .quick-tips {
@@ -109,138 +129,193 @@
 }
 
 .quick-tips h2 {
-  color: #00337f;
+  color: #003366;
   border-bottom: 2px solid #F9A01B;
   padding-bottom: 10px;
 }
 
 .tips-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .tip-card {
   background: white;
-  border-radius: 8px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border-left: 4px solid #28a745;
+  border-left: 5px solid #0066cc;
+}
+
+.tip-card:nth-child(2) {
+  border-left-color: #00a651;
+}
+
+.tip-card:nth-child(3) {
+  border-left-color: #ff9900;
+}
+
+.tip-card:nth-child(4) {
+  border-left-color: #cc0000;
 }
 
 .tip-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.tip-card svg {
-  width: 40px;
-  height: 40px;
-  color: #28a745;
+.tip-card h3 {
+  color: #003366;
+  margin-top: 0;
   margin-bottom: 10px;
 }
 
 .rules-sections {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
 }
 
 .rules-sections h2 {
-  color: #00337f;
+  color: #003366;
   border-bottom: 2px solid #F9A01B;
   padding-bottom: 10px;
 }
 
 .section-accordion {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .accordion-header {
   width: 100%;
-  background: #f8f9fa;
-  border: 1px solid #ddd;
-  padding: 15px;
-  text-align: left;
+  background: linear-gradient(to right, #0066cc, #004d99);
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 600;
-  color: #00337f;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: background 0.3s;
 }
 
 .accordion-header:hover {
-  background: #e9ecef;
+  background: linear-gradient(to right, #0055b3, #004080);
 }
 
 .accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+  margin-top: 5px;
 }
 
 .rule-item {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.rule-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .rule-item h3 {
   color: #0055A5;
-  margin-bottom: 5px;
-}
-
-.rule-item p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-.no-results {
-  text-align: center;
-  color: #666;
-  font-style: italic;
-  padding: 20px;
+  margin-bottom: 10px;
 }
 
 .first-aid-quick {
-  background: #fff3cd;
-  border-radius: 8px;
-  padding: 20px;
-  border-left: 4px solid #ffc107;
+  background: linear-gradient(to bottom, #fff4f4, #ffe6e6);
+  border-left: 5px solid #cc0000;
+  padding: 25px;
+  border-radius: 10px;
+  margin-top: 30px;
 }
 
 .first-aid-quick h2 {
-  color: #856404;
+  color: #cc0000;
   margin-top: 0;
+  border-bottom: 2px solid #cc0000;
+  padding-bottom: 10px;
 }
 
 .aid-steps {
   background: white;
-  padding: 15px;
-  border-radius: 4px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.aid-steps h3 {
+  color: #990000;
+  margin-top: 0;
 }
 
 .aid-steps ol {
-  padding-left: 20px;
+  margin-left: 20px;
+  margin-bottom: 15px;
 }
 
 .aid-steps li {
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .aid-note {
   font-weight: 600;
-  color: #856404;
+  color: #990000;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  border-radius: 6px;
 }
 
 @media (max-width: 768px) {
-  .safety-header { padding: 15px; flex-direction: column; gap: 10px; }
-  .safety-main { padding: 15px; }
-  .tips-grid { grid-template-columns: 1fr; }
-  .accordion-header { padding: 12px; font-size: 0.9rem; }
-  .search-input { font-size: 16px; } /* Prevent zoom on iOS */
+  .safety-header {
+    padding: 15px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .safety-nav {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .safety-main {
+    padding: 15px;
+  }
+  
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .accordion-header {
+    padding: 12px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title-container h1 {
+    font-size: 1.2rem;
+  }
+  
+  .foreword-banner,
+  .contents-section,
+  .rules-sections {
+    padding: 15px;
+  }
+  
+  .search-input {
+    font-size: 16px;
+  }
 }
