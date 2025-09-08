@@ -66,6 +66,24 @@
   font-weight: 700;
 }
 
+/* Waving Hand Animation Fix */
+.waving-hand {
+  display: inline-block;
+  animation: wave 2.5s infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
 .dashboard-main {
   padding: 0 25px;
 }
@@ -115,13 +133,14 @@
   width: 24px;
   height: 24px;
   z-index: 2;
-  fill: #fff; /* White icon on colored background */
+  fill: #fff;
 }
 
 .stat-icon.inspections { background-color: #0066cc; }
 .stat-icon.cases { background-color: #ff6633; }
 .stat-icon.sync { background-color: #33cc33; }
 .stat-icon.outages { background-color: #ff6633; }
+.stat-icon.disconnections { background-color: #ffcc00; }
 
 .stat-card h4 {
   margin: 0 0 10px;
@@ -168,7 +187,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: rgba(0, 102, 204, 0.1); /* Default, override per icon */
+  background-color: rgba(0, 102, 204, 0.1);
 }
 
 .icon-container svg {
@@ -184,6 +203,7 @@
 .grid-icon:nth-child(3) .icon-container { background-color: rgba(255, 204, 0, 0.1); color: #ffcc00; }
 .grid-icon:nth-child(4) .icon-container { background-color: rgba(51, 204, 51, 0.1); color: #33cc33; }
 .grid-icon:nth-child(5) .icon-container { background-color: rgba(153, 102, 204, 0.1); color: #9966cc; }
+.grid-icon:nth-child(6) .icon-container { background-color: rgba(255, 102, 51, 0.1); color: #ff6633; }
 
 .grid-icon span {
   display: block;
