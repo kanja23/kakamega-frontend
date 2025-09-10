@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './DashboardPage.css';
-import Toast from './Toast'; // Import for toasts
+import Toast from './Toast';
 import logo from './kplc-logo.png';
 
 const getGreeting = () => {
@@ -20,7 +20,7 @@ const GridIcon = ({ label, iconSvg, color, onClick }) => (
   </div>
 );
 
-// SVG Icons (including new SafetyIcon)
+// SVG Icons (added RebillingIcon)
 const MeterInspectionIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -57,9 +57,15 @@ const SmartMeterIcon = () => (
   </svg>
 );
 
-const SafetyIcon = () => (  // New icon for Safety Rules (shield/helmet)
+const SafetyIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
     <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V5l-9-4z"/>
+  </svg>
+);
+
+const RebillingIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 6h-2v2h2v2h-2v2H9v-2H7v-2h2v-2H9V8h2v2h2v2zm4 6h-8v-2h8v2zm0-4h-8v-2h8v2z"/>
   </svg>
 );
 
@@ -83,18 +89,11 @@ function DashboardPage() {
     } else {
       navigate('/');
     }
-    // Load real stats from localStorage
     const inspections = JSON.parse(localStorage.getItem('inspections') || '[]').length;
     const outages = JSON.parse(localStorage.getItem('outages') || '[]').length;
     const disconnectionAccounts = JSON.parse(localStorage.getItem('disconnectionAccounts') || '[]');
     const pendingDisconnections = disconnectionAccounts.filter(a => a.status === 'pending').length;
-    setStats({ 
-      inspections, 
-      activeCases: 3, 
-      pendingSync: 2, 
-      outages, 
-      disconnections: pendingDisconnections 
-    });
+    setStats({ inspections, activeCases: 3, pendingSync: 2, outages, disconnections: pendingDisconnections });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -200,8 +199,14 @@ function DashboardPage() {
             <GridIcon
               label="Safety Rules"
               iconSvg={<SafetyIcon />}
-              color="#28a745" // Green for safety
+              color="#28a745"
               onClick={() => navigateTo('/safety-rules')}
+            />
+            <GridIcon
+              label="Rebilling Automation"
+              iconSvg={<RebillingIcon />}
+              color="#ff9900"
+              onClick={() => navigateTo('/rebilling-automation')}
             />
             <GridIcon
               label="Fraud Detection"
