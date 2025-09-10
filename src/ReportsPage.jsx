@@ -15,6 +15,13 @@ function ReportsPage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [userName, setUserName] = useState('');
+  const [rebillingStats, setRebillingStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    totalAdjustment: 0
+  });
 
   // Report types based on your modules
   const reportTypes = {
@@ -22,7 +29,8 @@ function ReportsPage() {
     outage: 'Power Outage',
     fraud: 'Fraud Case',
     disconnection: 'Disconnection',
-    issue: 'Field Issue'
+    issue: 'Field Issue',
+    rebilling: 'Rebilling Request' // Added rebilling type
   };
 
   useEffect(() => {
@@ -34,6 +42,7 @@ function ReportsPage() {
     }
     
     loadReports();
+    loadRebillingStats();
   }, []);
 
   useEffect(() => {
@@ -48,6 +57,7 @@ function ReportsPage() {
       const savedFraudCases = JSON.parse(localStorage.getItem('fraudCases') || '[]');
       const savedDisconnections = JSON.parse(localStorage.getItem('disconnections') || '[]');
       const savedIssues = JSON.parse(localStorage.getItem('fieldIssues') || '[]');
+      const savedRebilling = JSON.parse(localStorage.getItem('rebillingRequests') || '[]');
 
       // Combine all reports with type identifiers
       const allReports = [
@@ -55,12 +65,27 @@ function ReportsPage() {
         ...savedOutages.map(r => ({ ...r, type: 'outage' })),
         ...savedFraudCases.map(r => ({ ...r, type: 'fraud' })),
         ...savedDisconnections.map(r => ({ ...r, type: 'disconnection' })),
-        ...savedIssues.map(r => ({ ...r, type: 'issue' }))
+        ...savedIssues.map(r => ({ ...r, type: 'issue' })),
+        ...savedRebilling.map(r => ({ 
+          ...r, 
+          type: 'rebilling',
+          id: r.id || Date.now(),
+          timestamp: r.timestamp || new Date().toISOString()
+        }))
       ].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
       setReports(allReports);
     } catch (error) {
       console.error('Error loading reports:', error);
+    }
+  };
+
+  const loadRebillingStats = () => {
+    try {
+      const savedStats = JSON.parse(localStorage.getItem('rebillingStats') || '{}');
+      setRebillingStats(savedStats);
+    } catch (error) {
+      console.error('Error loading rebilling stats:', error);
     }
   };
 
@@ -139,6 +164,16 @@ function ReportsPage() {
             'Estimated Loss': report.estimatedLoss ? `KSh ${report.estimatedLoss}` : 'N/A',
             'Actions Taken': report.actionsTaken || 'None'
           };
+        } else if (report.type === 'rebilling') {
+          return {
+            ...baseData,
+            'Account Number': report.accountNo || 'N/A',
+            'Old Bill': report.oldBill ? `KSh ${report.oldBill}` : 'N/A',
+            'New Bill': report.newBill ? `KSh ${report.newBill}` : 'N/A',
+            'Adjustment Amount': report.adjustmentAmount ? `KSh ${report.adjustmentAmount}` : 'N/A',
+            'Reason': report.reason || 'N/A',
+            'Officer': report.officerName || userName
+          };
         }
         // Add more type-specific mappings as needed
 
@@ -167,7 +202,9 @@ function ReportsPage() {
       submitted: 'status-submitted',
       pending: 'status-pending',
       resolved: 'status-resolved',
-      escalated: 'status-escalated'
+      escalated: 'status-escalated',
+      approved: 'status-resolved', // Use resolved style for approved
+      rejected: 'status-escalated' // Use escalated style for rejected
     };
     
     return (
@@ -196,6 +233,33 @@ function ReportsPage() {
       </header>
 
       <div className="reports-content">
+        {/* Rebilling Stats Section */}
+        <div className="stats-section">
+          <h2>Rebilling Statistics</h2>
+          <div className="stats-grid">
+            <div className="stat-card">
+              <h3>Total Requests</h3>
+              <p>{rebillingStats.total || 0}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Pending</h3>
+              <p>{rebillingStats.pending || 0}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Approved</h3>
+              <p>{rebillingStats.approved || 0}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Rejected</h3>
+              <p>{rebillingStats.rejected || 0}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Total Adjustment</h3>
+              <p>KES {rebillingStats.totalAdjustment ? rebillingStats.totalAdjustment.toLocaleString() : 0}</p>
+            </div>
+          </div>
+        </div>
+
         {/* Filters Section */}
         <div className="filters-section">
           <h2>Filter Reports</h2>
@@ -242,6 +306,8 @@ function ReportsPage() {
                 <option value="pending">Pending</option>
                 <option value="resolved">Resolved</option>
                 <option value="escalated">Escalated</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
               </select>
             </div>
           </div>
@@ -274,11 +340,23 @@ function ReportsPage() {
                       {report.type === 'fraud' && `Fraud Case: ${report.fraudType}`}
                       {report.type === 'disconnection' && `Disconnection: ${report.accountNumber}`}
                       {report.type === 'issue' && `Issue: ${report.issueType}`}
+                      {report.type === 'rebilling' && `Rebilling: ${report.accountNo}`}
                     </p>
                     
                     <p className="report-date">
                       {new Date(report.timestamp).toLocaleString()}
                     </p>
+                    
+                    {report.type === 'rebilling' && (
+                      <>
+                        <p className="report-detail">
+                          Adjustment: KES {report.adjustmentAmount || 0}
+                        </p>
+                        <p className="report-detail">
+                          Reason: {report.reason || 'N/A'}
+                        </p>
+                      </>
+                    )}
                     
                     <p className="report-location">
                       {report.location && 
