@@ -22,13 +22,20 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- 👇 Register service worker -->
+    <!-- 👇 Register service worker with improved error handling -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('Service Worker registered:', reg))
-            .catch(err => console.error('Service Worker registration failed:', err));
+            .then(reg => {
+              console.log('Service Worker registered:', reg);
+              // Check for updates
+              reg.update();
+            })
+            .catch(err => {
+              console.error('Service Worker registration failed:', err);
+              // Don't show error to user as it's not critical
+            });
         });
       }
     </script>
