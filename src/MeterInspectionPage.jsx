@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
-import logo from './kplc-logo.png';
-import { staffStructure, getAllInspectors } from '../data/staffStructure';
+import { staffStructure, getAllStaff } from '../data/staffStructure';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -20,7 +19,8 @@ function MeterInspectionPage() {
     timestamp: new Date().toISOString(),
     inspectorName: '',
     zone: '',
-    sector: ''
+    sector: '',
+    role: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
@@ -31,14 +31,15 @@ function MeterInspectionPage() {
     // Get user data to pre-fill inspector name if available
     const userData = JSON.parse(localStorage.getItem('userData') || '{}');
     if (userData.full_name) {
-      const inspectors = getAllInspectors();
-      const userInspector = inspectors.find(i => i.name === userData.full_name);
-      if (userInspector) {
+      const allStaff = getAllStaff();
+      const userStaff = allStaff.find(staff => staff.name === userData.full_name);
+      if (userStaff) {
         setFormData(prev => ({
           ...prev,
           inspectorName: userData.full_name,
-          zone: userInspector.zone,
-          sector: userInspector.sector
+          zone: userStaff.zone,
+          sector: userStaff.sector,
+          role: userStaff.role
         }));
       }
     }
@@ -52,13 +53,14 @@ function MeterInspectionPage() {
     const { name, value } = e.target;
     
     if (name === 'inspectorName') {
-      const selectedInspector = getAllInspectors().find(insp => insp.name === value);
-      if (selectedInspector) {
+      const selectedStaff = getAllStaff().find(staff => staff.name === value);
+      if (selectedStaff) {
         setFormData(prev => ({
           ...prev,
           inspectorName: value,
-          zone: selectedInspector.zone,
-          sector: selectedInspector.sector
+          zone: selectedStaff.zone,
+          sector: selectedStaff.sector,
+          role: selectedStaff.role
         }));
         return;
       }
@@ -127,7 +129,33 @@ function MeterInspectionPage() {
       timeStyle: 'medium' 
     });
 
-    // Your email sending logic here
+    // Email template parameters
+    const templateParams = {
+      to_name: 'Supervisor',
+      from_name: inspectionData.staffName || 'Field Officer',
+      meter_number: inspectionData.meterNumber,
+      reading: inspectionData.reading,
+      status: inspectionData.status,
+      inspector_name: inspectionData.inspectorName,
+      inspector_role: inspectionData.role,
+      zone: inspectionData.zone,
+      sector: inspectionData.sector,
+      location: inspectionData.location ? 
+        `Lat: ${inspectionData.location.lat}, Lng: ${inspectionData.location.lng}` : 'Not provided',
+      notes: inspectionData.notes || 'No additional notes',
+      timestamp: timestamp,
+      to_email: 'supervisor@kplc.com',
+      reply_to: userEmail
+    };
+
+    // Send email using EmailJS
+    emailjs.send('service_your_service_id', 'template_meter_inspection', templateParams, 'Qn5t9k9qX720n3G9_')
+      .then((response) => {
+        console.log('Email sent successfully!', response.status, response.text);
+      })
+      .catch((error) => {
+        console.error('Failed to send email:', error);
+      });
   };
 
   const handleSubmit = async (e) => {
@@ -152,7 +180,7 @@ function MeterInspectionPage() {
       sendEmail(inspectionData);
       
       // Reset form but keep inspector details
-      setFormData({
+      setFormData(prev => ({
         meterNumber: '',
         reading: '',
         status: 'normal',
@@ -161,10 +189,11 @@ function MeterInspectionPage() {
         photoPreview: null,
         location: null,
         timestamp: new Date().toISOString(),
-        inspectorName: formData.inspectorName,
-        zone: formData.zone,
-        sector: formData.sector
-      });
+        inspectorName: prev.inspectorName,
+        zone: prev.zone,
+        sector: prev.sector,
+        role: prev.role
+      }));
       
       showToast('Meter inspection submitted successfully!');
     } catch (error) {
@@ -254,7 +283,7 @@ function MeterInspectionPage() {
         <main className="inspection-form-container">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="inspectorName">Inspector Name *</label>
+              <label htmlFor="inspectorName">Staff Name *</label>
               <select
                 id="inspectorName"
                 name="inspectorName"
@@ -263,39 +292,54 @@ function MeterInspectionPage() {
                 required
                 disabled={isSubmitting}
               >
-                <option value="">Select Inspector</option>
-                {getAllInspectors().map(inspector => (
-                  <option key={inspector.name} value={inspector.name}>
-                    {inspector.name} ({inspector.zone})
+                <option value="">Select Staff Member</option>
+                {getAllStaff().map(staff => (
+                  <option key={staff.name} value={staff.name}>
+                    {staff.name} ({staff.role} - {staff.zone})
                   </option>
                 ))}
               </select>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="zone">Zone</label>
-              <input
-                id="zone"
-                name="zone"
-                type="text"
-                value={formData.zone}
-                readOnly
-                className="read-only"
-                disabled={isSubmitting}
-              />
-            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="role">Role</label>
+                <input
+                  id="role"
+                  name="role"
+                  type="text"
+                  value={formData.role}
+                  readOnly
+                  className="read-only"
+                  disabled={isSubmitting}
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="sector">Sector</label>
-              <input
-                id="sector"
-                name="sector"
-                type="text"
-                value={formData.sector}
-                readOnly
-                className="read-only"
-                disabled={isSubmitting}
-              />
+              <div className="form-group">
+                <label htmlFor="zone">Zone</label>
+                <input
+                  id="zone"
+                  name="zone"
+                  type="text"
+                  value={formData.zone}
+                  readOnly
+                  className="read-only"
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="sector">Sector</label>
+                <input
+                  id="sector"
+                  name="sector"
+                  type="text"
+                  value={formData.sector}
+                  readOnly
+                  className="read-only"
+                  disabled={isSubmitting}
+                />
+              </div>
             </div>
 
             <div className="form-group">
@@ -313,7 +357,7 @@ function MeterInspectionPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="reading">Meter Reading </label>
+              <label htmlFor="reading">Meter Reading *</label>
               <input 
                 id="reading" 
                 name="reading" 
@@ -327,7 +371,7 @@ function MeterInspectionPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="status">Meter Status</label>
+              <label htmlFor="status">Meter Status *</label>
               <select 
                 id="status" 
                 name="status" 
@@ -335,6 +379,7 @@ function MeterInspectionPage() {
                 onChange={handleInputChange} 
                 className="status-select" 
                 disabled={isSubmitting} 
+                required
               >
                 <option value="normal">Normal</option>
                 <option value="faulty">Faulty</option>
