@@ -36,11 +36,32 @@ self.addEventListener('activate', event => {
 
 // Fetch event – serve from cache first, fallback to offline page
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request).then(response => {
-        return response || caches.match(OFFLINE_URL);
-      });
-    })
-  );
+  // Fix for preload response issue
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      (async () => {
+        try {
+          const preloadResponse = await event.preloadResponse;
+          if (preloadResponse) {
+            return preloadResponse;
+          }
+          return await fetch(event.request);
+        } catch (error) {
+          const cachedResponse = await caches.match(event.request);
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return await caches.match(OFFLINE_URL);
+        }
+      })()
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return response || fetch(event.request).catch(() => {
+          return caches.match(OFFLINE_URL);
+        });
+      })
+    );
+  }
 });
