@@ -9,8 +9,8 @@
   display: flex;
   align-items: center;
   padding: 15px 25px;
-  background: white; /* Changed to white */
-  color: #00337f; /* Blue text */
+  background: white;
+  color: #00337f;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid #eaeaea;
 }
@@ -21,12 +21,12 @@
   font-size: 1.6rem;
   text-align: center;
   flex: 1;
-  color: #00337f; /* Blue text */
+  color: #00337f;
 }
 
 .back-button {
   background: transparent;
-  border: 1px solid #00337f; /* Blue border */
+  border: 1px solid #00337f;
   padding: 10px 15px;
   border-radius: 6px;
   cursor: pointer;
@@ -35,23 +35,130 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #00337f; /* Blue text */
+  color: #00337f;
 }
 
 .back-button:hover {
   background: #00337f;
-  color: white; /* White text on hover */
+  color: white;
 }
 
-/* Rest of your MeterInspectionPage.css styles remain the same */
+.inspection-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.org-structure-section {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+}
+
+.org-structure-section h2 {
+  color: #00337f;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.sector-selector {
+  margin-bottom: 20px;
+}
+
+.sector-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.sector-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+}
+
+.sector-card {
+  margin-bottom: 20px;
+}
+
+.sector-card h3 {
+  color: #00337f;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.supervisor {
+  color: #6c757d;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.zones-container {
+  display: grid;
+  gap: 15px;
+}
+
+.zone-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  border-left: 4px solid #0055A5;
+}
+
+.zone-card h4 {
+  color: #00337f;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.staff-category {
+  margin-bottom: 15px;
+}
+
+.staff-category h5 {
+  color: #555;
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.staff-category ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.staff-category li {
+  margin-bottom: 4px;
+  color: #6c757d;
+}
+
 .inspection-form-container {
   max-width: 600px;
-  margin: 20px auto;
+  margin: 0 auto;
   padding: 0 20px;
 }
 
 .form-group {
   margin-bottom: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
 .form-group label {
@@ -61,9 +168,7 @@
   margin-bottom: 8px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input, .form-group select, .form-group textarea {
   width: 100%;
   padding: 12px 15px;
   border: 1px solid #ddd;
@@ -73,12 +178,15 @@
   transition: all 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
   outline: none;
   border-color: #00337f;
   box-shadow: 0 0 0 2px rgba(0, 51, 127, 0.2);
+}
+
+.read-only {
+  background-color: #f8f9fa !important;
+  color: #6c757d;
 }
 
 .upload-button {
@@ -144,12 +252,30 @@
 }
 
 /* Responsive design */
+@media (max-width: 1024px) {
+  .inspection-content {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .inspection-header {
     padding: 15px;
   }
   
+  .inspection-content {
+    padding: 15px;
+  }
+  
+  .org-structure-section {
+    padding: 15px;
+  }
+  
   .inspection-form-container {
     padding: 0 15px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }
