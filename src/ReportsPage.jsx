@@ -30,7 +30,7 @@ function ReportsPage() {
     fraud: 'Fraud Case',
     disconnection: 'Disconnection',
     issue: 'Field Issue',
-    rebilling: 'Rebilling Request' // Added rebilling type
+    rebilling: 'Rebilling Request'
   };
 
   useEffect(() => {
@@ -133,7 +133,7 @@ function ReportsPage() {
           'Date': new Date(report.timestamp).toLocaleDateString(),
           'Time': new Date(report.timestamp).toLocaleTimeString(),
           'Status': report.status || 'Submitted',
-          'Officer': userName // Use the logged-in user's name
+          'Officer': report.staffName || userName
         };
 
         // Add type-specific fields
@@ -142,7 +142,10 @@ function ReportsPage() {
             ...baseData,
             'Meter Number': report.meterNumber || 'N/A',
             'Reading': report.reading || 'N/A',
-            'Meter Status': report.meterStatus || 'N/A',
+            'Meter Status': report.status || 'N/A',
+            'Inspector': report.inspectorName || 'N/A',
+            'Zone': report.zone || 'N/A',
+            'Sector': report.sector || 'N/A',
             'Location': report.location ? `${report.location.lat}, ${report.location.lng}` : 'N/A',
             'Notes': report.notes || ''
           };
@@ -164,6 +167,23 @@ function ReportsPage() {
             'Estimated Loss': report.estimatedLoss ? `KSh ${report.estimatedLoss}` : 'N/A',
             'Actions Taken': report.actionsTaken || 'None'
           };
+        } else if (report.type === 'disconnection') {
+          return {
+            ...baseData,
+            'Account Number': report.accountNumber || 'N/A',
+            'Customer Name': report.customerName || 'N/A',
+            'Balance': report.balance ? `KSh ${report.balance}` : 'N/A',
+            'Status': report.status || 'N/A',
+            'Action': report.action || 'N/A'
+          };
+        } else if (report.type === 'issue') {
+          return {
+            ...baseData,
+            'Issue Type': report.issueType || 'N/A',
+            'Description': report.description || 'N/A',
+            'Priority': report.priority || 'Medium',
+            'Location': report.location ? `${report.location.lat}, ${report.location.lng}` : 'N/A'
+          };
         } else if (report.type === 'rebilling') {
           return {
             ...baseData,
@@ -175,7 +195,6 @@ function ReportsPage() {
             'Officer': report.officerName || userName
           };
         }
-        // Add more type-specific mappings as needed
 
         return baseData;
       });
@@ -203,8 +222,12 @@ function ReportsPage() {
       pending: 'status-pending',
       resolved: 'status-resolved',
       escalated: 'status-escalated',
-      approved: 'status-resolved', // Use resolved style for approved
-      rejected: 'status-escalated' // Use escalated style for rejected
+      approved: 'status-approved',
+      rejected: 'status-rejected',
+      normal: 'status-resolved',
+      faulty: 'status-escalated',
+      tampered: 'status-escalated',
+      not_found: 'status-pending'
     };
     
     return (
@@ -212,6 +235,104 @@ function ReportsPage() {
         {status?.charAt(0).toUpperCase() + status?.slice(1) || 'Submitted'}
       </span>
     );
+  };
+
+  const getReportTitle = (report) => {
+    switch (report.type) {
+      case 'inspection':
+        return `Meter: ${report.meterNumber || 'N/A'}`;
+      case 'outage':
+        return `Outage: ${report.area || 'N/A'}`;
+      case 'fraud':
+        return `Fraud Case: ${report.fraudType || 'N/A'}`;
+      case 'disconnection':
+        return `Disconnection: ${report.accountNumber || 'N/A'}`;
+      case 'issue':
+        return `Issue: ${report.issueType || 'N/A'}`;
+      case 'rebilling':
+        return `Rebilling: ${report.accountNo || 'N/A'}`;
+      default:
+        return 'Report Details';
+    }
+  };
+
+  const getReportDetails = (report) => {
+    switch (report.type) {
+      case 'inspection':
+        return (
+          <>
+            <p className="report-detail">
+              <strong>Inspector:</strong> {report.inspectorName || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Zone:</strong> {report.zone || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Sector:</strong> {report.sector || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Reading:</strong> {report.reading || 'N/A'}
+            </p>
+            {report.notes && (
+              <p className="report-detail">
+                <strong>Notes:</strong> {report.notes}
+              </p>
+            )}
+          </>
+        );
+      case 'outage':
+        return (
+          <>
+            <p className="report-detail">
+              <strong>Feeder:</strong> {report.feeder || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Cause:</strong> {report.cause || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Customers Affected:</strong> {report.customersAffected || 'N/A'}
+            </p>
+          </>
+        );
+      case 'fraud':
+        return (
+          <>
+            <p className="report-detail">
+              <strong>Account:</strong> {report.accountNumber || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Estimated Loss:</strong> {report.estimatedLoss ? `KSh ${report.estimatedLoss}` : 'N/A'}
+            </p>
+          </>
+        );
+      case 'disconnection':
+        return (
+          <>
+            <p className="report-detail">
+              <strong>Customer:</strong> {report.customerName || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Balance:</strong> {report.balance ? `KSh ${report.balance}` : 'N/A'}
+            </p>
+          </>
+        );
+      case 'rebilling':
+        return (
+          <>
+            <p className="report-detail">
+              <strong>Adjustment:</strong> KES {report.adjustmentAmount || 0}
+            </p>
+            <p className="report-detail">
+              <strong>Reason:</strong> {report.reason || 'N/A'}
+            </p>
+            <p className="report-detail">
+              <strong>Officer:</strong> {report.officerName || 'N/A'}
+            </p>
+          </>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -308,6 +429,10 @@ function ReportsPage() {
                 <option value="escalated">Escalated</option>
                 <option value="approved">Approved</option>
                 <option value="rejected">Rejected</option>
+                <option value="normal">Normal</option>
+                <option value="faulty">Faulty</option>
+                <option value="tampered">Tampered</option>
+                <option value="not_found">Not Found</option>
               </select>
             </div>
           </div>
@@ -335,33 +460,26 @@ function ReportsPage() {
                   
                   <div className="report-body">
                     <p className="report-title">
-                      {report.type === 'inspection' && `Meter: ${report.meterNumber}`}
-                      {report.type === 'outage' && `Outage: ${report.area}`}
-                      {report.type === 'fraud' && `Fraud Case: ${report.fraudType}`}
-                      {report.type === 'disconnection' && `Disconnection: ${report.accountNumber}`}
-                      {report.type === 'issue' && `Issue: ${report.issueType}`}
-                      {report.type === 'rebilling' && `Rebilling: ${report.accountNo}`}
+                      {getReportTitle(report)}
                     </p>
                     
                     <p className="report-date">
                       {new Date(report.timestamp).toLocaleString()}
                     </p>
                     
-                    {report.type === 'rebilling' && (
-                      <>
-                        <p className="report-detail">
-                          Adjustment: KES {report.adjustmentAmount || 0}
-                        </p>
-                        <p className="report-detail">
-                          Reason: {report.reason || 'N/A'}
-                        </p>
-                      </>
+                    {getReportDetails(report)}
+                    
+                    {report.location && (
+                      <p className="report-location">
+                        <strong>Location:</strong> {report.location.lat.toFixed(6)}, {report.location.lng.toFixed(6)}
+                      </p>
                     )}
                     
-                    <p className="report-location">
-                      {report.location && 
-                        `Location: ${report.location.lat.toFixed(4)}, ${report.location.lng.toFixed(4)}`}
-                    </p>
+                    {report.staffNumber && (
+                      <p className="report-detail">
+                        <strong>Staff ID:</strong> {report.staffNumber}
+                      </p>
+                    )}
                   </div>
 
                   <div className="report-actions">
