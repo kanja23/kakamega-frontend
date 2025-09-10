@@ -197,13 +197,15 @@
   fill: currentColor;
 }
 
-/* Per-icon colors */
+/* Per-icon colors (updated for 8 items) */
 .grid-icon:nth-child(1) .icon-container { background-color: rgba(0, 102, 204, 0.1); color: #0066cc; }
 .grid-icon:nth-child(2) .icon-container { background-color: rgba(255, 102, 51, 0.1); color: #ff6633; }
 .grid-icon:nth-child(3) .icon-container { background-color: rgba(255, 204, 0, 0.1); color: #ffcc00; }
 .grid-icon:nth-child(4) .icon-container { background-color: rgba(51, 204, 51, 0.1); color: #33cc33; }
-.grid-icon:nth-child(5) .icon-container { background-color: rgba(153, 102, 204, 0.1); color: #9966cc; }
-.grid-icon:nth-child(6) .icon-container { background-color: rgba(255, 102, 51, 0.1); color: #ff6633; }
+.grid-icon:nth-child(5) .icon-container { background-color: rgba(255, 153, 0, 0.1); color: #ff9900; } /* Rebilling */
+.grid-icon:nth-child(6) .icon-container { background-color: rgba(153, 102, 204, 0.1); color: #9966cc; }
+.grid-icon:nth-child(7) .icon-container { background-color: rgba(255, 102, 51, 0.1); color: #ff6633; }
+.grid-icon:nth-child(8) .icon-container { background-color: rgba(153, 102, 204, 0.1); color: #9966cc; }
 
 .grid-icon span {
   display: block;
