@@ -150,3 +150,13 @@ export const getAllStaff = () => {
   
   return allStaff;
 };
+
+// Export all functions
+export {
+  getAllStaffByRole,
+  getAllInspectors,
+  getAllMeterReaders,
+  getAllRevenueCollectors,
+  getAllSupervisors,
+  getAllStaff
+};
