@@ -44,7 +44,7 @@ export const staffStructure = {
 };
 
 // Helper function to get all staff members by role
-export const getAllStaffByRole = (role) => {
+const getAllStaffByRole = (role) => {
   const staffMembers = [];
   staffStructure.sectors.forEach(sector => {
     // Add supervisor for each sector
@@ -74,27 +74,27 @@ export const getAllStaffByRole = (role) => {
 };
 
 // Get all IIU Inspectors (for meter inspection)
-export const getAllInspectors = () => {
+const getAllInspectors = () => {
   return getAllStaffByRole('iiuInspectors');
 };
 
 // Get all Meter Readers
-export const getAllMeterReaders = () => {
+const getAllMeterReaders = () => {
   return getAllStaffByRole('meterReaders');
 };
 
 // Get all Revenue Collectors
-export const getAllRevenueCollectors = () => {
+const getAllRevenueCollectors = () => {
   return getAllStaffByRole('revenueCollectors');
 };
 
 // Get all Supervisors
-export const getAllSupervisors = () => {
+const getAllSupervisors = () => {
   return getAllStaffByRole('supervisors');
 };
 
 // Get ALL staff members (including supervisors)
-export const getAllStaff = () => {
+const getAllStaff = () => {
   const allStaff = [];
   
   // Add supervisors
