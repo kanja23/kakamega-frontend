@@ -222,7 +222,7 @@ function DisconnectionsPage() {
             </div>
             <div className="stat-card">
               <div className="stat-icon high-priority"></div>
-              <h4>High Priority (>Ksh 51)</h4>
+              <h4>High Priority (&gt;Ksh 51)</h4>
               <p className="stat-value">{stats.highPriority}</p>
             </div>
             <div className="stat-card">
