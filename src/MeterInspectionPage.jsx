@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
-import { staffStructure, getAllStaff } from '../data/staffStructure';
+// FIXED: Changed the import path from '../data/staffStructure' to './data/staffStructure'
+import { staffStructure, getAllStaff } from './data/staffStructure';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
