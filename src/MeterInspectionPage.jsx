@@ -147,9 +147,15 @@ function MeterInspectionPage() {
         timeZone: 'Africa/Nairobi'
       });
 
+      // Find the supervisor for the current sector
+      const currentSector = staffStructure.sectors.find(s => s.name === inspectionData.sector);
+      const supervisorEmail = currentSector && currentSector.supervisorEmail 
+        ? currentSector.supervisorEmail 
+        : 'martin.kanja23@gmail.com'; // Default supervisor email
+
       // Prepare email template parameters
       const templateParams = {
-        to_email: 'martin.kanja23@gmail.com', // Supervisor email
+        to_email: supervisorEmail, // Supervisor email
         cc_email: 'martinkaranja92@gmail.com', // Your email for copy
         from_name: inspectionData.inspectorName || 'Field Officer',
         reply_to: userEmail,
@@ -195,9 +201,15 @@ function MeterInspectionPage() {
       // Initialize EmailJS with consistent public key
       emailjs.init('P1yWbgGZv3Vi9-9hf');
       
+      // Find the supervisor for the current sector
+      const currentSector = staffStructure.sectors.find(s => s.name === formData.sector);
+      const supervisorEmail = currentSector && currentSector.supervisorEmail 
+        ? currentSector.supervisorEmail 
+        : 'martin.kanja23@gmail.com'; // Default supervisor email
+
       // Prepare email template parameters for issue report
       const templateParams = {
-        to_email: 'martin.kanja23@gmail.com', // Supervisor email
+        to_email: supervisorEmail, // Supervisor email
         cc_email: 'martinkaranja92@gmail.com', // Your email for copy
         from_name: formData.inspectorName || 'Field Officer',
         reply_to: userEmail,
@@ -327,8 +339,8 @@ function MeterInspectionPage() {
         'service_gypr87t',
         'template_tpm59pq',
         {
-          to_email: 'martinkaranja92@gmail.com',
-          cc_email: 'martin.kanja23@gmail.com',
+          to_email: 'martin.kanja23@gmail.com',
+          cc_email: 'martinkaranja92@gmail.com',
           from_name: 'Test User',
           message: 'This is a test email from Kakamega Field Ops App',
           date: new Date().toLocaleString(),
