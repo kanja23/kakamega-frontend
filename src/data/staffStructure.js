@@ -41,12 +41,9 @@ export const staffStructure = {
       zones: []
     }
   ],
-  // Add admin and quality roles at the top level
+  // Add admin section
   admin: {
     systemAdmin: ["Martin Karanja"]
-  },
-  processImprovement: {
-    piQuality: ["Martin Karanja"]
   }
 };
 
@@ -90,18 +87,6 @@ const getAllStaffByRole = (role) => {
     });
   }
   
-  // Add quality assurance staff
-  if (role === 'piQuality' && staffStructure.qualityAssurance[role]) {
-    staffStructure.qualityAssurance[role].forEach(name => {
-      staffMembers.push({
-        name,
-        role: 'PI (Quality)',
-        zone: 'All Zones',
-        sector: 'Quality Assurance'
-      });
-    });
-  }
-  
   return staffMembers;
 };
 
@@ -130,12 +115,7 @@ const getAllAdmins = () => {
   return getAllStaffByRole('systemAdmin');
 };
 
-// Get all Quality Assurance staff
-const getAllQualityAssurance = () => {
-  return getAllStaffByRole('piQuality');
-};
-
-// Get ALL staff members (including supervisors, admins, and quality assurance)
+// Get ALL staff members (including supervisors and admins)
 const getAllStaff = () => {
   const allStaff = [];
   
@@ -202,18 +182,6 @@ const getAllStaff = () => {
     });
   }
   
-  // Add quality assurance staff
-  if (staffStructure.qualityAssurance.piQuality && staffStructure.qualityAssurance.piQuality.length > 0) {
-    staffStructure.qualityAssurance.piQuality.forEach(name => {
-      allStaff.push({
-        name,
-        role: 'PI (Quality)',
-        zone: 'All Zones',
-        sector: 'Quality Assurance'
-      });
-    });
-  }
-  
   return allStaff;
 };
 
@@ -225,6 +193,5 @@ export {
   getAllRevenueCollectors,
   getAllSupervisors,
   getAllAdmins,
-  getAllQualityAssurance,
   getAllStaff
 };
