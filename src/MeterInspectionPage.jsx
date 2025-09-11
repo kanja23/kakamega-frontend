@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import emailjs from '@emailjs/browser';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
 import { staffStructure, getAllStaff, getAllAdmins } from './data/staffStructure';
+
+// Remove the emailjs import from the top and use dynamic import instead
+// We'll load EmailJS only when needed to avoid build issues
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -33,11 +35,6 @@ function MeterInspectionPage() {
     description: '',
     meterNumber: ''
   });
-
-  // Initialize EmailJS with your public key
-  useEffect(() => {
-    emailjs.init("Qn5t9k9qX720n3G9_");
-  }, []);
 
   useEffect(() => {
     // Get user data to pre-fill inspector name if available
@@ -136,6 +133,9 @@ function MeterInspectionPage() {
 
   const sendInspectionEmail = async (inspectionData) => {
     try {
+      // Dynamically import emailjs to avoid build issues
+      const emailjs = await import('@emailjs/browser');
+      
       // Format the date for the email
       const date = new Date().toLocaleString('en-US', {
         weekday: 'long',
@@ -170,7 +170,8 @@ function MeterInspectionPage() {
       const response = await emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
-        templateParams
+        templateParams,
+        'Qn5t9k9qX720n3G9_'
       );
 
       console.log('Email sent successfully!', response.status, response.text);
@@ -183,6 +184,9 @@ function MeterInspectionPage() {
 
   const submitIssue = async (issueData) => {
     try {
+      // Dynamically import emailjs to avoid build issues
+      const emailjs = await import('@emailjs/browser');
+      
       // Prepare email template parameters for issue report
       const templateParams = {
         to_email: 'martin.kanja23@gmail.com', // Supervisor email
@@ -205,7 +209,8 @@ function MeterInspectionPage() {
       const response = await emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
-        templateParams
+        templateParams,
+        'Qn5t9k9qX720n3G9_'
       );
 
       console.log('Issue email sent successfully!', response.status, response.text);
