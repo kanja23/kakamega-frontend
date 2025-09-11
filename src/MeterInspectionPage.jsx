@@ -49,10 +49,37 @@ function MeterInspectionPage() {
         }));
       }
     }
+    
+    // Load EmailJS script if not already loaded
+    if (!window.emailjs) {
+      loadEmailJSScript();
+    }
   }, []);
+
+  const loadEmailJSScript = () => {
+    // Check if script is already loaded
+    if (document.getElementById('emailjs-script')) return;
+    
+    const script = document.createElement('script');
+    script.id = 'emailjs-script';
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    script.onload = () => {
+      // Initialize EmailJS after script loads
+      window.emailjs.init('P1yWbgGZv3Vi9-9hf');
+      console.log('EmailJS script loaded and initialized');
+    };
+    script.onerror = () => {
+      console.error('Failed to load EmailJS script');
+      showToast('Email service unavailable. Please check your connection.', 'error');
+    };
+    document.body.appendChild(script);
+  };
 
   const showToast = (message, type = 'success') => {
     setToast({ show: true, message, type });
+    setTimeout(() => {
+      setToast({ show: false, message: '', type: 'success' });
+    }, 3000);
   };
 
   const handleInputChange = (e) => {
@@ -130,11 +157,12 @@ function MeterInspectionPage() {
 
   const sendInspectionEmail = async (inspectionData) => {
     try {
-      // Dynamically import emailjs to avoid build issues
-      const emailjs = await import('@emailjs/browser');
-      
-      // Initialize EmailJS with consistent public key
-      emailjs.init('P1yWbgGZv3Vi9-9hf');
+      // Check if EmailJS is available
+      if (!window.emailjs) {
+        console.error('EmailJS not loaded');
+        showToast('Email service not available. Please check your connection.', 'error');
+        return false;
+      }
       
       // Format the date for the email
       const date = new Date().toLocaleString('en-US', {
@@ -147,15 +175,9 @@ function MeterInspectionPage() {
         timeZone: 'Africa/Nairobi'
       });
 
-      // Find the supervisor for the current sector
-      const currentSector = staffStructure.sectors.find(s => s.name === inspectionData.sector);
-      const supervisorEmail = currentSector && currentSector.supervisorEmail 
-        ? currentSector.supervisorEmail 
-        : 'martin.kanja23@gmail.com'; // Default supervisor email
-
       // Prepare email template parameters
       const templateParams = {
-        to_email: supervisorEmail, // Supervisor email
+        to_email: 'martin.kanja23@gmail.com', // Supervisor email
         cc_email: 'martinkaranja92@gmail.com', // Your email for copy
         from_name: inspectionData.inspectorName || 'Field Officer',
         reply_to: userEmail,
@@ -174,8 +196,10 @@ function MeterInspectionPage() {
         photo: inspectionData.photo ? 'Attached' : 'No photo'
       };
 
+      console.log('Sending email with params:', templateParams);
+
       // Send email using EmailJS
-      const response = await emailjs.send(
+      const response = await window.emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
         templateParams
@@ -189,27 +213,23 @@ function MeterInspectionPage() {
       if (error.text) {
         console.error('EmailJS error details:', error.text);
       }
+      showToast('Failed to send email. Please check your connection.', 'error');
       return false;
     }
   };
 
   const submitIssue = async (issueData) => {
     try {
-      // Dynamically import emailjs to avoid build issues
-      const emailjs = await import('@emailjs/browser');
+      // Check if EmailJS is available
+      if (!window.emailjs) {
+        console.error('EmailJS not loaded');
+        showToast('Email service not available. Please check your connection.', 'error');
+        return false;
+      }
       
-      // Initialize EmailJS with consistent public key
-      emailjs.init('P1yWbgGZv3Vi9-9hf');
-      
-      // Find the supervisor for the current sector
-      const currentSector = staffStructure.sectors.find(s => s.name === formData.sector);
-      const supervisorEmail = currentSector && currentSector.supervisorEmail 
-        ? currentSector.supervisorEmail 
-        : 'martin.kanja23@gmail.com'; // Default supervisor email
-
       // Prepare email template parameters for issue report
       const templateParams = {
-        to_email: supervisorEmail, // Supervisor email
+        to_email: 'martin.kanja23@gmail.com', // Supervisor email
         cc_email: 'martinkaranja92@gmail.com', // Your email for copy
         from_name: formData.inspectorName || 'Field Officer',
         reply_to: userEmail,
@@ -230,7 +250,7 @@ function MeterInspectionPage() {
       };
 
       // Send email using EmailJS
-      const response = await emailjs.send(
+      const response = await window.emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
         templateParams
@@ -264,6 +284,12 @@ function MeterInspectionPage() {
         staffName: userData.full_name || 'Unknown',
         timestamp: new Date().toISOString()
       };
+      
+      // Validate required fields
+      if (!inspectionData.meterNumber || !inspectionData.reading) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+      }
       
       // Save to localStorage
       saveInspection(inspectionData);
@@ -332,10 +358,14 @@ function MeterInspectionPage() {
   // Test EmailJS function for debugging
   const testEmailJS = async () => {
     try {
-      const emailjs = await import('@emailjs/browser');
-      emailjs.init('P1yWbgGZv3Vi9-9hf'); // Consistent public key
+      // Check if EmailJS is available
+      if (!window.emailjs) {
+        console.error('EmailJS not loaded');
+        showToast('Email service not available. Please check your connection.', 'error');
+        return;
+      }
       
-      const response = await emailjs.send(
+      const response = await window.emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
         {
@@ -352,7 +382,9 @@ function MeterInspectionPage() {
           inspector_name: 'Martin Karanja',
           inspector_role: 'System Admin',
           zone: 'Central',
-          sector: 'Kakamega West'
+          sector: 'Kakamega West',
+          submitted_on: new Date().toLocaleString(),
+          photo: 'Test photo'
         }
       );
       
