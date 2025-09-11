@@ -9,13 +9,13 @@ function LoginPage() {
   const [staffNumber, setStaffNumber] = useState('');
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Only added this line
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
     setError('');
-    setIsLoading(true); // Added this line
+    setIsLoading(true);
 
     const params = new URLSearchParams();
     params.append('username', staffNumber);
@@ -49,7 +49,7 @@ function LoginPage() {
         setError('Login Failed: An unexpected error occurred.');
       }
     } finally {
-      setIsLoading(false); // Added this line
+      setIsLoading(false);
     }
   };
 
@@ -79,7 +79,7 @@ function LoginPage() {
               onChange={(e) => setStaffNumber(e.target.value)}
               placeholder="Enter your staff number"
               required
-              disabled={isLoading} // Added this attribute
+              disabled={isLoading}
             />
           </div>
           <div className="input-group">
@@ -91,7 +91,7 @@ function LoginPage() {
               onChange={(e) => setPin(e.target.value)}
               placeholder="Enter your PIN"
               required
-              disabled={isLoading} // Added this attribute
+              disabled={isLoading}
             />
           </div>
 
@@ -100,9 +100,9 @@ function LoginPage() {
           <button 
             type="submit" 
             className="login-button"
-            disabled={isLoading} // Added this attribute
+            disabled={isLoading}
           >
-            {isLoading ? ( // Only changed this part
+            {isLoading ? (
               <span className="button-loading">
                 <span className="button-spinner"></span>
                 Logging in...
@@ -113,7 +113,8 @@ function LoginPage() {
           </button>
         </form>
         <p className="login-footer">
-          <a href="By Martin"target=">
+          <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+            By Martin (85891)
           </a>
         </p>
       </div>
