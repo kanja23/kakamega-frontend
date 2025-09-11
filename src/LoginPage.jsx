@@ -113,7 +113,6 @@ function LoginPage() {
           </button>
         </form>
         <p className="login-footer">
-          <a href="https://example.com" target="_blank" rel="noopener noreferrer">
             By Martin (85891)
           </a>
         </p>
