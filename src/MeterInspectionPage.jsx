@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
-import { staffStructure, getAllStaff, getAllAdmins, getAllQualityAssurance } from './data/staffStructure';
+import { staffStructure, getAllStaff, getAllAdmins } from './data/staffStructure';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function MeterInspectionPage() {
     role: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
+  const [userEmail, setUserEmail] = useState('martin.kanja23@gmail.com');
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeSector, setActiveSector] = useState('Kakamega West');
   const [showIssueModal, setShowIssueModal] = useState(false);
@@ -133,7 +133,7 @@ function MeterInspectionPage() {
       // In a real implementation, you would use EmailJS or another service
       // For now, we'll simulate the email sending
       console.log('Issue reported:', issueData);
-      console.log('Email would be sent to: martinkaranja92@gmail.com');
+      console.log('Email would be sent to: martin.kanja23@gmail.com');
       
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -305,27 +305,6 @@ function MeterInspectionPage() {
                       {getAllAdmins().map((admin, index) => (
                         <li key={index}>
                           {admin.name} - {admin.role}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quality Assurance Section */}
-          <div className="sector-info">
-            <div className="sector-card quality-card">
-              <h3>Quality Assurance</h3>
-              <div className="zones-container">
-                <div className="zone-card">
-                  <h4>Quality Inspection</h4>
-                  <div className="staff-category">
-                    <ul>
-                      {getAllQualityAssurance().map((qa, index) => (
-                        <li key={index}>
-                          {qa.name} - {qa.role}
                         </li>
                       ))}
                     </ul>
