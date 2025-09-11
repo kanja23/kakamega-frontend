@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Field Ops_2.0</title>
+    <title>Kakamega Field Ops 2.0</title>
 
-    <!-- 👇 PWA / App meta -->
+    <!-- PWA / App meta -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#003366" />
     <link rel="icon" href="/icon-192x192.png" type="image/png">
@@ -14,7 +14,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
       (function() {
-        emailjs.init('Qn5t9k9qX720n3G9_'); // New Public Key
+        // Consistent Public Key for all email functions
+        emailjs.init('P1yWbgGZv3Vi9-9hf');
       })();
     </script>
   </head>
@@ -22,7 +23,7 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- 👇 Register service worker with improved error handling -->
+    <!-- Register service worker with improved error handling -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
