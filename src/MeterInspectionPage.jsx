@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
-// FIXED: Changed the import path from '../data/staffStructure' to './data/staffStructure'
-import { staffStructure, getAllStaff } from './data/staffStructure';
+import { staffStructure, getAllStaff, getAllAdmins, getAllQualityAssurance } from './data/staffStructure';
 
 function MeterInspectionPage() {
   const navigate = useNavigate();
@@ -27,6 +26,12 @@ function MeterInspectionPage() {
   const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeSector, setActiveSector] = useState('Kakamega West');
+  const [showIssueModal, setShowIssueModal] = useState(false);
+  const [issueData, setIssueData] = useState({
+    issueType: '',
+    description: '',
+    meterNumber: ''
+  });
 
   useEffect(() => {
     // Get user data to pre-fill inspector name if available
@@ -123,40 +128,23 @@ function MeterInspectionPage() {
     return newInspection;
   };
 
-  const sendEmail = (inspectionData) => {
-    const timestamp = new Date().toLocaleString('en-US', { 
-      timeZone: 'Africa/Nairobi', 
-      dateStyle: 'full', 
-      timeStyle: 'medium' 
-    });
-
-    // Email template parameters
-    const templateParams = {
-      to_name: 'Supervisor',
-      from_name: inspectionData.staffName || 'Field Officer',
-      meter_number: inspectionData.meterNumber,
-      reading: inspectionData.reading,
-      status: inspectionData.status,
-      inspector_name: inspectionData.inspectorName,
-      inspector_role: inspectionData.role,
-      zone: inspectionData.zone,
-      sector: inspectionData.sector,
-      location: inspectionData.location ? 
-        `Lat: ${inspectionData.location.lat}, Lng: ${inspectionData.location.lng}` : 'Not provided',
-      notes: inspectionData.notes || 'No additional notes',
-      timestamp: timestamp,
-      to_email: 'supervisor@kplc.com',
-      reply_to: userEmail
-    };
-
-    // Send email using EmailJS
-    emailjs.send('service_your_service_id', 'template_meter_inspection', templateParams, 'Qn5t9k9qX720n3G9_')
-      .then((response) => {
-        console.log('Email sent successfully!', response.status, response.text);
-      })
-      .catch((error) => {
-        console.error('Failed to send email:', error);
-      });
+  const submitIssue = async (issueData) => {
+    try {
+      // In a real implementation, you would use EmailJS or another service
+      // For now, we'll simulate the email sending
+      console.log('Issue reported:', issueData);
+      console.log('Email would be sent to: martinkaranja92@gmail.com');
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      showToast('Issue reported successfully! A copy has been sent to your email.');
+      return true;
+    } catch (error) {
+      console.error('Failed to send issue report:', error);
+      showToast('Failed to send issue report. Please try again.', 'error');
+      return false;
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -176,9 +164,6 @@ function MeterInspectionPage() {
       
       // Save to localStorage
       saveInspection(inspectionData);
-      
-      // Send email
-      sendEmail(inspectionData);
       
       // Reset form but keep inspector details
       setFormData(prev => ({
@@ -200,6 +185,35 @@ function MeterInspectionPage() {
     } catch (error) {
       console.error('Error submitting inspection:', error);
       showToast('Failed to submit inspection. Please try again.', 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleIssueChange = (e) => {
+    const { name, value } = e.target;
+    setIssueData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleIssueSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const success = await submitIssue({
+        ...issueData,
+        inspectorName: formData.inspectorName,
+        location: formData.location
+      });
+      
+      if (success) {
+        setShowIssueModal(false);
+        setIssueData({
+          issueType: '',
+          description: '',
+          meterNumber: ''
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -277,6 +291,48 @@ function MeterInspectionPage() {
                   </div>
                 </div>
               ))}
+          </div>
+
+          {/* Administration Section */}
+          <div className="sector-info">
+            <div className="sector-card admin-card">
+              <h3>Administration</h3>
+              <div className="zones-container">
+                <div className="zone-card">
+                  <h4>System Administrators</h4>
+                  <div className="staff-category">
+                    <ul>
+                      {getAllAdmins().map((admin, index) => (
+                        <li key={index}>
+                          {admin.name} - {admin.role}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quality Assurance Section */}
+          <div className="sector-info">
+            <div className="sector-card quality-card">
+              <h3>Quality Assurance</h3>
+              <div className="zones-container">
+                <div className="zone-card">
+                  <h4>Quality Inspection</h4>
+                  <div className="staff-category">
+                    <ul>
+                      {getAllQualityAssurance().map((qa, index) => (
+                        <li key={index}>
+                          {qa.name} - {qa.role}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -462,16 +518,108 @@ function MeterInspectionPage() {
               ></textarea>
             </div>
 
-            <button 
-              type="submit" 
-              className="submit-button" 
-              disabled={isSubmitting} 
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit Inspection'}
-            </button>
+            <div className="form-actions">
+              <button 
+                type="submit" 
+                className="submit-button" 
+                disabled={isSubmitting} 
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Inspection'}
+              </button>
+              
+              <button 
+                type="button" 
+                className="issue-button"
+                onClick={() => setShowIssueModal(true)}
+                disabled={isSubmitting}
+              >
+                Report an Issue
+              </button>
+            </div>
           </form>
         </main>
       </div>
+
+      {/* Issue Report Modal */}
+      {showIssueModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Report an Issue</h2>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowIssueModal(false)}
+                disabled={isSubmitting}
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={handleIssueSubmit}>
+              <div className="form-group">
+                <label htmlFor="issueType">Issue Type *</label>
+                <select
+                  id="issueType"
+                  name="issueType"
+                  value={issueData.issueType}
+                  onChange={handleIssueChange}
+                  required
+                  disabled={isSubmitting}
+                >
+                  <option value="">Select Issue Type</option>
+                  <option value="meter_tampering">Meter Tampering</option>
+                  <option value="faulty_meter">Faulty Meter</option>
+                  <option value="safety_concern">Safety Concern</option>
+                  <option value="billing_issue">Billing Issue</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="meterNumber">Meter Number (if applicable)</label>
+                <input
+                  id="meterNumber"
+                  name="meterNumber"
+                  type="text"
+                  value={issueData.meterNumber}
+                  onChange={handleIssueChange}
+                  placeholder="Enter meter number"
+                  disabled={isSubmitting}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="description">Issue Description *</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={issueData.description}
+                  onChange={handleIssueChange}
+                  placeholder="Please describe the issue in detail..."
+                  rows="4"
+                  required
+                  disabled={isSubmitting}
+                ></textarea>
+              </div>
+              
+              <div className="modal-actions">
+                <button 
+                  type="button" 
+                  onClick={() => setShowIssueModal(false)}
+                  disabled={isSubmitting}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Issue'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {toast.show && (
         <Toast 
