@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 import './MeterInspectionPage.css';
 import Toast from './Toast';
 import { staffStructure, getAllStaff, getAllAdmins } from './data/staffStructure';
@@ -23,7 +24,7 @@ function MeterInspectionPage() {
     role: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userEmail, setUserEmail] = useState('martin.kanja23@gmail.com');
+  const [userEmail, setUserEmail] = useState('martinkaranja92@gmail.com');
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
   const [activeSector, setActiveSector] = useState('Kakamega West');
   const [showIssueModal, setShowIssueModal] = useState(false);
@@ -32,6 +33,11 @@ function MeterInspectionPage() {
     description: '',
     meterNumber: ''
   });
+
+  // Initialize EmailJS with your public key
+  useEffect(() => {
+    emailjs.init("Qn5t9k9qX720n3G9_");
+  }, []);
 
   useEffect(() => {
     // Get user data to pre-fill inspector name if available
@@ -128,16 +134,81 @@ function MeterInspectionPage() {
     return newInspection;
   };
 
+  const sendInspectionEmail = async (inspectionData) => {
+    try {
+      // Format the date for the email
+      const date = new Date().toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Africa/Nairobi'
+      });
+
+      // Prepare email template parameters
+      const templateParams = {
+        to_email: 'martin.kanja23@gmail.com', // Supervisor email
+        cc_email: 'martinkaranja92@gmail.com', // Your email for copy
+        from_name: inspectionData.inspectorName || 'Field Officer',
+        reply_to: userEmail,
+        date: date,
+        meter_number: inspectionData.meterNumber,
+        reading: inspectionData.reading,
+        status: inspectionData.status,
+        notes: inspectionData.notes || 'No additional notes',
+        location: inspectionData.location ? 
+          `Lat: ${inspectionData.location.lat}, Lng: ${inspectionData.location.lng}` : 'Not provided',
+        inspector_name: inspectionData.inspectorName,
+        inspector_role: inspectionData.role,
+        zone: inspectionData.zone,
+        sector: inspectionData.sector
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        'service_gypr87t',
+        'template_tpm59pq',
+        templateParams
+      );
+
+      console.log('Email sent successfully!', response.status, response.text);
+      return true;
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      return false;
+    }
+  };
+
   const submitIssue = async (issueData) => {
     try {
-      // In a real implementation, you would use EmailJS or another service
-      // For now, we'll simulate the email sending
-      console.log('Issue reported:', issueData);
-      console.log('Email would be sent to: martin.kanja23@gmail.com');
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Prepare email template parameters for issue report
+      const templateParams = {
+        to_email: 'martin.kanja23@gmail.com', // Supervisor email
+        cc_email: 'martinkaranja92@gmail.com', // Your email for copy
+        from_name: formData.inspectorName || 'Field Officer',
+        reply_to: userEmail,
+        issue_type: issueData.issueType,
+        issue_description: issueData.description,
+        meter_number: issueData.meterNumber || 'N/A',
+        location: formData.location ? 
+          `Lat: ${formData.location.lat}, Lng: ${formData.location.lng}` : 'Not provided',
+        timestamp: new Date().toLocaleString('en-US', { 
+          timeZone: 'Africa/Nairobi', 
+          dateStyle: 'full', 
+          timeStyle: 'medium' 
+        })
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        'service_gypr87t',
+        'template_tpm59pq',
+        templateParams
+      );
+
+      console.log('Issue email sent successfully!', response.status, response.text);
       showToast('Issue reported successfully! A copy has been sent to your email.');
       return true;
     } catch (error) {
@@ -165,6 +236,15 @@ function MeterInspectionPage() {
       // Save to localStorage
       saveInspection(inspectionData);
       
+      // Send email
+      const emailSent = await sendInspectionEmail(inspectionData);
+      
+      if (emailSent) {
+        showToast('Meter inspection submitted successfully! Email sent.');
+      } else {
+        showToast('Inspection submitted but email failed to send.', 'warning');
+      }
+      
       // Reset form but keep inspector details
       setFormData(prev => ({
         meterNumber: '',
@@ -180,8 +260,6 @@ function MeterInspectionPage() {
         sector: prev.sector,
         role: prev.role
       }));
-      
-      showToast('Meter inspection submitted successfully!');
     } catch (error) {
       console.error('Error submitting inspection:', error);
       showToast('Failed to submit inspection. Please try again.', 'error');
