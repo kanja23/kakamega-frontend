@@ -113,8 +113,7 @@ function LoginPage() {
           </button>
         </form>
         <p className="login-footer">
-            By Martin (85891)
-          </a>
+          By Martin (85891)
         </p>
       </div>
     </div>
