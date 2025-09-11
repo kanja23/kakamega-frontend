@@ -5,9 +5,6 @@ import './MeterInspectionPage.css';
 import Toast from './Toast';
 import { staffStructure, getAllStaff, getAllAdmins } from './data/staffStructure';
 
-// Remove the emailjs import from the top and use dynamic import instead
-// We'll load EmailJS only when needed to avoid build issues
-
 function MeterInspectionPage() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -136,6 +133,9 @@ function MeterInspectionPage() {
       // Dynamically import emailjs to avoid build issues
       const emailjs = await import('@emailjs/browser');
       
+      // Initialize EmailJS with your public key
+      emailjs.init('Qn5t9k9qX720n3G9_');
+      
       // Format the date for the email
       const date = new Date().toLocaleString('en-US', {
         weekday: 'long',
@@ -170,14 +170,17 @@ function MeterInspectionPage() {
       const response = await emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
-        templateParams,
-        'Qn5t9k9qX720n3G9_'
+        templateParams
       );
 
       console.log('Email sent successfully!', response.status, response.text);
       return true;
     } catch (error) {
       console.error('Failed to send email:', error);
+      // Log more details about the error
+      if (error.text) {
+        console.error('EmailJS error details:', error.text);
+      }
       return false;
     }
   };
@@ -186,6 +189,9 @@ function MeterInspectionPage() {
     try {
       // Dynamically import emailjs to avoid build issues
       const emailjs = await import('@emailjs/browser');
+      
+      // Initialize EmailJS with your public key
+      emailjs.init('Qn5t9k9qX720n3G9_');
       
       // Prepare email template parameters for issue report
       const templateParams = {
@@ -209,8 +215,7 @@ function MeterInspectionPage() {
       const response = await emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
-        templateParams,
-        'Qn5t9k9qX720n3G9_'
+        templateParams
       );
 
       console.log('Issue email sent successfully!', response.status, response.text);
@@ -218,6 +223,10 @@ function MeterInspectionPage() {
       return true;
     } catch (error) {
       console.error('Failed to send issue report:', error);
+      // Log more details about the error
+      if (error.text) {
+        console.error('EmailJS error details:', error.text);
+      }
       showToast('Failed to send issue report. Please try again.', 'error');
       return false;
     }
@@ -302,6 +311,33 @@ function MeterInspectionPage() {
     }
   };
 
+  // Test EmailJS function for debugging
+  const testEmailJS = async () => {
+    try {
+      const emailjs = await import('@emailjs/browser');
+      emailjs.init('Qn5t9k9qX720n3G9_');
+      
+      const response = await emailjs.send(
+        'service_gypr87t',
+        'template_tpm59pq',
+        {
+          to_email: 'martinkaranja92@gmail.com',
+          from_name: 'Test User',
+          message: 'This is a test email from Kakamega Field Ops App'
+        }
+      );
+      
+      console.log('Test email sent successfully!', response);
+      showToast('Test email sent successfully!');
+    } catch (error) {
+      console.error('Failed to send test email:', error);
+      if (error.text) {
+        console.error('EmailJS error details:', error.text);
+      }
+      showToast('Failed to send test email.', 'error');
+    }
+  };
+
   return (
     <div className="inspection-page">
       <header className="inspection-header">
@@ -309,6 +345,21 @@ function MeterInspectionPage() {
           &larr; Back to Dashboard
         </button>
         <h1>Meter Inspection</h1>
+        <button 
+          onClick={testEmailJS} 
+          className="test-email-button"
+          style={{
+            background: '#6c757d',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '12px'
+          }}
+        >
+          Test Email
+        </button>
       </header>
 
       <div className="inspection-content">
