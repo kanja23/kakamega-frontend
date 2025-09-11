@@ -40,7 +40,14 @@ export const staffStructure = {
       supervisor: "To be assigned",
       zones: []
     }
-  ]
+  ],
+  // Add admin and quality roles at the top level
+  admin: {
+    systemAdmin: ["Martin Karanja"]
+  },
+  qualityAssurance: {
+    piQuality: ["Martin Karanja"]
+  }
 };
 
 // Helper function to get all staff members by role
@@ -70,6 +77,31 @@ const getAllStaffByRole = (role) => {
       }
     });
   });
+  
+  // Add admin staff
+  if (role === 'systemAdmin' && staffStructure.admin[role]) {
+    staffStructure.admin[role].forEach(name => {
+      staffMembers.push({
+        name,
+        role: 'System Administrator',
+        zone: 'All Zones',
+        sector: 'Administration'
+      });
+    });
+  }
+  
+  // Add quality assurance staff
+  if (role === 'piQuality' && staffStructure.qualityAssurance[role]) {
+    staffStructure.qualityAssurance[role].forEach(name => {
+      staffMembers.push({
+        name,
+        role: 'PI (Quality)',
+        zone: 'All Zones',
+        sector: 'Quality Assurance'
+      });
+    });
+  }
+  
   return staffMembers;
 };
 
@@ -93,7 +125,17 @@ const getAllSupervisors = () => {
   return getAllStaffByRole('supervisors');
 };
 
-// Get ALL staff members (including supervisors)
+// Get all System Administrators
+const getAllAdmins = () => {
+  return getAllStaffByRole('systemAdmin');
+};
+
+// Get all Quality Assurance staff
+const getAllQualityAssurance = () => {
+  return getAllStaffByRole('piQuality');
+};
+
+// Get ALL staff members (including supervisors, admins, and quality assurance)
 const getAllStaff = () => {
   const allStaff = [];
   
@@ -148,6 +190,30 @@ const getAllStaff = () => {
     });
   });
   
+  // Add admin staff
+  if (staffStructure.admin.systemAdmin && staffStructure.admin.systemAdmin.length > 0) {
+    staffStructure.admin.systemAdmin.forEach(name => {
+      allStaff.push({
+        name,
+        role: 'System Administrator',
+        zone: 'All Zones',
+        sector: 'Administration'
+      });
+    });
+  }
+  
+  // Add quality assurance staff
+  if (staffStructure.qualityAssurance.piQuality && staffStructure.qualityAssurance.piQuality.length > 0) {
+    staffStructure.qualityAssurance.piQuality.forEach(name => {
+      allStaff.push({
+        name,
+        role: 'PI (Quality)',
+        zone: 'All Zones',
+        sector: 'Quality Assurance'
+      });
+    });
+  }
+  
   return allStaff;
 };
 
@@ -158,5 +224,7 @@ export {
   getAllMeterReaders,
   getAllRevenueCollectors,
   getAllSupervisors,
+  getAllAdmins,
+  getAllQualityAssurance,
   getAllStaff
 };
