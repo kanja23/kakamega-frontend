@@ -45,7 +45,7 @@ export const staffStructure = {
   admin: {
     systemAdmin: ["Martin Karanja"]
   },
-  qualityAssurance: {
+  processImprovement: {
     piQuality: ["Martin Karanja"]
   }
 };
