@@ -133,7 +133,7 @@ function MeterInspectionPage() {
       // Dynamically import emailjs to avoid build issues
       const emailjs = await import('@emailjs/browser');
       
-      // Initialize EmailJS with your public key
+      // Initialize EmailJS with consistent public key
       emailjs.init('P1yWbgGZv3Vi9-9hf');
       
       // Format the date for the email
@@ -163,7 +163,9 @@ function MeterInspectionPage() {
         inspector_name: inspectionData.inspectorName,
         inspector_role: inspectionData.role,
         zone: inspectionData.zone,
-        sector: inspectionData.sector
+        sector: inspectionData.sector,
+        submitted_on: new Date().toLocaleString(),
+        photo: inspectionData.photo ? 'Attached' : 'No photo'
       };
 
       // Send email using EmailJS
@@ -190,8 +192,8 @@ function MeterInspectionPage() {
       // Dynamically import emailjs to avoid build issues
       const emailjs = await import('@emailjs/browser');
       
-      // Initialize EmailJS with your public key
-      emailjs.init('Qn5t9k9qX720n3G9_');
+      // Initialize EmailJS with consistent public key
+      emailjs.init('P1yWbgGZv3Vi9-9hf');
       
       // Prepare email template parameters for issue report
       const templateParams = {
@@ -208,7 +210,11 @@ function MeterInspectionPage() {
           timeZone: 'Africa/Nairobi', 
           dateStyle: 'full', 
           timeStyle: 'medium' 
-        })
+        }),
+        inspector_name: formData.inspectorName,
+        inspector_role: formData.role,
+        zone: formData.zone,
+        sector: formData.sector
       };
 
       // Send email using EmailJS
@@ -315,15 +321,26 @@ function MeterInspectionPage() {
   const testEmailJS = async () => {
     try {
       const emailjs = await import('@emailjs/browser');
-      emailjs.init('Qn5t9k9qX720n3G9_');
+      emailjs.init('P1yWbgGZv3Vi9-9hf'); // Consistent public key
       
       const response = await emailjs.send(
         'service_gypr87t',
         'template_tpm59pq',
         {
           to_email: 'martinkaranja92@gmail.com',
+          cc_email: 'martin.kanja23@gmail.com',
           from_name: 'Test User',
-          message: 'This is a test email from Kakamega Field Ops App'
+          message: 'This is a test email from Kakamega Field Ops App',
+          date: new Date().toLocaleString(),
+          meter_number: 'TEST123',
+          reading: '9999',
+          status: 'normal',
+          notes: 'This is a test inspection',
+          location: 'Test location',
+          inspector_name: 'Martin Karanja',
+          inspector_role: 'System Admin',
+          zone: 'Central',
+          sector: 'Kakamega West'
         }
       );
       
