@@ -134,7 +134,7 @@ function MeterInspectionPage() {
       const emailjs = await import('@emailjs/browser');
       
       // Initialize EmailJS with your public key
-      emailjs.init('Qn5t9k9qX720n3G9_');
+      emailjs.init('P1yWbgGZv3Vi9-9hf');
       
       // Format the date for the email
       const date = new Date().toLocaleString('en-US', {
