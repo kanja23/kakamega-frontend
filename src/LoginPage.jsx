@@ -113,8 +113,7 @@ function LoginPage() {
           </button>
         </form>
         <p className="login-footer">
-          <a href="https://www.martindev.co.ke" target="_blank" rel="noopener noreferrer">
-            www.martindev.co.ke
+          <a href="By Martin"target=">
           </a>
         </p>
       </div>
