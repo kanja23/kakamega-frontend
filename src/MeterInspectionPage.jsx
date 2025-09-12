@@ -131,7 +131,7 @@ function MeterInspectionPage() {
           }));
           showToast('Location captured successfully!');
         },
-        (error) => {
+        (error) {
           console.error('Error getting location:', error);
           showToast('Could not get location. Please ensure location services are enabled.', 'error');
         }
@@ -355,50 +355,6 @@ function MeterInspectionPage() {
     }
   };
 
-  // Test EmailJS function for debugging
-  const testEmailJS = async () => {
-    try {
-      // Check if EmailJS is available
-      if (!window.emailjs) {
-        console.error('EmailJS not loaded');
-        showToast('Email service not available. Please check your connection.', 'error');
-        return;
-      }
-      
-      const response = await window.emailjs.send(
-        'service_gypr87t',
-        'template_tpm59pq',
-        {
-          to_email: 'martin.kanja23@gmail.com',
-          cc_email: 'martinkaranja92@gmail.com',
-          from_name: 'Test User',
-          message: 'This is a test email from Kakamega Field Ops App',
-          date: new Date().toLocaleString(),
-          meter_number: 'TEST123',
-          reading: '9999',
-          status: 'normal',
-          notes: 'This is a test inspection',
-          location: 'Test location',
-          inspector_name: 'Martin Karanja',
-          inspector_role: 'System Admin',
-          zone: 'Central',
-          sector: 'Kakamega West',
-          submitted_on: new Date().toLocaleString(),
-          photo: 'Test photo'
-        }
-      );
-      
-      console.log('Test email sent successfully!', response);
-      showToast('Test email sent successfully!');
-    } catch (error) {
-      console.error('Failed to send test email:', error);
-      if (error.text) {
-        console.error('EmailJS error details:', error.text);
-      }
-      showToast('Failed to send test email.', 'error');
-    }
-  };
-
   return (
     <div className="inspection-page">
       <header className="inspection-header">
@@ -406,21 +362,6 @@ function MeterInspectionPage() {
           &larr; Back to Dashboard
         </button>
         <h1>Meter Inspection</h1>
-        <button 
-          onClick={testEmailJS} 
-          className="test-email-button"
-          style={{
-            background: '#6c757d',
-            color: 'white',
-            border: 'none',
-            padding: '8px 12px',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '12px'
-          }}
-        >
-          Test Email
-        </button>
       </header>
 
       <div className="inspection-content">
