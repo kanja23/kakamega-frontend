@@ -355,7 +355,7 @@ function MeterInspectionPage() {
     }
   };
 
-  // Test EmailJS function for debugging (keep for internal use but remove button)
+  // Test EmailJS function for debugging
   const testEmailJS = async () => {
     try {
       // Check if EmailJS is available
@@ -406,7 +406,21 @@ function MeterInspectionPage() {
           &larr; Back to Dashboard
         </button>
         <h1>Meter Inspection</h1>
-        {/* REMOVED THE TEST EMAIL BUTTON */}
+        <button 
+          onClick={testEmailJS} 
+          className="test-email-button"
+          style={{
+            background: '#6c757d',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '12px'
+          }}
+        >
+          Test Email
+        </button>
       </header>
 
       <div className="inspection-content">
@@ -742,7 +756,7 @@ function MeterInspectionPage() {
                   type="text"
                   value={issueData.meterNumber}
                   onChange={handleIssueChange}
-                  placeholder="Enter meter number'
+                  placeholder="Enter meter number"
                   disabled={isSubmitting}
                 />
               </div>
