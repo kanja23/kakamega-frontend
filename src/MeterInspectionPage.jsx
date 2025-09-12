@@ -406,7 +406,21 @@ function MeterInspectionPage() {
           &larr; Back to Dashboard
         </button>
         <h1>Meter Inspection</h1>
-        {/* Removed the Test Email button as requested */}
+        <button 
+          onClick={testEmailJS} 
+          className="test-email-button"
+          style={{
+            background: '#6c757d',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontSize: '12px'
+          }}
+        >
+          Test Email
+        </button>
       </header>
 
       <div className="inspection-content">
@@ -589,114 +603,131 @@ function MeterInspectionPage() {
 
             <div className="form-group">
               <label htmlFor="status">Meter Status *</label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
+              <select 
+                id="status" 
+                name="status" 
+                value={formData.status} 
+                onChange={handleInputChange} 
+                className="status-select" 
+                disabled={isSubmitting} 
                 required
-                disabled={isSubmitting}
               >
                 <option value="normal">Normal</option>
                 <option value="faulty">Faulty</option>
                 <option value="tampered">Tampered</option>
-                <option value="bypassed">Bypassed</option>
+                <option value="not_found">Not Found</option>
               </select>
             </div>
 
             <div className="form-group">
-              <label htmlFor="notes">Notes (Optional)</label>
-              <textarea
-                id="notes"
-                name="notes"
-                value={formData.notes}
-                onChange={handleInputChange}
-                placeholder="Additional observations or comments"
-                disabled={isSubmitting}
-                rows="3"
+              <label htmlFor="photo">Upload Photo</label>
+              <input 
+                type="file" 
+                id="photo" 
+                ref={fileInputRef} 
+                onChange={handlePhotoSelect} 
+                accept="image/*" 
+                capture="environment" 
+                style={{ display: 'none' }} 
+                disabled={isSubmitting} 
+              />
+              <button 
+                type="button" 
+                className="upload-button" 
+                onClick={() => fileInputRef.current.click()} 
+                disabled={isSubmitting} 
+              >
+                {formData.photoPreview ? 'Change Photo' : 'Select Photo'}
+              </button>
+              {formData.photoPreview && (
+                <div className="photo-preview">
+                  <img src={formData.photoPreview} alt="Meter preview" />
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="userEmail">Your Email *</label>
+              <input 
+                id="userEmail" 
+                name="userEmail" 
+                type="email" 
+                value={userEmail} 
+                onChange={(e) => setUserEmail(e.target.value)} 
+                placeholder="Enter your email" 
+                required 
+                disabled={isSubmitting} 
               />
             </div>
 
             <div className="form-group">
-              <label>Photo (Optional)</label>
-              <div className="photo-upload">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoSelect}
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  disabled={isSubmitting}
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current.click()}
-                  disabled={isSubmitting}
-                >
-                  {formData.photo ? 'Change Photo' : 'Take/Upload Photo'}
-                </button>
-                {formData.photoPreview && (
-                  <div className="photo-preview">
-                    <img src={formData.photoPreview} alt="Meter preview" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFormData(prev => ({ ...prev, photo: null, photoPreview: null }));
-                        fileInputRef.current.value = '';
-                      }}
-                      disabled={isSubmitting}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-              </div>
+              <label>Location</label>
+              <button 
+                type="button" 
+                className="upload-button" 
+                onClick={getCurrentLocation} 
+                disabled={isSubmitting} 
+              >
+                {formData.location ? 'Update Location' : 'Capture Location'}
+              </button>
+              {formData.location && (
+                <div className="location-info">
+                  <small>
+                    Lat: {formData.location.lat.toFixed(6)}, Lng: {formData.location.lng.toFixed(6)}
+                  </small>
+                </div>
+              )}
             </div>
 
             <div className="form-group">
-              <label>Location</label>
-              <div className="location-capture">
-                <button
-                  type="button"
-                  onClick={getCurrentLocation}
-                  disabled={isSubmitting}
-                >
-                  {formData.location ? 'Update Location' : 'Capture Current Location'}
-                </button>
-                {formData.location && (
-                  <div className="location-info">
-                    <span>Captured: {formData.location.lat.toFixed(6)}, {formData.location.lng.toFixed(6)}</span>
-                  </div>
-                )}
-              </div>
+              <label htmlFor="notes">Notes / Flags</label>
+              <textarea 
+                id="notes" 
+                name="notes" 
+                value={formData.notes} 
+                onChange={handleInputChange} 
+                placeholder="e.g., Tampered meter, faulty, customer comments, etc." 
+                rows="4" 
+                disabled={isSubmitting} 
+              ></textarea>
             </div>
 
             <div className="form-actions">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="submit-button"
+              <button 
+                type="submit" 
+                className="submit-button" 
+                disabled={isSubmitting} 
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Inspection'}
               </button>
               
-              <button
-                type="button"
+              <button 
+                type="button" 
+                className="issue-button"
                 onClick={() => setShowIssueModal(true)}
                 disabled={isSubmitting}
-                className="issue-button"
               >
-                Report Issue
+                Report an Issue
               </button>
             </div>
           </form>
         </main>
       </div>
 
+      {/* Issue Report Modal */}
       {showIssueModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Report an Issue</h2>
+            <div className="modal-header">
+              <h2>Report an Issue</h2>
+              <button 
+                className="modal-close" 
+                onClick={() => setShowIssueModal(false)}
+                disabled={isSubmitting}
+              >
+                &times;
+              </button>
+            </div>
             <form onSubmit={handleIssueSubmit}>
               <div className="form-group">
                 <label htmlFor="issueType">Issue Type *</label>
@@ -709,17 +740,18 @@ function MeterInspectionPage() {
                   disabled={isSubmitting}
                 >
                   <option value="">Select Issue Type</option>
-                  <option value="technical">Technical Problem</option>
-                  <option value="safety">Safety Concern</option>
-                  <option value="meter">Meter Issue</option>
+                  <option value="meter_tampering">Meter Tampering</option>
+                  <option value="faulty_meter">Faulty Meter</option>
+                  <option value="safety_concern">Safety Concern</option>
+                  <option value="billing_issue">Billing Issue</option>
                   <option value="other">Other</option>
                 </select>
               </div>
-
+              
               <div className="form-group">
-                <label htmlFor="issueMeterNumber">Meter Number (if applicable)</label>
+                <label htmlFor="meterNumber">Meter Number (if applicable)</label>
                 <input
-                  id="issueMeterNumber"
+                  id="meterNumber"
                   name="meterNumber"
                   type="text"
                   value={issueData.meterNumber}
@@ -728,34 +760,32 @@ function MeterInspectionPage() {
                   disabled={isSubmitting}
                 />
               </div>
-
+              
               <div className="form-group">
-                <label htmlFor="description">Description *</label>
+                <label htmlFor="description">Issue Description *</label>
                 <textarea
                   id="description"
                   name="description"
                   value={issueData.description}
                   onChange={handleIssueChange}
-                  placeholder="Please describe the issue in detail"
+                  placeholder="Please describe the issue in detail..."
+                  rows="4"
                   required
                   disabled={isSubmitting}
-                  rows="4"
-                />
+                ></textarea>
               </div>
-
+              
               <div className="modal-actions">
-                <button
-                  type="button"
+                <button 
+                  type="button" 
                   onClick={() => setShowIssueModal(false)}
                   disabled={isSubmitting}
-                  className="cancel-button"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
+                <button 
+                  type="submit" 
                   disabled={isSubmitting}
-                  className="submit-button"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Issue'}
                 </button>
@@ -766,10 +796,10 @@ function MeterInspectionPage() {
       )}
 
       {toast.show && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast({ show: false, message: '', type: 'success' })}
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast({ show: false, message: '', type: 'success' })} 
         />
       )}
     </div>
